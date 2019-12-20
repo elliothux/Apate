@@ -2,7 +2,7 @@ import * as React from "react";
 import { Maybe } from "../../types";
 import { loadImage } from "../../utils";
 
-import EXAMPLE_IMAGE from "assets/images/example.jpg";
+import EXAMPLE_IMAGE from "../../assets/images/example.jpg";
 
 const { innerWidth, innerHeight } = window;
 
@@ -19,22 +19,26 @@ export class Canvas extends React.Component {
   };
 
   public async componentDidMount() {
-    // const { imgInfo: info } = this;
-    // const image = await loadImage(EXAMPLE_IMAGE);
-    //
-    // const { naturalWidth, naturalHeight } = image;
-    // const [w, h] = [naturalWidth * 0.1, naturalHeight * 0.1];
-    // info.width = w;
-    // info.height = h;
-    //
-    // this.ctx!.drawImage(image, info.left, info.top, w, h);
+    const { imgInfo: info } = this;
+    const image = await loadImage(EXAMPLE_IMAGE);
+
+    const { naturalWidth, naturalHeight } = image;
+    const [w, h] = [naturalWidth * 0.1, naturalHeight * 0.1];
+    info.width = w;
+    info.height = h;
+
+    this.ctx!.drawImage(image, info.left, info.top, w, h);
 
     await this.loadWasm();
   }
 
   private loadWasm = async () => {
-    import("wasm-lib/pkg")
-      .then(console.log)
+    const { top, left, width, height } = this.imgInfo;
+
+    import("../../../pkg")
+      .then(i => {
+        console.log(i.get_image_data(left, top, width, height));
+      })
       .catch(console.error);
   };
 
@@ -73,12 +77,10 @@ export class Canvas extends React.Component {
       <>
         {/*<button onClick={this.handleClick}>click</button>*/}
         <canvas
-          id="canvas"
-          height="150"
-          width="150"
+          id="main-canvas"
           ref={this.setRefAndCtx}
-          // width={innerWidth}
-          // height={innerHeight}
+          width={innerWidth}
+          height={innerHeight}
           style={{ backgroundColor: "white" }}
         >
           你的浏览器不支持canvas
