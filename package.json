@@ -17,9 +17,8 @@
     "typescript": "~3.7.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -38,6 +37,8 @@
     ]
   },
   "devDependencies": {
-    "prettier": "^1.19.1"
+    "@wasm-tool/wasm-pack-plugin": "^1.1.0",
+    "prettier": "^1.19.1",
+    "react-app-rewired": "^2.1.5"
   }
 }

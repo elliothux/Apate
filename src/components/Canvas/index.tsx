@@ -19,16 +19,24 @@ export class Canvas extends React.Component {
   };
 
   public async componentDidMount() {
-    const { imgInfo: info } = this;
-    const image = await loadImage(EXAMPLE_IMAGE);
+    // const { imgInfo: info } = this;
+    // const image = await loadImage(EXAMPLE_IMAGE);
+    //
+    // const { naturalWidth, naturalHeight } = image;
+    // const [w, h] = [naturalWidth * 0.1, naturalHeight * 0.1];
+    // info.width = w;
+    // info.height = h;
+    //
+    // this.ctx!.drawImage(image, info.left, info.top, w, h);
 
-    const { naturalWidth, naturalHeight } = image;
-    const [w, h] = [naturalWidth * 0.1, naturalHeight * 0.1];
-    info.width = w;
-    info.height = h;
-
-    this.ctx!.drawImage(image, info.left, info.top, w, h);
+    await this.loadWasm();
   }
+
+  private loadWasm = async () => {
+    import("wasm-lib/pkg")
+      .then(console.log)
+      .catch(console.error);
+  };
 
   private setRefAndCtx = (i: HTMLCanvasElement) => {
     this.ref = i;
@@ -63,11 +71,14 @@ export class Canvas extends React.Component {
   public render() {
     return (
       <>
-        <button onClick={this.handleClick}>click</button>
+        {/*<button onClick={this.handleClick}>click</button>*/}
         <canvas
+          id="canvas"
+          height="150"
+          width="150"
           ref={this.setRefAndCtx}
-          width={innerWidth}
-          height={innerHeight}
+          // width={innerWidth}
+          // height={innerHeight}
           style={{ backgroundColor: "white" }}
         >
           你的浏览器不支持canvas
