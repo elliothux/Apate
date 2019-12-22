@@ -8,6 +8,8 @@ export interface WithReactChildren {
 
 export type Function<T = any, U = void> = (param: T) => U;
 
+export type PromiseValueType<T> = T extends Promise<infer U> ? U : never;
+
 export enum RequestStatus {
   LOADING = "loading",
   SUCCESS = "success",

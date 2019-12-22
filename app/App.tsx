@@ -1,6 +1,12 @@
 import * as React from "react";
-import { Canvas } from "./components/Canvas";
+import { Canvas } from "./modules/Canvas";
+import { ToolBar } from "./modules/ToolBar";
 
 export function App() {
-  return <Canvas />;
+  return (
+    <>
+      <ToolBar />
+      <Canvas />
+    </>
+  );
 }
