@@ -20,8 +20,6 @@ export class Canvas extends React.Component {
   };
 
   public state = {
-    width: 0,
-    height: 0,
     top: 0,
     left: 0
   };
@@ -54,7 +52,8 @@ export class Canvas extends React.Component {
       naturalWidth,
       naturalHeight
     );
-    this.setState({ width, height, top, left }, () =>
+    store.setCanvasSize(width, height);
+    this.setState({ top, left }, () =>
       this.ctx!.drawImage(image, 0, 0, width, height)
     );
   };
@@ -65,11 +64,13 @@ export class Canvas extends React.Component {
     this.ref = i;
     if (i) {
       this.ctx = i.getContext("2d");
+      store.setCanvasContext(this.ctx!);
     }
   };
 
   public render() {
-    const { width, height, left, top } = this.state;
+    const { width, height } = store;
+    const { left, top } = this.state;
     return (
       <div id="main-canvas-container" ref={this.setContainerRef}>
         <canvas

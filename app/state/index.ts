@@ -1,5 +1,6 @@
 import { action, observable, configure } from "mobx";
 import { Maybe } from "../types";
+import { BitMap } from "../utils/bitmap";
 
 configure({ enforceActions: "always" });
 
@@ -31,6 +32,34 @@ export class Store {
     document.body.appendChild(input);
     input.click();
   };
+
+  @observable width: number = 0;
+
+  @observable height: number = 0;
+
+  @action
+  public setCanvasSize = (w: number, h: number) => {
+    this.width = w;
+    this.height = h;
+  };
+
+  public canvasContext: Maybe<CanvasRenderingContext2D> = null;
+
+  @action
+  public setCanvasContext = (ctx: CanvasRenderingContext2D) => {
+    this.canvasContext = ctx;
+  };
+
+  public getImageData = (): ImageData => {
+    const data = this.canvasContext!.getImageData(
+      0,
+      0,
+      this.width,
+      this.height
+    );
+    console.log(BitMap.from(data.data, data.width, data.height));
+    return data;
+  };
 }
 
 export const store = new Store();
@@ -40,3 +69,6 @@ Object.defineProperty(window, "__store", {
     return store;
   }
 });
+
+// TODO: remove
+setTimeout(() => store.setImageSrc(require("assets/images/example.jpg")), 1000);
