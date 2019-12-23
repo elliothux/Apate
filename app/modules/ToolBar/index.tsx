@@ -1,16 +1,19 @@
 import "./index.scss";
 import * as React from "react";
-import { Button, ButtonGroup } from "../../components/Button";
-import { IconType } from "../../components/Icon";
-import { Gap } from "../../components/Gap";
+import { Button, ButtonGroup } from "components/Button";
+import { IconType } from "components/Icon";
+import { Gap } from "components/Gap";
+import { store } from "state";
 
 export function ToolBar() {
   return (
     <div id="tool-bar">
-      <Button icon={IconType.DOWN}>打开</Button>
+      <Button icon={IconType.DOWN} onClick={store.loadImageFile}>
+        打开
+      </Button>
 
       <ButtonGroup>
-        <Button>100%</Button>
+        <Button icon={IconType.DOWN}>100%</Button>
         <Gap w={5} />
         <Button icon={IconType.PLUS} />
         <Gap w={5} />

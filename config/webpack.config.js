@@ -20,6 +20,7 @@ module.exports = {
     contentBase: dist
   },
   resolve: {
+    modules: [path.resolve(__dirname, "../app"), "node_modules"],
     extensions: [".js", ".jsx", ".ts", ".tsx", ".json"]
   },
   module: {

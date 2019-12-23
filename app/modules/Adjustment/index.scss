@@ -1,8 +1,7 @@
-@import "../../styles/helper";
+@import "styles/helper";
 
 #adjustment {
   width: $adjustment-width;
-  padding: 0 20px;
   height: calc(100% - #{$header-height});
   position: fixed;
   top: 38px;

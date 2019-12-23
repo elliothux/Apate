@@ -1,14 +1,17 @@
-import { Maybe } from "../types";
+import { Maybe, PromiseValueType } from "types";
 
-export function loadWasmLib() {
-  // return new Promise((resolve, reject) => {
-  //   import("../../pkg")
-  //     .then(i => {
-  //       wasmModule = i;
-  //       console.log("Load web assembly module success");
-  //       resolve(i);
-  //     })
-  //     .catch(reject);
-  // });
+type ModuleType = PromiseValueType<ReturnType<typeof loadWasmLib>>;
+
+let wasmModule: Maybe<ModuleType> = null;
+
+function loadWasmLib() {
   return import("../../pkg");
+}
+
+export async function getWasmLib(): Promise<ModuleType> {
+  if (!wasmModule) {
+    wasmModule = await loadWasmLib();
+  }
+
+  return wasmModule;
 }

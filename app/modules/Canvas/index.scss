@@ -1,4 +1,4 @@
-@import "../../styles/helper";
+@import "styles/helper";
 
 #main-canvas-container {
   position: fixed;
@@ -6,4 +6,8 @@
   left: 0;
   height: calc(100% - #{$header-height});
   width: calc(100% - #{$adjustment-width});
+
+  #main-canvas {
+    position: relative;
+  }
 }

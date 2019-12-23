@@ -1,13 +1,13 @@
 import "./index.scss";
 import * as React from "react";
 
-import ADJUSTMENT from "../../assets/icons/adjustment.svg";
-import COLORS from "../../assets/icons/colors.svg";
-import CROP from "../../assets/icons/crop.svg";
-import DOWN from "../../assets/icons/down.svg";
-import EXPORT from "../../assets/icons/export.svg";
-import MINUS from "../../assets/icons/minus.svg";
-import PLUS from "../../assets/icons/plus.svg";
+import ADJUSTMENT from "assets/icons/adjustment.svg";
+import COLORS from "assets/icons/colors.svg";
+import CROP from "assets/icons/crop.svg";
+import DOWN from "assets/icons/down.svg";
+import EXPORT from "assets/icons/export.svg";
+import MINUS from "assets/icons/minus.svg";
+import PLUS from "assets/icons/plus.svg";
 
 export enum IconType {
   ADJUSTMENT = "adjustment",
