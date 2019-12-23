@@ -3,12 +3,12 @@ import * as React from "react";
 import { Button, ButtonGroup } from "components/Button";
 import { IconType } from "components/Icon";
 import { Gap } from "components/Gap";
-import { store } from "state";
+import { mainStore } from "state";
 
 export function ToolBar() {
   return (
     <div id="tool-bar">
-      <Button icon={IconType.DOWN} onClick={store.loadImageFile}>
+      <Button icon={IconType.DOWN} onClick={mainStore.loadImageFile}>
         打开
       </Button>
 

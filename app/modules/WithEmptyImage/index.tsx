@@ -1,12 +1,12 @@
 import * as React from "react";
 import { WithReactChildren } from "types";
 import { observer } from "mobx-react";
-import { store } from "../../state";
+import { mainStore } from "../../state";
 
 interface Props extends WithReactChildren {}
 
 function IWithEmptyImage({ children }: Props) {
-  const { imageSrc } = store;
+  const { imageSrc } = mainStore;
   if (!imageSrc) {
     return <div>111</div>;
   }

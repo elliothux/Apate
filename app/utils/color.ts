@@ -35,7 +35,7 @@ export function rgbToHsl(
     h /= 6;
   }
 
-  return [h, s, l];
+  return [h * 255, s * 100, l * 100];
 }
 
 export function hslToRgb(
@@ -43,6 +43,10 @@ export function hslToRgb(
   s: number,
   l: number
 ): [number, number, number] {
+  h /= 255;
+  s /= 100;
+  l /= 100;
+
   let r;
   let g;
   let b;

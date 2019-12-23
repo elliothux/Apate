@@ -3,7 +3,7 @@ import * as React from "react";
 import { Maybe, PromiseValueType } from "types";
 import { loadImage, getWasmLib } from "utils";
 import { observer } from "mobx-react";
-import { store } from "../../state";
+import { bitMapStore, mainStore } from "../../state";
 import { getCanvasSizeAndPosition } from "./utils";
 
 @observer
@@ -44,7 +44,7 @@ export class Canvas extends React.Component {
   };
 
   private drawImage = async () => {
-    const image = await loadImage(store.imageSrc!);
+    const image = await loadImage(mainStore.imageSrc!);
     const { naturalWidth, naturalHeight } = image;
     const { width, height, left, top } = getCanvasSizeAndPosition(
       this.maxSize.width,
@@ -52,10 +52,11 @@ export class Canvas extends React.Component {
       naturalWidth,
       naturalHeight
     );
-    store.setCanvasSize(width, height);
-    this.setState({ top, left }, () =>
-      this.ctx!.drawImage(image, 0, 0, width, height)
-    );
+    mainStore.setCanvasSize(width, height);
+    this.setState({ top, left }, () => {
+      this.ctx!.drawImage(image, 0, 0, width, height);
+      bitMapStore.initImageData();
+    });
   };
 
   private setContainerRef = (i: HTMLDivElement) => (this.containerRef = i);
@@ -64,12 +65,12 @@ export class Canvas extends React.Component {
     this.ref = i;
     if (i) {
       this.ctx = i.getContext("2d");
-      store.setCanvasContext(this.ctx!);
+      mainStore.setCanvasContext(this.ctx!);
     }
   };
 
   public render() {
-    const { width, height } = store;
+    const { width, height } = mainStore;
     const { left, top } = this.state;
     return (
       <div id="main-canvas-container" ref={this.setContainerRef}>

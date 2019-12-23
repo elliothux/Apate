@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@types/rc-slider": "^8.6.5",
+    "debounce": "^1.2.0",
     "mobx": "^5.15.1",
     "mobx-react": "^6.1.4",
     "rc-slider": "^8.7.1",
@@ -21,6 +22,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@types/debounce": "^1.2.0",
     "@types/jest": "^24.0.0",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
