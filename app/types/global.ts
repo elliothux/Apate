@@ -6,6 +6,10 @@ export interface WithReactChildren {
   children: React.ReactNode;
 }
 
+export interface WithOptionalReactChildren {
+  children?: React.ReactNode;
+}
+
 export type Function<T = any, U = void> = (param: T) => U;
 
 export type PromiseValueType<T> = T extends Promise<infer U> ? U : never;

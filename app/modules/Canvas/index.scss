@@ -1,0 +1,9 @@
+@import "../../styles/helper";
+
+#main-canvas-container {
+  position: fixed;
+  top: $header-height;
+  left: 0;
+  height: calc(100% - #{$header-height});
+  width: calc(100% - #{$adjustment-width});
+}

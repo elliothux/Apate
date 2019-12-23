@@ -6,10 +6,19 @@
   background: #5d5d5d;
   border: 1px solid #969797;
   border-radius: 2px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-evenly;
+  cursor: pointer;
 
-  .icon {
-    width: auto;
-    height: 6px;
-    margin-left: 5px;
-  }
+  //.icon {
+  //  margin-left: 5px;
+  //}
+}
+
+.button-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

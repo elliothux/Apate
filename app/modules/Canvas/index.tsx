@@ -1,3 +1,4 @@
+import "./index.scss";
 import * as React from "react";
 import { Maybe, PromiseValueType } from "../../types";
 import { loadImage, loadWasmLib } from "../../utils";
@@ -46,7 +47,7 @@ export class Canvas extends React.Component {
   public render() {
     const { width, height } = this.state;
     return (
-      <>
+      <div id="main-canvas-container">
         {/*<button onClick={this.handleClick}>click</button>*/}
         <canvas
           id="main-canvas"
@@ -57,7 +58,7 @@ export class Canvas extends React.Component {
         >
           你的浏览器不支持canvas
         </canvas>
-      </>
+      </div>
     );
   }
 }

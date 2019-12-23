@@ -1,0 +1,15 @@
+@import "../../styles/helper";
+
+#adjustment {
+  width: $adjustment-width;
+  padding: 0 20px;
+  height: calc(100% - #{$header-height});
+  position: fixed;
+  top: 38px;
+  right: 0;
+  background: #0e0e0e;
+  border-left: 1px solid #606060;
+  //display: flex;
+  //align-items: center;
+  //justify-content: space-between;
+}
