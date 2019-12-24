@@ -5,6 +5,7 @@ use web_sys::{console, ImageData};
 use js_sys::{Uint8ClampedArray};
 
 pub mod color;
+pub mod image;
 
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]
@@ -39,3 +40,23 @@ pub fn get_image_data(width: u32, height: u32) -> Result<ImageData, JsValue> {
     Ok(pixels)
 }
 
+//#[wasm_bindgen()]
+//pub struct ImageData {
+//    width: u32,
+//    height: u32,
+//    data: Box<[u8]>
+//}
+
+#[wasm_bindgen()]
+pub fn grey(data: Box<[u8]>) -> Result<Box<[u8]>, JsValue> {
+    let mut result = Vec::<u8>::new();
+    for i in 0..(data.len()/4) {
+        let index = i * 4;
+        let avg = data[index] / 3 + data[index + 1] / 3 + data[index + 2] / 3;
+        result.push(avg);
+        result.push(avg);
+        result.push(avg);
+        result.push(255);
+    }
+    Ok(result.into_boxed_slice())
+}

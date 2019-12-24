@@ -1,6 +1,6 @@
 import { action, observable, configure } from "mobx";
 import { Maybe } from "types";
-import { BitMap } from "utils";
+import { BitMap, getWasmLib } from "utils";
 import { mainStore } from "./main";
 
 export class BitMapStore {
@@ -16,12 +16,23 @@ export class BitMapStore {
       height,
       data
     } = (this.originalImageData = this.getImageData());
-    this.originalBitMap = BitMap.from(data, width, height);
-    this.currentBitMap = BitMap.from(data, width, height, this.onChange);
-    setTimeout(() =>     {
+    // this.originalBitMap = BitMap.from(data, width, height);
+    // this.currentBitMap = BitMap.from(data, width, height, this.onChange);
+    setTimeout(async () => {
       console.log("set: ");
-      this.onChange(this.currentBitMap!)
-    }, 1000)
+      const lib = await getWasmLib();
+      const instance = lib.Image.from(width, height, data as any);
+      console.log(instance.to_data_with_alpha(), instance);
+      debugger;
+      // this.onChange(this.currentBitMap!)
+      // const greydata = (await getWasmLib()).grey(data as any);
+      // console.log(greydata);
+      // mainStore.canvasContext!.putImageData(
+      //   new ImageData(Uint8ClampedArray.from(greydata), width, height),
+      //   0,
+      //   0
+      // );
+    }, 1000);
   };
 
   public getImageData = (): ImageData => {
