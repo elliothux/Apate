@@ -1,28 +1,43 @@
 use std::f32;
 use wasm_bindgen::prelude::*;
-use wasm_bindgen::{JsValue};
 
-//#[wasm_bindgen()]
-//pub fn rgb_to_hsl(r: u8, g: u8, b: u8) -> Result<[u8; 3], JsValue> {
-//    let _r:f32 = r as f32 / 255_f32;
-//    let _g:f32 = g as f32 / 255_f32;
-//    let _b:f32 = b as f32 / 255_f32;
-//
-//    let max = _r.max(_g.max(_b));
-//    let min = _r.min(_g.min(_b));
-//
-//    let mut h = 0_f32;
-//    let mut s = 0_f32;
-//    let mut l: f32 = (max + min) / 2_f32;
-//
-//    if max.eq(&min) {
-//        h = 0_f32;
-//        s = 0_f32;
-//    } else {
-//        let d = max - min;
-//        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-//    }
+pub fn rgb_to_hsv(_r: u8, _g: u8, _b: u8) -> [u16; 3] {
+    let r = (_r as f32) / 255_f32;
+    let g = (_g as f32) / 255_f32;
+    let b = (_b as f32) / 255_f32;
 
-//    let result: [u8; 3] = [h.into(), s.into(), l.into()];
-//    Ok(result)
-//}
+    let max = r.max(r).max(b);
+    let min = r.min(r).min(b);
+
+    let v = max;
+    let s = if v.eq(&0_f32) { 0_f32 } else { (v - min) / v };
+    let mut h = match v {
+        r => 60_f32 * (g - b) / (v - min),
+        g => 120_f32 + 60_f32 * (b - r) / (v - min),
+        b => 240_f32 + 60_f32 * (r - g) / (v - min),
+    };
+    h = if h.gt(&0_f32) { h } else { 360_f32 + h };
+
+    [h as u16, (s * 100_f32) as u16, (v * 100_f32) as u16]
+}
+
+pub fn hsv_to_rgb(_r: u8, _g: u8, _b: u8) -> [u16; 3] {
+    let r = (_r as f32) / 255_f32;
+    let g = (_g as f32) / 255_f32;
+    let b = (_b as f32) / 255_f32;
+
+    let max = r.max(r).max(b);
+    let min = r.min(r).min(b);
+
+    let v = max;
+    let s = if v.eq(&0_f32) { 0_f32 } else { (v - min) / v };
+    let mut h = match v {
+        r => 60_f32 * (g - b) / (v - min),
+        g => 120_f32 + 60_f32 * (b - r) / (v - min),
+        b => 240_f32 + 60_f32 * (r - g) / (v - min),
+    };
+    h = if h.gt(&0_f32) { h } else { 360_f32 + h };
+
+    [h as u16, (s * 100_f32) as u16, (v * 100_f32) as u16]
+}
+

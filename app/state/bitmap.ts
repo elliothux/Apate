@@ -22,16 +22,17 @@ export class BitMapStore {
       console.log("set: ");
       const lib = await getWasmLib();
       const instance = lib.Image.from(width, height, data as any);
-      console.log(instance.to_data_with_alpha(), instance);
+      console.log(instance.get_rgb_data(), instance.get_hsv_data());
       debugger;
-      // this.onChange(this.currentBitMap!)
-      // const greydata = (await getWasmLib()).grey(data as any);
-      // console.log(greydata);
-      // mainStore.canvasContext!.putImageData(
-      //   new ImageData(Uint8ClampedArray.from(greydata), width, height),
-      //   0,
-      //   0
-      // );
+      mainStore.canvasContext!.putImageData(
+        new ImageData(
+          Uint8ClampedArray.from(instance.to_data_with_alpha()),
+          width,
+          height
+        ),
+        0,
+        0
+      );
     }, 1000);
   };
 
