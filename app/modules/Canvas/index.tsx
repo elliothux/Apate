@@ -3,7 +3,7 @@ import * as React from "react";
 import { Maybe, PromiseValueType } from "types";
 import { loadImage, getWasmLib } from "utils";
 import { observer } from "mobx-react";
-import { bitMapStore, mainStore } from "../../state";
+import { editorStore, mainStore } from "../../state";
 import { getCanvasSizeAndPosition } from "./utils";
 
 @observer
@@ -55,7 +55,7 @@ export class Canvas extends React.Component {
     mainStore.setCanvasSize(width, height);
     this.setState({ top, left }, () => {
       this.ctx!.drawImage(image, 0, 0, width, height);
-      bitMapStore.initImageData();
+      editorStore.initImageData();
     });
   };
 

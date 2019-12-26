@@ -1,7 +1,21 @@
-import { action, observable } from "mobx";
+import { action, observable, runInAction } from "mobx";
 import { Maybe } from "types";
+import { loadWasmLib } from "../utils";
 
 export class MainStore {
+  constructor() {
+    this.init();
+  }
+
+  @observable
+  public ready: boolean = false;
+
+  private init = () => {
+    loadWasmLib()
+      .then(() => runInAction(() => (this.ready = true)))
+      .catch(console.error);
+  };
+
   @observable
   public imageSrc: Maybe<string> = null;
 

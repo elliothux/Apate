@@ -6,6 +6,7 @@ use js_sys::{Uint8ClampedArray};
 
 pub mod color;
 pub mod image;
+pub mod utils;
 
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]

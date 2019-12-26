@@ -1,69 +1,100 @@
-//use std::f64;
+use std::{thread};
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::{JsValue, Clamped};
 use js_sys::{Uint8ClampedArray};
-use crate::color;
+use crate::color::{RGB, rgb_to_hsv};
 
 #[wasm_bindgen()]
+#[derive(Copy, Clone)]
 pub struct EditData {
-
+    pub brightness: u8,
+    pub saturation: u8
 }
+
+type ImageDataRow = Vec<RGB>;
+type ImageData = Vec<ImageDataRow>;
 
 #[wasm_bindgen()]
 pub struct Image {
     pub width: u32,
     pub height: u32,
-    rgb_data: Vec<u8>,
-    hsv_data: Vec<u16>
+    data: ImageData,
+
+    pub edit_data: EditData,
 }
 
 #[wasm_bindgen()]
 impl Image {
     pub fn from(width: u32, height: u32, data: Box<[u8]>) -> Image {
-        let mut result = Vec::<u8>::new();
-        let mut hsv_result = Vec::<u16>::new();
-        for i in 0..(data.len() / 4) {
-            // Drop useless alpha data for saving memories
-            let index = i * 4;
-            let r = data[index];
-            let g = data[index + 1];
-            let b = data[index + 2];
+        let mut image_data= Vec::<ImageDataRow>::new();
 
-            result.push(r);
-            result.push(g);
-            result.push(b);
+        for y in 0..height {
+            let mut row = Vec::<RGB>::new();
 
-            let [h, s, v] = color::rgb_to_hsv(r, g, b);
-            hsv_result.push(h);
-            hsv_result.push(s);
-            hsv_result.push(v);
+            for x in 0..width {
+                let i = (x as usize) * 4 + (width * 4 * y) as usize;
+                row.push(RGB {
+                    r: data[i],
+                    g: data[i + 1],
+                    b: data[i + 2],
+                });
+            }
+
+            image_data.push(row);
         }
 
         Image {
             width,
             height,
-            rgb_data: result,
-            hsv_data: hsv_result
+            data: image_data,
+            edit_data: EditData {
+                brightness: 100u8,
+                saturation: 100u8,
+            }
         }
     }
 
-    pub fn to_data_with_alpha(&self) -> Box<[u8]> {
+    pub fn to_array(&self) -> Box<[u8]> {
         let mut result = Vec::<u8>::new();
-        for i in 0..(self.rgb_data.len() / 3) {
-            let index = i * 3;
-            result.push(self.rgb_data[index]);
-            result.push(self.rgb_data[index + 1]);
-            result.push(self.rgb_data[index + 2]);
-            result.push(255);
+        for row in &self.data {
+            for color in row {
+                result.push(color.r);
+                result.push(color.g);
+                result.push(color.b);
+                result.push(255_u8);
+            }
         }
         result.into_boxed_slice()
     }
 
-    pub fn get_rgb_data(&self) -> Box<[u8]> {
-        self.rgb_data.clone().into_boxed_slice()
+    fn get_current_rgb(&self, color: &RGB) -> RGB {
+        let mut current_color = color.clone();
+        let handler = thread::spawn(|| {
+            &current_color.calc_brightness(self.edit_data.brightness);
+        });
+        &current_color.calc_saturation(self.edit_data.saturation);
+        current_color
     }
 
-    pub fn get_hsv_data(&self) -> Box<[u16]> {
-        self.hsv_data.clone().into_boxed_slice()
+    pub fn get_current_data_array(&self) -> Box<[u8]> {
+        let mut result = Vec::<u8>::new();
+        for row in &self.data {
+            for color in row {
+                let current_color = self.get_current_rgb(&color);
+                result.push(current_color.r);
+                result.push(current_color.g);
+                result.push(current_color.b);
+                result.push(255_u8);
+            }
+        }
+        result.into_boxed_slice()
+    }
+
+    pub fn set_brightness(&mut self, brightness: u8) {
+        self.edit_data.brightness = brightness;
+    }
+
+    pub fn set_saturation(&mut self, saturation: u8) {
+        self.edit_data.saturation = saturation;
     }
 }

@@ -1,17 +1,20 @@
 import { Maybe, PromiseValueType } from "types";
 
-type ModuleType = PromiseValueType<ReturnType<typeof loadWasmLib>>;
+export type WasmModuleType = PromiseValueType<ReturnType<typeof loadWasmLib>>;
 
-let wasmModule: Maybe<ModuleType> = null;
+let wasmModule: Maybe<WasmModuleType> = null;
 
-function loadWasmLib() {
-  return import("../../pkg");
+export function loadWasmLib() {
+  const i = import("../../pkg");
+  i.then(w => {
+    wasmModule = w;
+  });
+  return i;
 }
 
-export async function getWasmLib(): Promise<ModuleType> {
+export function getWasmLib(): WasmModuleType {
   if (!wasmModule) {
-    wasmModule = await loadWasmLib();
+    throw new Error("WASM module not loaded.");
   }
-
-  return wasmModule;
+  return wasmModule as WasmModuleType;
 }

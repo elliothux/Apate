@@ -2,6 +2,8 @@ import * as React from "react";
 
 export type Maybe<T> = T | null | undefined;
 
+export type Into<T> = T extends Maybe<infer U> ? U : never;
+
 export interface WithReactChildren {
   children: React.ReactNode;
 }
