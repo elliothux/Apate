@@ -1,7 +1,7 @@
 import "./index.scss";
 import * as React from "react";
 import { observer } from "mobx-react";
-import { editorStore } from "state";
+import { imageStore } from "state";
 import { RangeInput } from "components/RangeInput";
 
 @observer
@@ -12,7 +12,7 @@ export class Adjustment extends React.Component {
       setSaturation,
       brightness,
       setBrightness
-    } = editorStore;
+    } = imageStore;
 
     return (
       <div id="adjustment">

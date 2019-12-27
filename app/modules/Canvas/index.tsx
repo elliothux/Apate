@@ -3,7 +3,7 @@ import * as React from "react";
 import { Maybe } from "types";
 import { loadImage } from "utils";
 import { observer } from "mobx-react";
-import { editorStore, mainStore } from "../../state";
+import { imageStore, mainStore } from "../../state";
 import { getCanvasSizeAndPosition } from "./utils";
 
 @observer
@@ -55,7 +55,7 @@ export class Canvas extends React.Component {
     mainStore.setCanvasSize(width, height);
     this.setState({ top, left }, () => {
       this.ctx!.drawImage(image, 0, 0, width, height);
-      editorStore.initImageData();
+      imageStore.initImageData();
     });
   };
 
