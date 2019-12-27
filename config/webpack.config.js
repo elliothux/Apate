@@ -2,6 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
+const WorkerPlugin = require('worker-plugin');
 
 const dist = path.resolve(__dirname, "../dist");
 const isEnvDevelopment = process.env === "development";
@@ -14,7 +15,8 @@ module.exports = {
   },
   output: {
     path: dist,
-    filename: "[name].js"
+    filename: "[name].js",
+    globalObject: "this"
   },
   devServer: {
     contentBase: dist
@@ -25,6 +27,16 @@ module.exports = {
   },
   module: {
     rules: [
+      // {
+      //   test: /\.worker\.ts$/,
+      //   use: {
+      //     loader: "worker-loader",
+      //     options: {
+      //       name: "[name]:[hash:8].worker.js",
+      //       inline: true
+      //     }
+      //   }
+      // },
       {
         test: /\.(js|mjs|jsx|ts|tsx)$/,
         exclude: /@babel(?:\/|\\{1,2})runtime/,
@@ -82,6 +94,7 @@ module.exports = {
     ]
   },
   plugins: [
+    new WorkerPlugin(),
     new WasmPackPlugin({
       crateDirectory: path.resolve(__dirname, "../"),
       extraArgs: "--out-name index"

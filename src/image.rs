@@ -69,9 +69,9 @@ impl Image {
 
     fn get_current_rgb(&self, color: &RGB) -> RGB {
         let mut current_color = color.clone();
-        let handler = thread::spawn(|| {
-            &current_color.calc_brightness(self.edit_data.brightness);
-        });
+//        let handler = thread::spawn(|| {
+//        });
+        &current_color.calc_brightness(self.edit_data.brightness);
         &current_color.calc_saturation(self.edit_data.saturation);
         current_color
     }

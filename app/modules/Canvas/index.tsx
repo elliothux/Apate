@@ -1,7 +1,7 @@
 import "./index.scss";
 import * as React from "react";
-import { Maybe, PromiseValueType } from "types";
-import { loadImage, getWasmLib } from "utils";
+import { Maybe } from "types";
+import { loadImage } from "utils";
 import { observer } from "mobx-react";
 import { editorStore, mainStore } from "../../state";
 import { getCanvasSizeAndPosition } from "./utils";

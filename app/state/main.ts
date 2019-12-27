@@ -1,6 +1,6 @@
 import { action, observable, runInAction } from "mobx";
 import { Maybe } from "types";
-import { loadWasmLib } from "../utils";
+import * as worker from "../worker";
 
 export class MainStore {
   constructor() {
@@ -10,10 +10,11 @@ export class MainStore {
   @observable
   public ready: boolean = false;
 
-  private init = () => {
-    loadWasmLib()
-      .then(() => runInAction(() => (this.ready = true)))
-      .catch(console.error);
+  private init = async () => {
+    await worker.init();
+    runInAction(() => {
+      this.ready = true;
+    });
   };
 
   @observable

@@ -1,17 +1,13 @@
 import { action, observable } from "mobx";
+import { Maybe } from "types";
 import { mainStore } from "./main";
-import { getWasmLib } from "../utils";
-import { Maybe } from "../types";
-import { debounce } from "debounce";
-
-const DEBOUNCE_TIMEOUT = 200;
 
 export class EditorStore {
   public bitmap: Maybe<ReturnType<typeof getBitMapImage>> = null;
 
   public initImageData = () => {
-    const { width, height, data } = this.getImageData();
-    this.bitmap = getBitMapImage(width, height, data);
+    // const { width, height, data } = this.getImageData();
+    // this.bitmap = getBitMapImage(width, height, data);
   };
 
   public getImageData = (): ImageData => {
@@ -69,7 +65,7 @@ function getBitMapImage(
   height: number,
   data: Uint8ClampedArray
 ) {
-  return getWasmLib().Image.from(width, height, data as any);
+  // return getWasmLib().Image.from(width, height, data as any);
 }
 
 export const editorStore = new EditorStore();
