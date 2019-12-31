@@ -9,6 +9,7 @@ use wasm_bindgen::{Clamped, JsValue};
 pub struct EditData {
     pub brightness: u8,
     pub saturation: u8,
+    pub vibrance: u8,
     pub temperature: u8,
     pub tint: u8,
 }
@@ -52,6 +53,7 @@ impl Image {
             edit_data: EditData {
                 brightness: 100u8,
                 saturation: 100u8,
+                vibrance: 100u8,
                 temperature: 100u8,
                 tint: 100_u8,
             },
@@ -108,5 +110,9 @@ impl Image {
 
     pub fn set_tint(&mut self, value: u8) {
         self.edit_data.tint = value;
+    }
+
+    pub fn set_vibrance(&mut self, value: u8) {
+        self.edit_data.vibrance = value;
     }
 }

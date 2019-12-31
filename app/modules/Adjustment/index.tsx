@@ -8,14 +8,16 @@ import { RangeInput } from "components/RangeInput";
 export class Adjustment extends React.Component {
   render() {
     const {
-      saturation,
-      setSaturation,
       brightness,
       setBrightness,
       temperature,
       setTemperature,
       tint,
-      setTint
+      setTint,
+      saturation,
+      setSaturation,
+      vibrance,
+      setVibrance
     } = imageStore;
 
     return (
@@ -48,6 +50,16 @@ export class Adjustment extends React.Component {
             step={1}
             value={saturation}
             onChange={setSaturation}
+          />
+        </div>
+        <div className="adjustment-range-item">
+          <span>自然饱和度</span>
+          <RangeInput
+            min={-100}
+            max={100}
+            step={1}
+            value={vibrance}
+            onChange={setVibrance}
           />
         </div>
         <div className="adjustment-range-item">

@@ -34,6 +34,11 @@ const handlersMap = {
   [MessageType.SET_IMAGE_TINT]: (v: number) => {
     bitmapImage!.set_tint(v);
     updateImageData();
+  },
+
+  [MessageType.SET_IMAGE_VIBRANCE]: (v: number) => {
+    bitmapImage!.set_vibrance(v);
+    updateImageData();
   }
 };
 

@@ -25,26 +25,6 @@ export class ImageStore {
   };
 
   /**
-   * @desc 饱和度
-   */
-  @observable
-  public saturation: number = 0;
-
-  @action
-  public setSaturation = (v: number) => {
-    if (v === this.saturation) {
-      return;
-    }
-
-    this.saturation = v;
-    this.setImageSaturation(v);
-  };
-
-  private setImageSaturation = throttle(THROTTLE_TIMEOUT, (v: number) => {
-    worker.setImageSaturation(100 + v);
-  });
-
-  /**
    * @desc 明度
    */
   @observable
@@ -102,6 +82,46 @@ export class ImageStore {
 
   private setImageTint = throttle(THROTTLE_TIMEOUT, (v: number) => {
     worker.setImageTint(v);
+  });
+
+  /**
+   * @desc 饱和度
+   */
+  @observable
+  public saturation: number = 0;
+
+  @action
+  public setSaturation = (v: number) => {
+    if (v === this.saturation) {
+      return;
+    }
+
+    this.saturation = v;
+    this.setImageSaturation(v);
+  };
+
+  private setImageSaturation = throttle(THROTTLE_TIMEOUT, (v: number) => {
+    worker.setImageSaturation(100 + v);
+  });
+
+  /**
+   * @desc 饱和度
+   */
+  @observable
+  public vibrance: number = 0;
+
+  @action
+  public setVibrance = (v: number) => {
+    if (v === this.vibrance) {
+      return;
+    }
+
+    this.vibrance = v;
+    this.setImageVibrance(v);
+  };
+
+  private setImageVibrance = throttle(THROTTLE_TIMEOUT, (v: number) => {
+    worker.setImageVibrance(100 + v);
   });
 }
 

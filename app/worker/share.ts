@@ -7,6 +7,7 @@ export enum MessageType {
   SET_IMAGE_BRIGHTNESS= 'set_image_brightness',
   SET_IMAGE_TEMPERATURE= 'set_image_temperature',
   SET_IMAGE_TINT= 'set_image_tint',
+  SET_IMAGE_VIBRANCE= 'set_image_vibrance',
 }
 
 export interface WorkerMessage<T = any> {

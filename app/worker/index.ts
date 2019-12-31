@@ -61,3 +61,7 @@ export function setImageTemperature(v: number) {
 export function setImageTint(v: number) {
   worker.postMessage(createMessage(MessageType.SET_IMAGE_TINT, v));
 }
+
+export function setImageVibrance(v: number) {
+  worker.postMessage(createMessage(MessageType.SET_IMAGE_VIBRANCE, v));
+}
