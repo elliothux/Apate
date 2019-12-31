@@ -19,7 +19,9 @@ export class Adjustment extends React.Component {
       brightness,
       setBrightness,
       exposure,
-      setExposure
+      setExposure,
+      contrast,
+      setContrast
     } = imageStore;
 
     return (
@@ -82,6 +84,16 @@ export class Adjustment extends React.Component {
             step={1}
             value={exposure}
             onChange={setExposure}
+          />
+        </div>
+        <div className="adjustment-range-item">
+          <span>对比度</span>
+          <RangeInput
+            min={-100}
+            max={100}
+            step={1}
+            value={contrast}
+            onChange={setContrast}
           />
         </div>
       </div>

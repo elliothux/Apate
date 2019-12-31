@@ -64,6 +64,27 @@ export class ImageStore {
     worker.setImageExposure(100 + v);
   });
 
+
+  /**
+   * @desc 对比度
+   */
+  @observable
+  public contrast: number = 0;
+
+  @action
+  public setContrast = (v: number) => {
+    if (v === this.contrast) {
+      return;
+    }
+
+    this.contrast = v;
+    this.setImageContrast(v);
+  };
+
+  private setImageContrast = throttle(THROTTLE_TIMEOUT, (v: number) => {
+    worker.setImageContrast(100 + v);
+  });
+
   /**
    * @desc 色温
    */

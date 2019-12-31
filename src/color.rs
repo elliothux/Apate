@@ -84,6 +84,17 @@ impl RGB {
         self.g = calc_exposure(self.g, d);
         self.b = calc_exposure(self.b, d);
     }
+
+    pub fn calc_contrast(&mut self, contrast: u8) {
+        if contrast == 100 {
+            return;
+        }
+
+        let d = 1_f32 + (contrast as f32 - 100_f32) / 100_f32;
+        self.r = calc_contrast(self.r, d);
+        self.g = calc_contrast(self.g, d);
+        self.b = calc_contrast(self.b, d);
+    }
 }
 
 fn calc_saturation(i: u8, saturation: u8, grey: u8) -> u8 {
@@ -111,6 +122,17 @@ fn calc_exposure(i: u8, v: f32) -> u8 {
     let result = i as f32 * v;
     if result > 255_f32 {
         255_u8
+    } else {
+        result as u8
+    }
+}
+
+fn calc_contrast(i: u8, d: f32) -> u8 {
+    let result = ((((i as f32 / 255_f32) - 0.5_f32) * d) + 0.5) * 255_f32;
+    if result > 255_f32 {
+        255_u8
+    } else if result < 0_f32 {
+        0_u8
     } else {
         result as u8
     }

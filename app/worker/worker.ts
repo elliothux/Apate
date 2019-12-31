@@ -44,7 +44,12 @@ const handlersMap = {
   [MessageType.SET_IMAGE_EXPOSURE]: (v: number) => {
     bitmapImage!.set_exposure(v);
     updateImageData();
-  }
+  },
+
+  [MessageType.SET_IMAGE_CONTRAST]: (v: number) => {
+    bitmapImage!.set_contrast(v);
+    updateImageData();
+  },
 };
 
 self.addEventListener("message", async ({ data: msg }) => {

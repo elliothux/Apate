@@ -9,6 +9,7 @@ export enum MessageType {
   SET_IMAGE_VIBRANCE= 'set_image_vibrance',
   SET_IMAGE_BRIGHTNESS= 'set_image_brightness',
   SET_IMAGE_EXPOSURE= 'set_image_exposure',
+  SET_IMAGE_CONTRAST = 'set_image_contract'
 }
 
 export interface WorkerMessage<T = any> {

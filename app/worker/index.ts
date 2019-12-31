@@ -69,3 +69,7 @@ export function setImageBrightness(v: number) {
 export function setImageExposure(v: number) {
   worker.postMessage(createMessage(MessageType.SET_IMAGE_EXPOSURE, v));
 }
+
+export function setImageContrast(v: number) {
+  worker.postMessage(createMessage(MessageType.SET_IMAGE_CONTRAST, v));
+}

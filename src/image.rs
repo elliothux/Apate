@@ -13,6 +13,7 @@ pub struct EditData {
     pub tint: u8,
     pub brightness: u8,
     pub exposure: u8,
+    pub contrast: u8,
 }
 
 type ImageDataRow = Vec<RGB>;
@@ -58,6 +59,7 @@ impl Image {
                 tint: 100_u8,
                 brightness: 100u8,
                 exposure: 100_u8,
+                contrast: 100_u8,
             },
         }
     }
@@ -82,6 +84,7 @@ impl Image {
         &current_color.calc_temperature(self.edit_data.temperature);
         &current_color.calc_tint(self.edit_data.tint);
         &current_color.calc_exposure(self.edit_data.exposure);
+        &current_color.calc_contrast(self.edit_data.contrast);
         current_color
     }
 
@@ -121,5 +124,9 @@ impl Image {
 
     pub fn set_exposure(&mut self, value: u8) {
         self.edit_data.exposure = value;
+    }
+
+    pub fn set_contrast(&mut self, value: u8) {
+        self.edit_data.contrast = value;
     }
 }
