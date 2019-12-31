@@ -50,10 +50,6 @@ export function setImageSaturation(v: number) {
   worker.postMessage(createMessage(MessageType.SET_IMAGE_SATURATION, v));
 }
 
-export function setImageBrightness(v: number) {
-  worker.postMessage(createMessage(MessageType.SET_IMAGE_BRIGHTNESS, v));
-}
-
 export function setImageTemperature(v: number) {
   worker.postMessage(createMessage(MessageType.SET_IMAGE_TEMPERATURE, v));
 }
@@ -64,4 +60,12 @@ export function setImageTint(v: number) {
 
 export function setImageVibrance(v: number) {
   worker.postMessage(createMessage(MessageType.SET_IMAGE_VIBRANCE, v));
+}
+
+export function setImageBrightness(v: number) {
+  worker.postMessage(createMessage(MessageType.SET_IMAGE_BRIGHTNESS, v));
+}
+
+export function setImageExposure(v: number) {
+  worker.postMessage(createMessage(MessageType.SET_IMAGE_EXPOSURE, v));
 }

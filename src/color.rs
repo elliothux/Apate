@@ -72,6 +72,18 @@ impl RGB {
             self.g = minus_u8(self.g, d);
         }
     }
+
+    pub fn calc_exposure(&mut self, exposure: u8) {
+        if exposure == 100 {
+            return;
+        }
+
+        let v = (exposure as f32 - 100_f32) / 50_f32;
+        let d = 2_f32.powf(v);
+        self.r = calc_exposure(self.r, d);
+        self.g = calc_exposure(self.g, d);
+        self.b = calc_exposure(self.b, d);
+    }
 }
 
 fn calc_saturation(i: u8, saturation: u8, grey: u8) -> u8 {
@@ -93,6 +105,15 @@ fn calc_saturation(i: u8, saturation: u8, grey: u8) -> u8 {
     } else {
         result as u8
     };
+}
+
+fn calc_exposure(i: u8, v: f32) -> u8 {
+    let result = i as f32 * v;
+    if result > 255_f32 {
+        255_u8
+    } else {
+        result as u8
+    }
 }
 
 pub fn rgb_to_hsv(_r: u8, _g: u8, _b: u8) -> [u16; 3] {

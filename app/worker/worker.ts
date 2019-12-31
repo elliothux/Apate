@@ -39,6 +39,11 @@ const handlersMap = {
   [MessageType.SET_IMAGE_VIBRANCE]: (v: number) => {
     bitmapImage!.set_vibrance(v);
     updateImageData();
+  },
+
+  [MessageType.SET_IMAGE_EXPOSURE]: (v: number) => {
+    bitmapImage!.set_exposure(v);
+    updateImageData();
   }
 };
 

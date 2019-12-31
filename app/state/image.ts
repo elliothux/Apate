@@ -25,7 +25,7 @@ export class ImageStore {
   };
 
   /**
-   * @desc 明度
+   * @desc 亮度
    */
   @observable
   public brightness: number = 0;
@@ -42,6 +42,26 @@ export class ImageStore {
 
   private setImageBrightness = throttle(THROTTLE_TIMEOUT, (v: number) => {
     worker.setImageBrightness(100 + v);
+  });
+
+  /**
+   * @desc 曝光
+   */
+  @observable
+  public exposure: number = 0;
+
+  @action
+  public setExposure = (v: number) => {
+    if (v === this.exposure) {
+      return;
+    }
+
+    this.exposure = v;
+    this.setImageExposure(v);
+  };
+
+  private setImageExposure = throttle(THROTTLE_TIMEOUT, (v: number) => {
+    worker.setImageExposure(100 + v);
   });
 
   /**

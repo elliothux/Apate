@@ -8,8 +8,6 @@ import { RangeInput } from "components/RangeInput";
 export class Adjustment extends React.Component {
   render() {
     const {
-      brightness,
-      setBrightness,
       temperature,
       setTemperature,
       tint,
@@ -17,7 +15,11 @@ export class Adjustment extends React.Component {
       saturation,
       setSaturation,
       vibrance,
-      setVibrance
+      setVibrance,
+      brightness,
+      setBrightness,
+      exposure,
+      setExposure
     } = imageStore;
 
     return (
@@ -70,6 +72,16 @@ export class Adjustment extends React.Component {
             step={1}
             value={brightness}
             onChange={setBrightness}
+          />
+        </div>
+        <div className="adjustment-range-item">
+          <span>曝光</span>
+          <RangeInput
+            min={-100}
+            max={100}
+            step={1}
+            value={exposure}
+            onChange={setExposure}
           />
         </div>
       </div>
