@@ -35,9 +35,12 @@ impl RGB {
             return;
         }
 
-        self.r = calc_saturation(self.r, saturation);
-        self.g = calc_saturation(self.g, saturation);
-        self.b = calc_saturation(self.b, saturation);
+        let gray =
+            (0.2989 * (self.r as f32) + 0.5870 * (self.g as f32) + 0.1140 * (self.b as f32)) as u8;
+
+        self.r = calc_saturation(self.r, saturation, gray);
+        self.g = calc_saturation(self.g, saturation, gray);
+        self.b = calc_saturation(self.b, saturation, gray);
     }
 
     pub fn calc_temperature(&mut self, temperature: u8) {
@@ -71,19 +74,25 @@ impl RGB {
     }
 }
 
-fn calc_saturation(i: u8, saturation: u8) -> u8 {
+fn calc_saturation(i: u8, saturation: u8, grey: u8) -> u8 {
     let m = 127_u8;
+    let mut result: f32 = 0_f32;
+
     if saturation > 100_u8 {
-        let d = saturation - 100;
-        return if i > m { add_u8(i, d) } else { minus_u8(i, d) };
+        let v = (saturation - 100) as f32 / 100_f32;
+        result = i as f32 * (1_f32 + v) - grey as f32 * v;
     } else {
-        let d = 100 - saturation;
-        return if i > m {
-            minus_u8(i, d)
-        } else {
-            minus_u8(i, d)
-        };
+        let v = (100 - saturation) as f32 / 100_f32;
+        result = i as f32 * (1_f32 - v) + grey as f32 * v;
     }
+
+    return if result < 0_f32 {
+        0_u8
+    } else if result > 255_f32 {
+        255_u8
+    } else {
+        result as u8
+    };
 }
 
 pub fn rgb_to_hsv(_r: u8, _g: u8, _b: u8) -> [u16; 3] {

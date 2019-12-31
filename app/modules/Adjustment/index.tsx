@@ -41,7 +41,7 @@ export class Adjustment extends React.Component {
           />
         </div>
         <div className="adjustment-range-item">
-          <span>对比度</span>
+          <span>饱和度</span>
           <RangeInput
             min={-100}
             max={100}
