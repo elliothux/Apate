@@ -39,6 +39,36 @@ impl RGB {
         self.g = calc_saturation(self.g, saturation);
         self.b = calc_saturation(self.b, saturation);
     }
+
+    pub fn calc_temperature(&mut self, temperature: u8) {
+        if temperature == 100 {
+            return;
+        }
+
+        if temperature > 100 {
+            let d = temperature - 100;
+            self.r = add_u8(self.r, d);
+            self.b = minus_u8(self.b, d)
+        } else {
+            let d = 100 - temperature;
+            self.r = minus_u8(self.r, d);
+            self.b = add_u8(self.b, d);
+        }
+    }
+
+    pub fn calc_tint(&mut self, tint: u8) {
+        if tint == 100 {
+            return;
+        }
+
+        if tint > 100 {
+            let d = tint - 100;
+            self.g = add_u8(self.g, d);
+        } else {
+            let d = 100 - tint;
+            self.g = minus_u8(self.g, d);
+        }
+    }
 }
 
 fn calc_saturation(i: u8, saturation: u8) -> u8 {

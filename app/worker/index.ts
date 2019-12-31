@@ -1,7 +1,7 @@
 import { createMessage, MessageType, WorkerMessage } from "./share";
 import { imageStore } from "../state";
 
-const worker = new Worker("./worker", { name: 'mine', type: "module" });
+const worker = new Worker("./worker", { name: "mine", type: "module" });
 
 worker.addEventListener("message", ({ data: msg }) => {
   if (typeof msg !== "object") {
@@ -52,4 +52,12 @@ export function setImageSaturation(v: number) {
 
 export function setImageBrightness(v: number) {
   worker.postMessage(createMessage(MessageType.SET_IMAGE_BRIGHTNESS, v));
+}
+
+export function setImageTemperature(v: number) {
+  worker.postMessage(createMessage(MessageType.SET_IMAGE_TEMPERATURE, v));
+}
+
+export function setImageTint(v: number) {
+  worker.postMessage(createMessage(MessageType.SET_IMAGE_TINT, v));
 }

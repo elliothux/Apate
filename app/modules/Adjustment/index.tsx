@@ -11,11 +11,35 @@ export class Adjustment extends React.Component {
       saturation,
       setSaturation,
       brightness,
-      setBrightness
+      setBrightness,
+      temperature,
+      setTemperature,
+      tint,
+      setTint
     } = imageStore;
 
     return (
       <div id="adjustment">
+        <div className="adjustment-range-item">
+          <span>色温</span>
+          <RangeInput
+            min={-100}
+            max={100}
+            step={1}
+            value={temperature}
+            onChange={setTemperature}
+          />
+        </div>
+        <div className="adjustment-range-item">
+          <span>色调</span>
+          <RangeInput
+            min={-100}
+            max={100}
+            step={1}
+            value={tint}
+            onChange={setTint}
+          />
+        </div>
         <div className="adjustment-range-item">
           <span>对比度</span>
           <RangeInput

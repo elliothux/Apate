@@ -24,6 +24,16 @@ const handlersMap = {
   [MessageType.SET_IMAGE_SATURATION]: (v: number) => {
     bitmapImage!.set_saturation(v);
     updateImageData();
+  },
+
+  [MessageType.SET_IMAGE_TEMPERATURE]: (v: number) => {
+    bitmapImage!.set_temperature(v);
+    updateImageData();
+  },
+
+  [MessageType.SET_IMAGE_TINT]: (v: number) => {
+    bitmapImage!.set_tint(v);
+    updateImageData();
   }
 };
 

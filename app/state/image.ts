@@ -3,6 +3,8 @@ import { throttle } from "throttle-debounce";
 import { mainStore } from "./main";
 import * as worker from "../worker";
 
+const THROTTLE_TIMEOUT = 200;
+
 export class ImageStore {
   public initImageData = () => {
     worker.initImage(this.getImageData());
@@ -38,9 +40,9 @@ export class ImageStore {
     this.setImageSaturation(v);
   };
 
-  private setImageSaturation = throttle(200, (v: number) =>
-    worker.setImageSaturation(100 + v)
-  );
+  private setImageSaturation = throttle(THROTTLE_TIMEOUT, (v: number) => {
+    worker.setImageSaturation(100 + v);
+  });
 
   /**
    * @desc 明度
@@ -58,9 +60,49 @@ export class ImageStore {
     this.setImageBrightness(v);
   };
 
-  private setImageBrightness = throttle(200, (v: number) =>
-    worker.setImageBrightness(100 + v)
-  );
+  private setImageBrightness = throttle(THROTTLE_TIMEOUT, (v: number) => {
+    worker.setImageBrightness(100 + v);
+  });
+
+  /**
+   * @desc 色温
+   */
+  @observable
+  public temperature: number = 0;
+
+  @action
+  public setTemperature = (v: number) => {
+    if (v === this.temperature) {
+      return;
+    }
+
+    this.temperature = v;
+    this.setImageTemperature(v);
+  };
+
+  private setImageTemperature = throttle(THROTTLE_TIMEOUT, (v: number) => {
+    worker.setImageTemperature(100 + v);
+  });
+
+  /**
+   * @desc 色调
+   */
+  @observable
+  public tint: number = 0;
+
+  @action
+  public setTint = (v: number) => {
+    if (v === this.tint) {
+      return;
+    }
+
+    this.tint = v;
+    this.setImageTint(100 + v);
+  };
+
+  private setImageTint = throttle(THROTTLE_TIMEOUT, (v: number) => {
+    worker.setImageTint(v);
+  });
 }
 
 export const imageStore = new ImageStore();

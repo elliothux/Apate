@@ -9,6 +9,8 @@ use wasm_bindgen::{Clamped, JsValue};
 pub struct EditData {
     pub brightness: u8,
     pub saturation: u8,
+    pub temperature: u8,
+    pub tint: u8,
 }
 
 type ImageDataRow = Vec<RGB>;
@@ -50,6 +52,8 @@ impl Image {
             edit_data: EditData {
                 brightness: 100u8,
                 saturation: 100u8,
+                temperature: 100u8,
+                tint: 100_u8,
             },
         }
     }
@@ -71,6 +75,8 @@ impl Image {
         let mut current_color = color.clone();
         &current_color.calc_brightness(self.edit_data.brightness);
         &current_color.calc_saturation(self.edit_data.saturation);
+        &current_color.calc_temperature(self.edit_data.temperature);
+        &current_color.calc_tint(self.edit_data.tint);
         current_color
     }
 
@@ -88,11 +94,19 @@ impl Image {
         result.into_boxed_slice()
     }
 
-    pub fn set_brightness(&mut self, brightness: u8) {
-        self.edit_data.brightness = brightness;
+    pub fn set_brightness(&mut self, value: u8) {
+        self.edit_data.brightness = value;
     }
 
-    pub fn set_saturation(&mut self, saturation: u8) {
-        self.edit_data.saturation = saturation;
+    pub fn set_saturation(&mut self, value: u8) {
+        self.edit_data.saturation = value;
+    }
+
+    pub fn set_temperature(&mut self, value: u8) {
+        self.edit_data.temperature = value;
+    }
+
+    pub fn set_tint(&mut self, value: u8) {
+        self.edit_data.tint = value;
     }
 }
