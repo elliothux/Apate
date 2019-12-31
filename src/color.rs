@@ -1,6 +1,6 @@
-use std::{u8};
-use wasm_bindgen::prelude::*;
 use crate::utils::{add_u8, minus_u8};
+use std::u8;
+use wasm_bindgen::prelude::*;
 
 #[derive(Copy, Clone)]
 pub struct RGB {
@@ -45,10 +45,14 @@ fn calc_saturation(i: u8, saturation: u8) -> u8 {
     let m = 127_u8;
     if saturation > 100_u8 {
         let d = saturation - 100;
-        return if i > m { add_u8(i, d) } else { minus_u8(i, d) }
+        return if i > m { add_u8(i, d) } else { minus_u8(i, d) };
     } else {
         let d = 100 - saturation;
-        return if i > m { minus_u8(i, d) } else { minus_u8(i, d) }
+        return if i > m {
+            minus_u8(i, d)
+        } else {
+            minus_u8(i, d)
+        };
     }
 }
 

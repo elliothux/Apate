@@ -1,4 +1,5 @@
 import { action, observable } from "mobx";
+import { throttle } from "throttle-debounce";
 import { mainStore } from "./main";
 import * as worker from "../worker";
 
@@ -12,8 +13,12 @@ export class ImageStore {
     return canvasContext!.getImageData(0, 0, width, height);
   };
 
-  public rerenderImage = (data: Uint8ClampedArray) => {
-    const image = new ImageData(data, mainStore.width, mainStore.height);
+  public rerenderImage = (data: Uint8Array) => {
+    const image = new ImageData(
+      Uint8ClampedArray.from(data),
+      mainStore.width,
+      mainStore.height
+    );
     mainStore.canvasContext!.putImageData(image, 0, 0);
   };
 
@@ -25,9 +30,17 @@ export class ImageStore {
 
   @action
   public setSaturation = (v: number) => {
+    if (v === this.saturation) {
+      return;
+    }
+
     this.saturation = v;
-    worker.setImageSaturation(v);
+    this.setImageSaturation(v);
   };
+
+  private setImageSaturation = throttle(200, (v: number) =>
+    worker.setImageSaturation(100 + v)
+  );
 
   /**
    * @desc 明度
@@ -37,9 +50,17 @@ export class ImageStore {
 
   @action
   public setBrightness = (v: number) => {
+    if (v === this.brightness) {
+      return;
+    }
+
     this.brightness = v;
-    worker.setImageBrightness(v);
+    this.setImageBrightness(v);
   };
+
+  private setImageBrightness = throttle(200, (v: number) =>
+    worker.setImageBrightness(100 + v)
+  );
 }
 
 export const imageStore = new ImageStore();

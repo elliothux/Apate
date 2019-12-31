@@ -1,7 +1,7 @@
 import { createMessage, MessageType, WorkerMessage } from "./share";
 import { imageStore } from "../state";
 
-const worker = new Worker("./worker", { type: "module" });
+const worker = new Worker("./worker", { name: 'mine', type: "module" });
 
 worker.addEventListener("message", ({ data: msg }) => {
   if (typeof msg !== "object") {
