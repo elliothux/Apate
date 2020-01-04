@@ -1,7 +1,7 @@
 import { createMessage, MessageType, WorkerMessage } from "./share";
 import { imageStore } from "../state";
 
-const worker = new Worker("./worker", { name: "mine", type: "module" });
+const worker = new Worker("./image.worker", { name: "mine", type: "module" });
 
 worker.addEventListener("message", ({ data: msg }) => {
   if (typeof msg !== "object") {
@@ -72,4 +72,12 @@ export function setImageExposure(v: number) {
 
 export function setImageContrast(v: number) {
   worker.postMessage(createMessage(MessageType.SET_IMAGE_CONTRAST, v));
+}
+
+export function setImageHighlight(v: number) {
+  worker.postMessage(createMessage(MessageType.SET_IMAGE_HIGHLIGHT, v));
+}
+
+export function setImageShadow(v: number) {
+  worker.postMessage(createMessage(MessageType.SET_IMAGE_SHADOW, v));
 }

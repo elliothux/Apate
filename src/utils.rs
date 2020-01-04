@@ -15,3 +15,13 @@ pub fn minus_u8(a: u8, b: u8) -> u8 {
         result as u8
     }
 }
+
+pub fn clamp_u8(i: f32) -> u8 {
+    if i > 255_f32 {
+        255_u8
+    } else if i < 0_f32 {
+        0_u8
+    } else {
+        i as u8
+    }
+}

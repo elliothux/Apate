@@ -1,4 +1,4 @@
-use crate::utils::{add_u8, minus_u8};
+use crate::utils::{add_u8, clamp_u8, minus_u8};
 use std::u8;
 use wasm_bindgen::prelude::*;
 
@@ -95,6 +95,38 @@ impl RGB {
         self.g = calc_contrast(self.g, d);
         self.b = calc_contrast(self.b, d);
     }
+
+    pub fn calc_highlight_and_shadow(&mut self, highlight: u8, shadow: u8) {
+        if highlight == 100 && shadow == 100 {
+            return;
+        }
+
+        let lum_r = 0.299_f32;
+        let lum_g = 0.587_f32;
+        let lum_b = 0.114_f32;
+        let luminance = (lum_r * (self.r as f32 / 255_f32).powi(2)
+            + lum_g * (self.g as f32 / 255_f32).powi(2)
+            + lum_b * (self.b as f32 / 255_f32).powi(2))
+        .sqrt();
+
+        let h = if highlight == 100 {
+            0_f32
+        } else {
+            ((highlight as f32) / 100_f32 - 1_f32) * 0.05 * (8_f32.powf(luminance) - 1_f32)
+        };
+
+        let s = if shadow == 100 {
+            0_f32
+        } else {
+            ((shadow as f32) / 100_f32 - 1_f32) * 0.05 * (8_f32.powf(1_f32 - luminance) - 1_f32)
+        };
+
+        let d = (h + s);
+
+        self.r = clamp_u8(self.r as f32 + d);
+        self.g = clamp_u8(self.g as f32 + d);
+        self.b = clamp_u8(self.g as f32 + d);
+    }
 }
 
 fn calc_saturation(i: u8, saturation: u8, grey: u8) -> u8 {
@@ -109,33 +141,17 @@ fn calc_saturation(i: u8, saturation: u8, grey: u8) -> u8 {
         result = i as f32 * (1_f32 - v) + grey as f32 * v;
     }
 
-    return if result < 0_f32 {
-        0_u8
-    } else if result > 255_f32 {
-        255_u8
-    } else {
-        result as u8
-    };
+    clamp_u8(result)
 }
 
 fn calc_exposure(i: u8, v: f32) -> u8 {
     let result = i as f32 * v;
-    if result > 255_f32 {
-        255_u8
-    } else {
-        result as u8
-    }
+    clamp_u8(result)
 }
 
 fn calc_contrast(i: u8, d: f32) -> u8 {
     let result = ((((i as f32 / 255_f32) - 0.5_f32) * d) + 0.5) * 255_f32;
-    if result > 255_f32 {
-        255_u8
-    } else if result < 0_f32 {
-        0_u8
-    } else {
-        result as u8
-    }
+    clamp_u8(result)
 }
 
 pub fn rgb_to_hsv(_r: u8, _g: u8, _b: u8) -> [u16; 3] {

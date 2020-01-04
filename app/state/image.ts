@@ -64,6 +64,45 @@ export class ImageStore {
     worker.setImageExposure(100 + v);
   });
 
+  /**
+   * @desc 曝光
+   */
+  @observable
+  public highlight: number = 0;
+
+  @action
+  public setHighlight = (v: number) => {
+    if (v === this.highlight) {
+      return;
+    }
+
+    this.highlight = v;
+    this.setImageHighlight(v);
+  };
+
+  private setImageHighlight = throttle(THROTTLE_TIMEOUT, (v: number) => {
+    worker.setImageHighlight(100 + v);
+  });
+
+  /**
+   * @desc 曝光
+   */
+  @observable
+  public shadow: number = 0;
+
+  @action
+  public setShadow = (v: number) => {
+    if (v === this.shadow) {
+      return;
+    }
+
+    this.shadow = v;
+    this.setImageShadow(v);
+  };
+
+  private setImageShadow = throttle(THROTTLE_TIMEOUT, (v: number) => {
+    worker.setImageShadow(100 + v);
+  });
 
   /**
    * @desc 对比度

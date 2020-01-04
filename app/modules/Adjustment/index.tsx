@@ -21,7 +21,11 @@ export class Adjustment extends React.Component {
       exposure,
       setExposure,
       contrast,
-      setContrast
+      setContrast,
+      highlight,
+      setHighlight,
+      shadow,
+      setShadow
     } = imageStore;
 
     return (
@@ -56,16 +60,16 @@ export class Adjustment extends React.Component {
             onChange={setSaturation}
           />
         </div>
-        <div className="adjustment-range-item">
-          <span>自然饱和度</span>
-          <RangeInput
-            min={-100}
-            max={100}
-            step={1}
-            value={vibrance}
-            onChange={setVibrance}
-          />
-        </div>
+        {/*<div className="adjustment-range-item">*/}
+        {/*  <span>自然饱和度</span>*/}
+        {/*  <RangeInput*/}
+        {/*    min={-100}*/}
+        {/*    max={100}*/}
+        {/*    step={1}*/}
+        {/*    value={vibrance}*/}
+        {/*    onChange={setVibrance}*/}
+        {/*  />*/}
+        {/*</div>*/}
         <div className="adjustment-range-item">
           <span>亮度</span>
           <RangeInput
@@ -94,6 +98,26 @@ export class Adjustment extends React.Component {
             step={1}
             value={contrast}
             onChange={setContrast}
+          />
+        </div>
+        <div className="adjustment-range-item">
+          <span>高光</span>
+          <RangeInput
+            min={-100}
+            max={100}
+            step={1}
+            value={highlight}
+            onChange={setHighlight}
+          />
+        </div>
+        <div className="adjustment-range-item">
+          <span>阴影</span>
+          <RangeInput
+            min={-100}
+            max={100}
+            step={1}
+            value={shadow}
+            onChange={setShadow}
           />
         </div>
       </div>

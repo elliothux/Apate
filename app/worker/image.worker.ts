@@ -50,6 +50,16 @@ const handlersMap = {
     bitmapImage!.set_contrast(v);
     updateImageData();
   },
+
+  [MessageType.SET_IMAGE_HIGHLIGHT]: (v: number) => {
+    bitmapImage!.set_highlight(v);
+    updateImageData();
+  },
+
+  [MessageType.SET_IMAGE_SHADOW]: (v: number) => {
+    bitmapImage!.set_shadow(v);
+    updateImageData();
+  }
 };
 
 self.addEventListener("message", async ({ data: msg }) => {
