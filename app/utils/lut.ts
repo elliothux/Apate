@@ -1,68 +1,80 @@
 import { Maybe } from "../types";
 
-export enum LookUpTableType {
-  "1D" = "1D",
-  "3D" = "3D"
-}
+type LutDataItem = Float32Array;
 
-export interface LookUpTable {
-  title: String;
-  type: LookUpTableType;
+export interface LookUp3DTable {
+  title: string;
   size: number;
-  domain: number[][];
-  data: number[][];
+  min: LutDataItem;
+  max: LutDataItem;
+  data: LutDataItem[][][];
+  getValue: (x: number, y: number, z: number) => LutDataItem;
 }
 
-export function parseLut(str: String): LookUpTable {
-  let title: Maybe<string> = null;
-  let type: Maybe<LookUpTableType> = null;
-  let size: number = 0;
-  let domain: number[][] = [
-    [0.0, 0.0, 0.0],
-    [1.0, 1.0, 1.0]
-  ];
-  let data: number[][] = [];
+export function parseLut(str: String): LookUp3DTable {
+  const result: LookUp3DTable = {
+    title: "untitled",
+    size: 0,
+    min: Float32Array.from([0, 0, 0]),
+    max: Float32Array.from([1, 1, 1]),
+    data: [],
+    getValue: function(x: number, y: number, z: number) {
+      return this.data[x][y][z];
+    }
+  };
 
-  const lines = str.split("\n");
+  const data: Float32Array[] = [];
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
+  str.split("\n").forEach((l, i) => {
+    const line = l.trim();
 
     if (line[0] === "#" || line === "") {
-      // Skip comments and empty lines
-      continue;
+      return;
     }
 
     const parts = line.split(/\s+/);
 
     switch (parts[0]) {
-      case "TITLE":
-        title = line.slice(7, -1);
-        break;
-      case "DOMAIN_MIN":
-        domain[0] = parts.slice(1).map(Number);
-        break;
-      case "DOMAIN_MAX":
-        domain[1] = parts.slice(1).map(Number);
-        break;
-      case "LUT_1D_SIZE":
-        type = LookUpTableType["1D"];
-        size = Number(parts[1]);
-        break;
-      case "LUT_3D_SIZE":
-        type = LookUpTableType["3D"];
-        size = Number(parts[1]);
-        break;
-      default:
-        data.push(parts.map(Number));
+      case "TITLE": {
+        result.title = line.slice(6);
+        return;
+      }
+      case "DOMAIN_MIN": {
+        result.min = Float32Array.from(parts.slice(1).map(Number));
+        return;
+      }
+      case "DOMAIN_MAX": {
+        result.max = Float32Array.from(parts.slice(1).map(Number));
+        return;
+      }
+      case "LUT_3D_SIZE": {
+        result.size = parseInt(parts[1], 10);
+        return;
+      }
+      case "LUT_1D_SIZE": {
+        throw new Error("1D lut not supported");
+      }
+      default: {
+        data.push(Float32Array.from(parts.map(Number)));
+        return;
+      }
     }
+  });
+
+  const { size } = result;
+
+  if (size === 0) {
+    throw new Error("Lut size not allow ti be zero.");
   }
 
-  return {
-    title: title!,
-    type: type!,
-    size,
-    domain,
-    data
-  } as LookUpTable;
+  const len = size * size * size;
+  if (len !== data.length) {
+    throw new Error(
+      `Lut data length should be ${len}[${size}^3], but is ${data.length}`
+    );
+  }
+
+  // TODO
+
+  return result;
 }

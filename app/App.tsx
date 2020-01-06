@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 import { Canvas } from "./modules/Canvas";
 import { ToolBar } from "./modules/ToolBar";
 import { Adjustment } from "./modules/Adjustment";
+import { Filter } from "./modules/Filter";
 import { WithEmptyImage } from "./modules/WithEmptyImage";
 import { mainStore } from "./state";
 
@@ -15,7 +16,8 @@ function IApp() {
     <>
       <ToolBar />
       <WithEmptyImage>
-        <Adjustment />
+        <Filter />
+        {/*<Adjustment />*/}
         <Canvas />
       </WithEmptyImage>
     </>

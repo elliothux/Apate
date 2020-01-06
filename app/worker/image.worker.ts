@@ -59,6 +59,11 @@ const handlersMap = {
   [MessageType.SET_IMAGE_SHADOW]: (v: number) => {
     bitmapImage!.set_shadow(v);
     updateImageData();
+  },
+
+  [MessageType.APPLY_FILTER]: ({ lut, size }: { lut: Uint8Array, size: number  }) => {
+    bitmapImage!.apply_lut(lut, size);
+    updateImageData();
   }
 };
 

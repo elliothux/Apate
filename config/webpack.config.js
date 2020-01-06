@@ -2,7 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
-const WorkerPlugin = require('worker-plugin');
+const WorkerPlugin = require("worker-plugin");
 
 const dist = path.resolve(__dirname, "../dist");
 const isEnvDevelopment = process.env === "development";
@@ -83,6 +83,10 @@ module.exports = {
           limit: 10000,
           name: "static/media/[name].[hash:8].[ext]"
         }
+      },
+      {
+        test: [/\.cube$/],
+        use: "raw-loader"
       }
       // {
       //   loader: require.resolve("file-loader"),

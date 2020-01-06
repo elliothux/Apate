@@ -107,6 +107,19 @@ impl Image {
         result.into_boxed_slice()
     }
 
+
+    pub fn apply_lut(&mut self, lut: &[u8], size: u32) {
+//        for (y, row) in self.data.iter().enumerate() {
+//            for (x, color) in row.iter().enumerate() {
+//                let RGB { r, g, b} = self.get_current_rgb(&color);
+//                let ri = r as u32;
+//                let gi = g as u32;
+//                let bi = b as u32;
+//
+//            }
+//        }
+    }
+
     pub fn set_saturation(&mut self, value: u8) {
         self.edit_data.saturation = value;
     }

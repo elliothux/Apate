@@ -25,3 +25,5 @@ pub fn clamp_u8(i: f32) -> u8 {
         i as u8
     }
 }
+
+//pub fn interp3d(arr: &[u8], x: usize, y: usize, z: usize, size_x: usize, size_y: usize, size_z: usize)

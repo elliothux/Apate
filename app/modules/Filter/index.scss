@@ -1,0 +1,19 @@
+@import "styles/helper";
+
+#filter {
+  width: calc(#{$adjustment-width} - 30px);
+  height: calc(100% - #{$header-height});
+  position: fixed;
+  top: 38px;
+  right: 0;
+  background: #0e0e0e;
+  border-left: 1px solid #606060;
+  color: white;
+  padding: 15px;
+  font-size: 12px;
+
+  .filter-item {
+    width: 100%;
+    height: 40px;
+  }
+}

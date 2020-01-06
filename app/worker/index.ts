@@ -81,3 +81,7 @@ export function setImageHighlight(v: number) {
 export function setImageShadow(v: number) {
   worker.postMessage(createMessage(MessageType.SET_IMAGE_SHADOW, v));
 }
+
+export function applyFilter(lut: Uint8Array, size: number) {
+  worker.postMessage(createMessage(MessageType.APPLY_FILTER, { lut, size }));
+}
