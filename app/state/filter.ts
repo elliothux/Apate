@@ -1,17 +1,22 @@
 import { action, observable, runInAction } from "mobx";
 import { Maybe } from "types";
 import * as worker from "../worker";
-import { LookUp3DTable, parseLut } from "../utils/lut";
+import { ThreeDirectionLookUpTable } from "../utils";
 import AL5 from "./AL5.cube";
 import { imageStore } from "./image";
+import { mainStore } from "./main";
 
 export class FilterStore {
-  public filterList: LookUp3DTable[] = [parseLut(AL5)];
+  public filterList: ThreeDirectionLookUpTable[] = [
+    ThreeDirectionLookUpTable.fromString(AL5)
+  ];
 
   public applyFilter = (index: number) => {
-    const { data, size } = this.filterList[index];
+    const lut = this.filterList[index]!;
     const { data: imgData, width, height } = imageStore.getImageData();
-    const multiple = size / 255;
+    const newData: number[] = [];
+
+    const multiple = lut.size / 255;
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
         const index = x * 4 + width * 4 * y;
@@ -21,11 +26,27 @@ export class FilterStore {
 
         const [xo, yo, zo] = [r, g, b].map(i => i * multiple);
         const [[x0, x1, dx], [y0, y1, dy], [z0, z1, dz]] = [xo, yo, zo].map(i =>
-          adjacent(i, 0, size)
+          adjacent(i, 0, lut.size - 1)
         );
 
+        const [[r0, g0, b0], [r1, g1, b1]] = [
+          Array.from(lut.getValue(x0, y0, z0)),
+          Array.from(lut.getValue(x1, y1, z1))
+        ];
+        const [ri, gi, bi] = [
+          lerp(r0, r1, dx),
+          lerp(g0, g1, dy),
+          lerp(b0, b1, dz)
+        ].map((i: number) => clamp(Math.round(i * 255), 0, 255));
+        newData.push(ri, gi, bi, 255);
       }
     }
+
+    mainStore.canvasContext!.putImageData(
+      new ImageData(Uint8ClampedArray.from(newData), width, height),
+      0,
+      0
+    );
   };
 }
 
@@ -37,10 +58,14 @@ Object.defineProperty(window, "__filter_store", {
   }
 });
 
-function adjacent(i: number, min: number, max: number): [number, number, number] {
+function adjacent(
+  i: number,
+  min: number,
+  max: number
+): [number, number, number] {
   let v1 = clamp(Math.floor(i), min, max);
   let v2 = clamp(Math.ceil(i), min, max);
-  let d = v2 - v1;
+  let d = i - v1;
   return [v1, v2, d];
 }
 
@@ -56,8 +81,6 @@ function clamp(value: number, min: number, max: number): number {
   return value;
 }
 
-function getR(arr: Uint8Array, x: number, y: number, z: number, size: number) {
-  const index = x * y * size
+function lerp(v1: number, v2: number, d: number): number {
+  return v1 + (v2 - v1) * d;
 }
-
-function lerp() {}

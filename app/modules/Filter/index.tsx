@@ -2,11 +2,11 @@ import "./index.scss";
 import * as React from "react";
 import { observer } from "mobx-react";
 import { filterStore } from "../../state";
-import { LookUp3DTable } from "../../utils/lut";
+import { ThreeDirectionLookUpTable } from "../../utils";
 
 @observer
 export class Filter extends React.Component {
-  renderFilterItem = ({ title }: LookUp3DTable, index: number) => {
+  renderFilterItem = ({ title }: ThreeDirectionLookUpTable, index: number) => {
     return (
       <button
         key={title}
