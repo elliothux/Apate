@@ -1,6 +1,5 @@
-use crate::utils::{add_u8, clamp_u8, minus_u8};
 use std::u8;
-use wasm_bindgen::prelude::*;
+use crate::utils::{add_u8, clamp_u8, minus_u8};
 
 #[derive(Copy, Clone)]
 pub struct RGB {
@@ -121,7 +120,7 @@ impl RGB {
             ((shadow as f32) / 100_f32 - 1_f32) * 0.05 * (8_f32.powf(1_f32 - luminance) - 1_f32)
         };
 
-        let d = (h + s);
+        let d = h + s;
 
         self.r = clamp_u8(self.r as f32 + d);
         self.g = clamp_u8(self.g as f32 + d);

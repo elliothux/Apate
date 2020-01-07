@@ -1,8 +1,5 @@
-use crate::color::{rgb_to_hsv, RGB};
-use js_sys::Uint8ClampedArray;
-use std::thread;
 use wasm_bindgen::prelude::*;
-use wasm_bindgen::{Clamped, JsValue};
+use crate::color::{RGB};
 
 #[wasm_bindgen()]
 #[derive(Copy, Clone)]
@@ -25,9 +22,10 @@ type ImageData = Vec<ImageDataRow>;
 pub struct Image {
     pub width: u32,
     pub height: u32,
-    data: ImageData,
-
     pub edit_data: EditData,
+
+    data: ImageData,
+    original_data: ImageData,
 }
 
 #[wasm_bindgen()]
@@ -53,7 +51,8 @@ impl Image {
         Image {
             width,
             height,
-            data: image_data,
+            data: image_data.clone(),
+            original_data: image_data,
             edit_data: EditData {
                 saturation: 100u8,
                 vibrance: 100u8,

@@ -91,7 +91,7 @@ export class ThreeDirectionLookUpTable {
     const { size } = result;
 
     if (size === 0) {
-      throw new Error("Lut size not allow ti be zero.");
+      throw new Error("Lut size not allow to be zero.");
     }
 
     const len = size * size * size;
