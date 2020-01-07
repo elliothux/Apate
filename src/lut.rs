@@ -70,3 +70,7 @@ fn parse_data_item(parts: &Vec<&str>) -> LutDataItem {
     let z = parts[2].parse::<f32>().unwrap();
     [x, y, z]
 }
+
+pub fn get_lut_value(lut: &ThreeDirectionLookUpTable, x: usize, y: usize, z: usize) -> LutDataItem {
+    lut.data[z][y][x]
+}

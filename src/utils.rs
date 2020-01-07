@@ -26,4 +26,21 @@ pub fn clamp_u8(i: f32) -> u8 {
     }
 }
 
-//pub fn interp3d(arr: &[u8], x: usize, y: usize, z: usize, size_x: usize, size_y: usize, size_z: usize)
+pub fn clamp(value: f32, min: f32, max: f32) -> f32 {
+    if value > max {
+        return max;
+    }
+
+    if value < min {
+        return min;
+    }
+
+    value
+}
+
+pub fn adjacent(i: f32, min: f32, max: f32) -> (f32, f32, f32) {
+    let v1 = clamp(i.floor(), min, max);
+    let v2 = clamp(i.ceil(), min, max);
+    let d = i - v1;
+    (v1, v2, d)
+}

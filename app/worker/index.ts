@@ -90,3 +90,7 @@ export function applyFilter(collection: string, name: string) {
     createMessage(MessageType.APPLY_FILTER, { collection, name })
   );
 }
+
+export function unapplyFilter() {
+  imageWorker.postMessage(createMessage(MessageType.UNAPPLY_FILTER));
+}

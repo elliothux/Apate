@@ -71,7 +71,13 @@ const handlersMap = {
     name: string;
   }) => {
     const filter = await getFilter(collection, name);
-    // TODO
+    bitmapImage!.apply_lut(filter);
+    updateImageData();
+  },
+
+  [MessageType.UNAPPLY_FILTER]: () => {
+    bitmapImage!.unapply_lut();
+    updateImageData();
   }
 };
 

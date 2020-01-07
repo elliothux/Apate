@@ -1,8 +1,7 @@
 use wasm_bindgen::prelude::*;
 use crate::color::{RGB};
+use crate::lut::ThreeDirectionLookUpTable;
 
-#[wasm_bindgen()]
-#[derive(Copy, Clone)]
 pub struct EditData {
     pub saturation: u8,
     pub vibrance: u8,
@@ -13,6 +12,8 @@ pub struct EditData {
     pub contrast: u8,
     pub highlight: u8,
     pub shadow: u8,
+    pub filter: Option<ThreeDirectionLookUpTable>,
+    pub filter_strength: u8,
 }
 
 type ImageDataRow = Vec<RGB>;
@@ -22,7 +23,8 @@ type ImageData = Vec<ImageDataRow>;
 pub struct Image {
     pub width: u32,
     pub height: u32,
-    pub edit_data: EditData,
+
+    edit_data: EditData,
 
     data: ImageData,
     original_data: ImageData,
@@ -63,6 +65,8 @@ impl Image {
                 contrast: 100_u8,
                 highlight: 100_u8,
                 shadow: 100_u8,
+                filter: None,
+                filter_strength: 100
             },
         }
     }
@@ -106,17 +110,38 @@ impl Image {
         result.into_boxed_slice()
     }
 
+    fn calc_lut(&mut self) {
+        if let Some(lut) = &self.edit_data.filter {
+            let multiple = (lut.size as f32) / 255_f32;
 
-    pub fn apply_lut(&mut self, lut: &[u8], size: u32) {
-//        for (y, row) in self.data.iter().enumerate() {
-//            for (x, color) in row.iter().enumerate() {
-//                let RGB { r, g, b} = self.get_current_rgb(&color);
-//                let ri = r as u32;
-//                let gi = g as u32;
-//                let bi = b as u32;
-//
-//            }
-//        }
+            for y in 0..self.height {
+                for x in 0..self.width {
+                    let RGB { r, g, b} = self.get_color_data(x as usize, y as usize);
+                    let xo = (r.clone() as f32) * multiple;
+                    let yo = (g.clone() as f32) * multiple;
+                    let zo = (b.clone() as f32) * multiple;
+                    // TODO
+                }
+            }
+        } else {
+            self.data = self.original_data.clone();
+        };
+    }
+
+    pub fn apply_lut(&mut self, lut: ThreeDirectionLookUpTable) {
+        self.edit_data.filter = Some(lut);
+        self.edit_data.filter_strength = 100;
+        self.calc_lut();
+    }
+
+    pub fn unapply_lut(&mut self) {
+        self.edit_data.filter = None;
+        self.edit_data.filter_strength = 100;
+        self.calc_lut();
+    }
+
+    pub fn set_filter_strength(&mut self, value: u8) {
+        self.edit_data.filter_strength = value;
     }
 
     pub fn set_saturation(&mut self, value: u8) {
@@ -153,5 +178,9 @@ impl Image {
 
     pub fn set_shadow(&mut self, value: u8) {
         self.edit_data.shadow = value;
+    }
+
+    fn get_color_data(&self, x: usize, y: usize) -> &RGB {
+        &self.data[y][x]
     }
 }

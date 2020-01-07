@@ -13,6 +13,7 @@ export enum MessageType {
   SET_IMAGE_HIGHLIGHT = "set_image_highlight",
   SET_IMAGE_SHADOW = "set_image_shadow",
   APPLY_FILTER = "apply_filter",
+  UNAPPLY_FILTER = "unapply_filter",
 }
 
 export interface WorkerMessage<T = any> {
