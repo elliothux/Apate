@@ -1,13 +1,9 @@
-import { action, observable, runInAction } from "mobx";
+import { action, observable } from "mobx";
 import { Maybe } from "types";
 import * as worker from "../worker";
-import { ThreeDirectionLookUpTable } from "../utils";
 import { imageStore } from "./image";
 import { mainStore } from "./main";
 import { filters } from "../../filter";
-import { requestFilter } from "../utils/filter";
-
-const lutMap: { [name: string]: ThreeDirectionLookUpTable } = {};
 
 export class FilterStore {
   @observable
@@ -42,6 +38,10 @@ export class FilterStore {
   };
 
   private applyFilter = async (collection: string, name: string) => {
+    return worker.applyFilter(collection, name);
+  };
+
+  private _applyFilter = async (collection: string, name: string) => {
     const lut = await this.getLut(collection, name);
     const { data: imgData, width, height } = imageStore.getImageData();
     const newData: number[] = [];
@@ -77,19 +77,6 @@ export class FilterStore {
       0,
       0
     );
-  };
-
-  private getLut = async (
-    collection: string,
-    name: string
-  ): Promise<ThreeDirectionLookUpTable> => {
-    if (lutMap[name]) {
-      return lutMap[name];
-    }
-
-    const lut = await requestFilter(collection, name);
-    lutMap[name] = lut;
-    return lut;
   };
 }
 

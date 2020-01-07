@@ -19,11 +19,11 @@ impl ThreeDirectionLookUpTable {
         for mut line in lines {
             line = line.trim();
 
-            if line.chars().nth(0).unwrap().eq(&'#') {
+            if line.len().eq(&0) {
                 continue;
             }
 
-            if line.eq("") {
+            if line.chars().nth(0).unwrap().eq(&'#') {
                 continue;
             }
 

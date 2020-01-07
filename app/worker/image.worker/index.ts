@@ -1,6 +1,8 @@
-import { getWasmLib, loadWasmLib } from "./loader";
-import { createMessage, MessageType, WorkerMessage } from "./share";
-import { Maybe } from "../types";
+import { Maybe } from "types";
+import { createMessage, MessageType, WorkerMessage } from "../share";
+import { loadWasmLib } from "./loader";
+import { createBitmapImage } from "./utils";
+import { getFilter } from "./filter";
 
 let bitmapImage: Maybe<ReturnType<typeof createBitmapImage>> = null;
 
@@ -61,9 +63,15 @@ const handlersMap = {
     updateImageData();
   },
 
-  [MessageType.APPLY_FILTER]: ({ lut, size }: { lut: Uint8Array, size: number  }) => {
-    bitmapImage!.apply_lut(lut, size);
-    updateImageData();
+  [MessageType.APPLY_FILTER]: async ({
+    collection,
+    name
+  }: {
+    collection: string;
+    name: string;
+  }) => {
+    const filter = await getFilter(collection, name);
+    // TODO
   }
 };
 
@@ -80,15 +88,6 @@ self.addEventListener("message", async ({ data: msg }) => {
 
   return console.log(`Invalid message received at worker: ${type}`);
 });
-
-function createBitmapImage(
-  width: number,
-  height: number,
-  data: Uint8ClampedArray
-) {
-  const lib = getWasmLib();
-  return lib.Image.from(width, height, data as any);
-}
 
 function updateImageData() {
   const data = bitmapImage!.get_current_data_array();
