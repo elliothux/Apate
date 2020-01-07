@@ -2,17 +2,47 @@ import { action, observable, runInAction } from "mobx";
 import { Maybe } from "types";
 import * as worker from "../worker";
 import { ThreeDirectionLookUpTable } from "../utils";
-import AL5 from "./AL5.cube";
 import { imageStore } from "./image";
 import { mainStore } from "./main";
+import { filters } from "../../filter";
+import { requestFilter } from "../utils/filter";
+
+const lutMap: { [name: string]: ThreeDirectionLookUpTable } = {};
 
 export class FilterStore {
-  public filterList: ThreeDirectionLookUpTable[] = [
-    ThreeDirectionLookUpTable.fromString(AL5)
-  ];
+  @observable
+  public filters: [string, string[]][] = Object.entries(filters);
 
-  public applyFilter = (index: number) => {
-    const lut = this.filterList[index]!;
+  @observable
+  public currentCollectionIndex: number = 0;
+
+  @action
+  public selectCollection = (index: number) => {
+    this.currentCollectionIndex = index;
+  };
+
+  @observable
+  public appliedFilter: Maybe<[number, number]> = null;
+
+  @observable
+  public filterStrength: number = 100;
+
+  @action
+  public setFilterStrength = (v: number) => {
+    this.filterStrength = v;
+  };
+
+  @action
+  public selectFilter = (filterIndex: number) => {
+    this.appliedFilter = [this.currentCollectionIndex, filterIndex];
+    this.filterStrength = 100;
+
+    const [name, filters] = this.filters[this.currentCollectionIndex];
+    return this.applyFilter(name, filters[filterIndex]);
+  };
+
+  private applyFilter = async (collection: string, name: string) => {
+    const lut = await this.getLut(collection, name);
     const { data: imgData, width, height } = imageStore.getImageData();
     const newData: number[] = [];
 
@@ -47,6 +77,19 @@ export class FilterStore {
       0,
       0
     );
+  };
+
+  private getLut = async (
+    collection: string,
+    name: string
+  ): Promise<ThreeDirectionLookUpTable> => {
+    if (lutMap[name]) {
+      return lutMap[name];
+    }
+
+    const lut = await requestFilter(collection, name);
+    lutMap[name] = lut;
+    return lut;
   };
 }
 

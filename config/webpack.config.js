@@ -1,4 +1,5 @@
 const path = require("path");
+const express = require("express");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
@@ -7,6 +8,8 @@ const WorkerPlugin = require("worker-plugin");
 const dist = path.resolve(__dirname, "../dist");
 const isEnvDevelopment = process.env === "development";
 const isEnvProduction = process.env === "production";
+
+const filterPath = path.resolve(__dirname, "../filter");
 
 module.exports = {
   mode: "production",
@@ -19,7 +22,10 @@ module.exports = {
     globalObject: "this"
   },
   devServer: {
-    contentBase: dist
+    contentBase: dist,
+    before(app) {
+      app.use("/filter", express.static(filterPath));
+    }
   },
   resolve: {
     modules: [path.resolve(__dirname, "../app"), "node_modules"],
@@ -27,16 +33,6 @@ module.exports = {
   },
   module: {
     rules: [
-      // {
-      //   test: /\.worker\.ts$/,
-      //   use: {
-      //     loader: "worker-loader",
-      //     options: {
-      //       name: "[name]:[hash:8].worker.js",
-      //       inline: true
-      //     }
-      //   }
-      // },
       {
         test: /\.(js|mjs|jsx|ts|tsx)$/,
         exclude: /@babel(?:\/|\\{1,2})runtime/,
@@ -88,13 +84,6 @@ module.exports = {
         test: [/\.cube$/],
         use: "raw-loader"
       }
-      // {
-      //   loader: require.resolve("file-loader"),
-      //   exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
-      //   options: {
-      //     name: "static/media/[name].[hash:8].[ext]"
-      //   }
-      // }
     ]
   },
   plugins: [
