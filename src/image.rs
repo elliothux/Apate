@@ -1,6 +1,7 @@
 use wasm_bindgen::prelude::*;
 use crate::color::{RGB};
-use crate::lut::ThreeDirectionLookUpTable;
+use crate::lut::{ThreeDirectionLookUpTable, get_lut_value};
+use crate::utils::{adjacent, linear_interpolation, clamp_u8};
 
 pub struct EditData {
     pub saturation: u8,
@@ -110,34 +111,42 @@ impl Image {
         result.into_boxed_slice()
     }
 
-    fn calc_lut(&mut self) {
-        if let Some(lut) = &self.edit_data.filter {
-            let multiple = (lut.size as f32) / 255_f32;
+    fn calc_lut(&mut self, lut: &ThreeDirectionLookUpTable) {
+        let multiple = (lut.size as f32) / 255_f32;
 
-            for y in 0..self.height {
-                for x in 0..self.width {
-                    let RGB { r, g, b} = self.get_color_data(x as usize, y as usize);
-                    let xo = (r.clone() as f32) * multiple;
-                    let yo = (g.clone() as f32) * multiple;
-                    let zo = (b.clone() as f32) * multiple;
-                    // TODO
-                }
+        for y in 0..self.height {
+            for x in 0..self.width {
+                let RGB { r, g, b} = self.get_original_color_data(x as usize, y as usize);
+                let xo = (r.clone() as f32) * multiple;
+                let yo = (g.clone() as f32) * multiple;
+                let zo = (b.clone() as f32) * multiple;
+
+                let (x0, x1, dx) = adjacent(xo, 0_f32, (lut.size - 1) as f32);
+                let (y0, y1, dy) = adjacent(yo, 0_f32, (lut.size - 1) as f32);
+                let (z0, z1, dz) = adjacent(zo, 0_f32, (lut.size - 1) as f32);
+
+                let (r0, g0, b0) = get_lut_value(&lut, x0 as usize, y0 as usize, z0 as usize);
+                let (r1, g1, b1) = get_lut_value(&lut, x1 as usize, y1 as usize, z1 as usize);
+
+                let ri = lerp_to_u8(linear_interpolation(r0, r1, dx));
+                let gi = lerp_to_u8(linear_interpolation(g0, g1, dy));
+                let bi = lerp_to_u8(linear_interpolation(b0, b1, dz));
+
+                &self.set_data(x as usize, y as usize, RGB { r: ri, g: gi, b: bi });
             }
-        } else {
-            self.data = self.original_data.clone();
-        };
+        }
     }
 
-    pub fn apply_lut(&mut self, lut: ThreeDirectionLookUpTable) {
-        self.edit_data.filter = Some(lut);
+    pub fn apply_lut(&mut self, lut: &ThreeDirectionLookUpTable) {
+        self.edit_data.filter = Some(lut.clone());
         self.edit_data.filter_strength = 100;
-        self.calc_lut();
+        self.calc_lut(&lut);
     }
 
     pub fn unapply_lut(&mut self) {
         self.edit_data.filter = None;
         self.edit_data.filter_strength = 100;
-        self.calc_lut();
+        self.data = self.original_data.clone();
     }
 
     pub fn set_filter_strength(&mut self, value: u8) {
@@ -183,4 +192,16 @@ impl Image {
     fn get_color_data(&self, x: usize, y: usize) -> &RGB {
         &self.data[y][x]
     }
+
+    fn get_original_color_data(&self, x: usize, y: usize) -> &RGB {
+        &self.original_data[y][x]
+    }
+
+    fn set_data(&mut self, x: usize, y: usize, data: RGB) {
+        self.data[y][x] = data;
+    }
+}
+
+fn lerp_to_u8(i: f32) -> u8 {
+    clamp_u8((i * 255_f32).round())
 }

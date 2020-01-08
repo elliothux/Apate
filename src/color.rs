@@ -126,6 +126,10 @@ impl RGB {
         self.g = clamp_u8(self.g as f32 + d);
         self.b = clamp_u8(self.g as f32 + d);
     }
+
+    pub fn to_tuple(&self) -> (u8, u8, u8) {
+        (self.r, self.g, self.b)
+    }
 }
 
 fn calc_saturation(i: u8, saturation: u8, grey: u8) -> u8 {

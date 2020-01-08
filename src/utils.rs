@@ -44,3 +44,7 @@ pub fn adjacent(i: f32, min: f32, max: f32) -> (f32, f32, f32) {
     let d = i - v1;
     (v1, v2, d)
 }
+
+pub fn linear_interpolation(v1: f32, v2: f32, d: f32) -> f32 {
+    v1 + (v2 - v1) * d
+}

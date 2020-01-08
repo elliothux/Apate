@@ -4,6 +4,7 @@ use wasm_bindgen::prelude::*;
 pub type LutDataItem = [f32; 3];
 
 #[wasm_bindgen()]
+#[derive(Clone)]
 pub struct ThreeDirectionLookUpTable {
     pub size: u32,
     data: Vec<Vec<Vec<LutDataItem>>>
@@ -71,6 +72,7 @@ fn parse_data_item(parts: &Vec<&str>) -> LutDataItem {
     [x, y, z]
 }
 
-pub fn get_lut_value(lut: &ThreeDirectionLookUpTable, x: usize, y: usize, z: usize) -> LutDataItem {
-    lut.data[z][y][x]
+pub fn get_lut_value(lut: &ThreeDirectionLookUpTable, x: usize, y: usize, z: usize) -> (f32, f32, f32) {
+    let v =     lut.data[z][y][x];
+    (v[0], v[1], v[2])
 }
