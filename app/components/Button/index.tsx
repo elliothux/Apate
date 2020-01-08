@@ -7,11 +7,18 @@ interface Props extends WithOptionalReactChildren {
   icon?: IconType;
   iconSize?: IconSize;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
+  activated?: boolean;
 }
 
-export function Button({ children, icon, iconSize, onClick }: Props) {
+export function Button({
+  children,
+  icon,
+  iconSize,
+  onClick,
+  activated
+}: Props) {
   return (
-    <div className="button" onClick={onClick}>
+    <div className={`button${activated ? " activated" : ""}`} onClick={onClick}>
       {children}
       {icon ? <Icon type={icon} size={iconSize} /> : null}
     </div>

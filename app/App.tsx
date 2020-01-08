@@ -6,18 +6,33 @@ import { Adjustment } from "./modules/Adjustment";
 import { Filter } from "./modules/Filter";
 import { WithEmptyImage } from "./modules/WithEmptyImage";
 import { mainStore } from "./state";
+import { Maybe } from "./types";
+import { ViewType } from "./types/state";
 
 function IApp() {
-  if (!mainStore.ready) {
+  const { ready, view } = mainStore;
+
+  if (!ready) {
     return <p>Loading</p>;
+  }
+
+  let content: Maybe<React.ReactElement>;
+  switch (view) {
+    case ViewType.ADJUSTMENT: {
+      content = <Adjustment />;
+      break;
+    }
+    case ViewType.FILTER: {
+      content = <Filter />;
+      break;
+    }
   }
 
   return (
     <>
       <ToolBar />
       <WithEmptyImage>
-        <Filter />
-        {/*<Adjustment />*/}
+        {content}
         <Canvas />
       </WithEmptyImage>
     </>

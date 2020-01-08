@@ -1,6 +1,7 @@
 import { action, observable, runInAction } from "mobx";
 import { Maybe } from "types";
 import * as worker from "../worker";
+import { ViewType } from "../types/state";
 
 export class MainStore {
   constructor() {
@@ -62,6 +63,14 @@ export class MainStore {
   @action
   public setCanvasContext = (ctx: CanvasRenderingContext2D) => {
     this.canvasContext = ctx;
+  };
+
+  @observable
+  public view: ViewType = ViewType.ADJUSTMENT;
+
+  @action
+  public setView = (i: ViewType) => {
+    this.view = i;
   };
 }
 

@@ -15,6 +15,11 @@
   //.icon {
   //  margin-left: 5px;
   //}
+
+  &.activated {
+    background-color: #ffa414;
+    border-color: #BC7613;
+  }
 }
 
 .button-group {
