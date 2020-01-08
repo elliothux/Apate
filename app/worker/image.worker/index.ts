@@ -83,7 +83,7 @@ const handlersMap = {
 
 self.addEventListener("message", async ({ data: msg }) => {
   if (typeof msg !== "object") {
-    return console.log(`Message received at worker: ${msg}`);
+    return console.log(`Message received at image.worker: ${msg}`);
   }
 
   const { type, data } = msg as WorkerMessage;
@@ -92,7 +92,7 @@ self.addEventListener("message", async ({ data: msg }) => {
     return handler(data);
   }
 
-  return console.log(`Invalid message received at worker: ${type}`);
+  return console.log(`Invalid message received at image.worker: ${type}`);
 });
 
 function updateImageData() {

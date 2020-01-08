@@ -6,6 +6,11 @@ const imageWorker = new Worker("./image.worker", {
   type: "module"
 });
 
+const samplingWorker = new Worker("./sampling.worker", {
+  name: "sampling",
+  type: "module"
+});
+
 imageWorker.addEventListener("message", ({ data: msg }) => {
   if (typeof msg !== "object") {
     return console.log(`Message received at main: ${msg}`);
@@ -93,4 +98,8 @@ export function applyFilter(collection: string, name: string) {
 
 export function unapplyFilter() {
   imageWorker.postMessage(createMessage(MessageType.UNAPPLY_FILTER));
+}
+
+export function updateSampling(data: ImageData) {
+  samplingWorker.postMessage(createMessage(MessageType.UPDATE_SAMPLING));
 }
