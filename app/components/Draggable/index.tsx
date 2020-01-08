@@ -7,9 +7,17 @@ export interface DraggableProps extends WithReactChildren {
   onDrag?: (x: number, y: number) => void;
 }
 
-// TODO
 export class Draggable extends React.Component<DraggableProps> {
-  constructor() {}
+  constructor(props: DraggableProps) {
+    super(props);
+    const { initX, initY } = props;
+    if (initX) {
+      this.state.x = initX;
+    }
+    if (initX) {
+      this.state.y = initY;
+    }
+  }
 
   private dragging: boolean = false;
 
