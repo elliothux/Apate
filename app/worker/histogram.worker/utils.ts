@@ -3,6 +3,13 @@ export interface HistogramData {
   max: number;
 }
 
+// export function samplingImageData(
+//   { width, height, data }: ImageData,
+//   scale: number
+// ): Uint8ClampedArray {
+//
+// }
+
 export function generateHistogramData(
   imageData: Uint8ClampedArray,
   n: number
@@ -13,9 +20,11 @@ export function generateHistogramData(
   const bs = new Array<number>(n).fill(0);
 
   for (let i = 0; i < imageData.length; i += 4) {
-    const [r, g, b] = [imageData[i], imageData[i + 1], imageData[i + 2]].map(
-      i => normalizeU8(i, n)
-    );
+    const [r, g, b] = [
+      imageData[i],
+      imageData[i + 1],
+      imageData[i + 2]
+    ].map(i => normalizeU8(i, n));
 
     if (rs[r]) {
       rs[r] += 1;

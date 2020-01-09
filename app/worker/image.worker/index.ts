@@ -97,5 +97,9 @@ self.addEventListener("message", async ({ data: msg }) => {
 
 function updateImageData() {
   const data = bitmapImage!.get_current_data_array();
-  self.postMessage(createMessage(MessageType.GET_CURRENT_IMAGE_DATA, data));
+  self.postMessage(
+    createMessage(MessageType.GET_CURRENT_IMAGE_DATA, data),
+    "*",
+    [data]
+  );
 }
