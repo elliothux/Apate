@@ -1,13 +1,14 @@
 import { createMessage, MessageType, WorkerMessage } from "./share";
 import { imageStore } from "../state";
+import { drawHistogram } from "../modules/Histogram";
 
 const imageWorker = new Worker("./image.worker", {
   name: "image",
   type: "module"
 });
 
-const samplingWorker = new Worker("./sampling.worker", {
-  name: "sampling",
+const histogramWorker = new Worker("./histogram.worker", {
+  name: "histogram",
   type: "module"
 });
 
@@ -20,11 +21,30 @@ imageWorker.addEventListener("message", ({ data: msg }) => {
 
   switch (type) {
     case MessageType.GET_CURRENT_IMAGE_DATA: {
+      histogramWorker.postMessage(createMessage(MessageType.UPDATE_HISTOGRAM, data));
       return imageStore.rerenderImage(data);
     }
 
     case MessageType.READY:
       return;
+
+    default: {
+      return console.log(`Invalid message received at main: ${type}`);
+    }
+  }
+});
+
+histogramWorker.addEventListener("message", ({ data: msg }) => {
+  if (typeof msg !== "object") {
+    return console.log(`Message received at main: ${msg}`);
+  }
+
+  const { type, data } = msg as WorkerMessage;
+
+  switch (type) {
+    case MessageType.UPDATE_HISTOGRAM: {
+      return drawHistogram(data);
+    }
 
     default: {
       return console.log(`Invalid message received at main: ${type}`);
@@ -98,8 +118,4 @@ export function applyFilter(collection: string, name: string) {
 
 export function unapplyFilter() {
   imageWorker.postMessage(createMessage(MessageType.UNAPPLY_FILTER));
-}
-
-export function updateSampling(data: ImageData) {
-  samplingWorker.postMessage(createMessage(MessageType.UPDATE_SAMPLING));
 }

@@ -1,19 +1,21 @@
+import "./index.scss";
 import * as React from "react";
 import { observer } from "mobx-react";
 import { Maybe } from "../../types";
-import { mainStore } from "../../state";
+
+let ctx: Maybe<ImageBitmapRenderingContext> = null;
 
 @observer
 export class Histogram extends React.Component {
   private ref: Maybe<HTMLCanvasElement> = null;
 
-  private ctx: Maybe<CanvasRenderingContext2D> = null;
+  private ctx: Maybe<ImageBitmapRenderingContext> = null;
 
   private setRefAndCtx = (i: HTMLCanvasElement) => {
     this.ref = i;
     if (i) {
-      this.ctx = i.getContext("2d");
-      mainStore.setCanvasContext(this.ctx!);
+      this.ctx = i.getContext("bitmaprenderer");
+      ctx = this.ctx;
     }
   };
 
@@ -26,4 +28,8 @@ export class Histogram extends React.Component {
       </div>
     );
   }
+}
+
+export function drawHistogram(bitmap: ImageBitmap) {
+  ctx!.transferFromImageBitmap(bitmap);
 }

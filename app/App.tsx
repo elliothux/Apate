@@ -4,6 +4,7 @@ import { Canvas } from "./modules/Canvas";
 import { ToolBar } from "./modules/ToolBar";
 import { Adjustment } from "./modules/Adjustment";
 import { Filter } from "./modules/Filter";
+import { Histogram } from "./modules/Histogram";
 import { WithEmptyImage } from "./modules/WithEmptyImage";
 import { mainStore } from "./state";
 import { Maybe } from "./types";
@@ -16,14 +17,14 @@ function IApp() {
     return <p>Loading</p>;
   }
 
-  let content: Maybe<React.ReactElement>;
+  let panel: Maybe<React.ReactElement>;
   switch (view) {
     case ViewType.ADJUSTMENT: {
-      content = <Adjustment />;
+      panel = <Adjustment />;
       break;
     }
     case ViewType.FILTER: {
-      content = <Filter />;
+      panel = <Filter />;
       break;
     }
   }
@@ -32,8 +33,9 @@ function IApp() {
     <>
       <ToolBar />
       <WithEmptyImage>
-        {content}
         <Canvas />
+        {panel}
+        <Histogram />
       </WithEmptyImage>
     </>
   );

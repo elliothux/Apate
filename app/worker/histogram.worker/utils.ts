@@ -20,11 +20,9 @@ export function generateHistogramData(
   const bs = new Array<number>(n).fill(0);
 
   for (let i = 0; i < imageData.length; i += 4) {
-    const [r, g, b] = [
-      imageData[i],
-      imageData[i + 1],
-      imageData[i + 2]
-    ].map(i => normalizeU8(i, n));
+    const [r, g, b] = [imageData[i], imageData[i + 1], imageData[i + 2]].map(
+      i => normalizeU8(i, n)
+    );
 
     if (rs[r]) {
       rs[r] += 1;
@@ -63,4 +61,11 @@ function normalizeU8(value: number, n: number): number {
   }
 
   return Math.round((value * n) / 255);
+}
+
+export function drawRGBHistogram(
+  data: HistogramData,
+  ctx: OffscreenCanvasRenderingContext2D
+) {
+  // TODO
 }
