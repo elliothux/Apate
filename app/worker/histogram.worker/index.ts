@@ -1,11 +1,17 @@
 import { createMessage, MessageType, WorkerMessage } from "../share";
 import { drawRGBHistogram, generateHistogramData } from "./utils";
+import { loadWasmLib } from "../share";
 
 const [width, height] = [256, 100];
 const canvas = new OffscreenCanvas(width, height);
 const ctx = canvas.getContext("2d");
 
 const handlersMap = {
+  [MessageType.INIT]: async () => {
+    await loadWasmLib();
+    self.postMessage(createMessage(MessageType.READY));
+  },
+
   [MessageType.UPDATE_HISTOGRAM]: ({
     data,
     expand

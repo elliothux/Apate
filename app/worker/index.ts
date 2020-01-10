@@ -55,17 +55,20 @@ histogramWorker.addEventListener("message", ({ data: msg }) => {
 });
 
 export function init(): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const handler = (message: MessageEvent) => {
-      if (message.data.type !== MessageType.READY) {
-        return;
-      }
-      imageWorker.removeEventListener("message", handler);
-      resolve();
-    };
-    imageWorker.addEventListener("message", handler);
-    imageWorker.postMessage(createMessage(MessageType.INIT));
-  });
+  return Promise.all([
+    new Promise(resolve => {
+      const handler = (message: MessageEvent) => {
+        if (message.data.type !== MessageType.READY) {
+          return;
+        }
+        imageWorker.removeEventListener("message", handler);
+        resolve();
+      };
+
+      imageWorker.addEventListener("message", handler);
+      imageWorker.postMessage(createMessage(MessageType.INIT));
+    })
+  ]);
 }
 
 export function initImage(data: ImageData) {

@@ -1,3 +1,5 @@
+import { Maybe, PromiseValueType } from "../types";
+
 export enum MessageType {
   INIT = "init",
   READY = "ready",
@@ -14,7 +16,7 @@ export enum MessageType {
   SET_IMAGE_SHADOW = "set_image_shadow",
   APPLY_FILTER = "apply_filter",
   UNAPPLY_FILTER = "unapply_filter",
-  UPDATE_HISTOGRAM = 'update_histogram'
+  UPDATE_HISTOGRAM = "update_histogram"
 }
 
 export interface WorkerMessage<T = any> {
@@ -27,4 +29,23 @@ export function createMessage<T>(
   data?: T
 ): WorkerMessage<T> {
   return { type, data };
+}
+
+export type WasmModuleType = PromiseValueType<ReturnType<typeof loadWasmLib>>;
+
+let wasmModule: Maybe<WasmModuleType> = null;
+
+export function loadWasmLib() {
+  const i = import("../../pkg");
+  i.then(w => {
+    wasmModule = w;
+  });
+  return i;
+}
+
+export function getWasmLib(): WasmModuleType {
+  if (!wasmModule) {
+    throw new Error("WASM module not loaded.");
+  }
+  return wasmModule as WasmModuleType;
 }

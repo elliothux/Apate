@@ -1,6 +1,10 @@
 import { Maybe } from "types";
-import { createMessage, MessageType, WorkerMessage } from "../share";
-import { loadWasmLib } from "./loader";
+import {
+  createMessage,
+  MessageType,
+  WorkerMessage,
+  loadWasmLib
+} from "../share";
 import { createBitmapImage } from "./utils";
 import { getFilter } from "./filter";
 

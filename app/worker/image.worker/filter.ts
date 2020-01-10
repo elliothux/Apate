@@ -1,4 +1,4 @@
-import { getWasmLib } from "./loader";
+import { getWasmLib } from "../share";
 
 type Filter = ReturnType<typeof parseFilter>;
 

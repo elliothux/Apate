@@ -1,4 +1,4 @@
-import { getWasmLib } from "./loader";
+import { getWasmLib } from "../share";
 
 export function createBitmapImage(
   width: number,
@@ -8,5 +8,3 @@ export function createBitmapImage(
   const lib = getWasmLib();
   return lib.Image.from(width, height, data as any);
 }
-
-

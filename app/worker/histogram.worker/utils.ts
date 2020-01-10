@@ -3,13 +3,6 @@ export interface HistogramData {
   max: number;
 }
 
-// export function samplingImageData(
-//   { width, height, data }: ImageData,
-//   scale: number
-// ): Uint8ClampedArray {
-//
-// }
-
 export function generateHistogramData(
   imageData: Uint8ClampedArray,
   n: number

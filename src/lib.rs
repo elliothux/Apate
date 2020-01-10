@@ -5,6 +5,7 @@ pub mod color;
 pub mod image;
 pub mod utils;
 pub mod lut;
+pub mod histogram;
 
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]
