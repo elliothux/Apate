@@ -8,7 +8,7 @@ import { observer } from "mobx-react";
 import { ViewType } from "../../types/state";
 
 function IToolBar() {
-  const { view, setView } = mainStore;
+  const { view, setView, showHistogram, toggleHistogram } = mainStore;
 
   return (
     <div id="tool-bar">
@@ -23,7 +23,11 @@ function IToolBar() {
         <Gap w={5} />
         <Button icon={IconType.MINUS} />
         <Gap w={30} />
-        <Button icon={IconType.HISTOGRAM} />
+        <Button
+          icon={IconType.HISTOGRAM}
+          activated={showHistogram}
+          onClick={toggleHistogram}
+        />
       </ButtonGroup>
 
       <ButtonGroup>

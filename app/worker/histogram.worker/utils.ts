@@ -69,22 +69,27 @@ export function drawRGBHistogram(
   { data, max }: HistogramData,
   ctx: OffscreenCanvasRenderingContext2D,
   graphWidth: number,
-  graphHeight: number
+  graphHeight: number,
+  expand: boolean
 ) {
-  const colors = ["rgba(255,0,0,0.6)", "rgba(0,255,0,0.6)", "rgba(0,0,255,0.6)"];
+  const colors = [
+    "rgba(255,0,0,0.6)",
+    "rgba(0,255,0,0.6)",
+    "rgba(0,0,255,0.6)"
+  ];
 
   data.forEach((histogramData, index) => {
     ctx.fillStyle = colors[index];
     ctx.beginPath();
-    ctx.moveTo(0, graphHeight);
+    ctx.moveTo(0, expand ? graphHeight * (index + 1) : graphHeight);
 
     histogramData.forEach((i, index) => {
       const drawHeight = Math.round((i / max) * graphHeight);
       const drawX = index + 1;
-      ctx.lineTo(drawX, graphHeight - drawHeight);
+      ctx.lineTo(drawX, graphHeight * (expand ? index + 1 : 1) - drawHeight);
     });
 
-    ctx.lineTo(graphWidth, graphHeight);
+    ctx.lineTo(graphWidth, expand ? graphHeight * (index + 1) : graphHeight);
     ctx.closePath();
     ctx.fill();
   });

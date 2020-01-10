@@ -1,15 +1,26 @@
 import { createMessage, MessageType, WorkerMessage } from "../share";
 import { drawRGBHistogram, generateHistogramData } from "./utils";
 
-const canvas = new OffscreenCanvas(256, 100);
+const [width, height] = [256, 100];
+const canvas = new OffscreenCanvas(width, height);
 const ctx = canvas.getContext("2d");
 
 const handlersMap = {
-  [MessageType.UPDATE_HISTOGRAM]: (data: Uint8ClampedArray) => {
+  [MessageType.UPDATE_HISTOGRAM]: ({
+    data,
+    expand
+  }: {
+    data: Uint8ClampedArray;
+    expand: boolean;
+  }) => {
+    const h = expand ? height * 3 : height;
+    if (h !== canvas.height) {
+      ctx!.canvas.height = h;
+    }
+
     const bitmap = canvas.transferToImageBitmap();
     const histogramData = generateHistogramData(data, 255);
-    drawRGBHistogram(histogramData, ctx!, 256, 100);
-
+    drawRGBHistogram(histogramData, ctx!, width, height, expand);
     self.postMessage(createMessage(MessageType.UPDATE_HISTOGRAM, bitmap), [
       bitmap
     ]);

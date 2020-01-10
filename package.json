@@ -14,6 +14,7 @@
     "rc-slider": "^8.7.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-draggable": "^4.2.0",
     "react-uwp": "^1.2.31",
     "throttle-debounce": "^2.1.0"
   },

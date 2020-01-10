@@ -9,6 +9,8 @@ import EXPORT from "assets/icons/export.svg";
 import MINUS from "assets/icons/minus.svg";
 import PLUS from "assets/icons/plus.svg";
 import HISTOGRAM from "assets/icons/histogram.svg";
+import EXPAND from "assets/icons/expand.svg";
+import UNEXPAND from "assets/icons/unexpand.svg";
 
 export enum IconType {
   ADJUSTMENT = "adjustment",
@@ -18,7 +20,9 @@ export enum IconType {
   EXPORT = "EXPORT",
   MINUS = "minus",
   PLUS = "plus",
-  HISTOGRAM = "histogram"
+  HISTOGRAM = "histogram",
+  EXPAND = "expand",
+  UNEXPAND = "unexpand"
 }
 
 export enum IconSize {
@@ -30,9 +34,10 @@ export enum IconSize {
 interface Props {
   type: IconType;
   size?: IconSize;
+  onClick?: Function;
 }
 
-export function Icon({ type, size = IconSize.MEDIUM }: Props) {
+export function Icon({ type, size = IconSize.MEDIUM, onClick }: Props) {
   let src: string;
   let className: string;
 
@@ -75,6 +80,16 @@ export function Icon({ type, size = IconSize.MEDIUM }: Props) {
     case IconType.HISTOGRAM: {
       src = HISTOGRAM;
       className = IconType.HISTOGRAM;
+      break;
+    }
+    case IconType.EXPAND: {
+      src = EXPAND;
+      className = IconType.EXPAND;
+      break;
+    }
+    case IconType.UNEXPAND: {
+      src = UNEXPAND;
+      className = IconType.UNEXPAND;
       break;
     }
   }

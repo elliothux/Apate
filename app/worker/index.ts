@@ -1,6 +1,7 @@
+import { throttle } from "throttle-debounce";
 import { createMessage, MessageType, WorkerMessage } from "./share";
-import { imageStore } from "../state";
-import { drawHistogram } from "../modules/Histogram";
+import { imageStore, mainStore } from "../state";
+import { globalEvent, GlobalEventType } from "../utils";
 
 const imageWorker = new Worker("./image.worker", {
   name: "image",
@@ -21,8 +22,9 @@ imageWorker.addEventListener("message", ({ data: msg }) => {
 
   switch (type) {
     case MessageType.GET_CURRENT_IMAGE_DATA: {
-      histogramWorker.postMessage(createMessage(MessageType.UPDATE_HISTOGRAM, data));
-      return imageStore.rerenderImage(data);
+      imageStore.rerenderImage(data);
+      updateHistogram(data);
+      return;
     }
 
     case MessageType.READY:
@@ -43,7 +45,7 @@ histogramWorker.addEventListener("message", ({ data: msg }) => {
 
   switch (type) {
     case MessageType.UPDATE_HISTOGRAM: {
-      return drawHistogram(data);
+      return globalEvent.emit(GlobalEventType.DRAW_HISTOGRAM, data);
     }
 
     default: {
@@ -68,6 +70,9 @@ export function init(): Promise<void> {
 
 export function initImage(data: ImageData) {
   imageWorker.postMessage(createMessage(MessageType.INIT_IMAGE, data));
+  // TODO: fix
+  iUpdateHistogram(data.data);
+  setTimeout(() => iUpdateHistogram(data.data), 1000);
 }
 
 export function getCurrentImageData() {
@@ -119,3 +124,14 @@ export function applyFilter(collection: string, name: string) {
 export function unapplyFilter() {
   imageWorker.postMessage(createMessage(MessageType.UNAPPLY_FILTER));
 }
+
+function iUpdateHistogram(data: Uint8ClampedArray) {
+  histogramWorker.postMessage(
+    createMessage(MessageType.UPDATE_HISTOGRAM, {
+      data,
+      expand: mainStore.expandHistogram
+    })
+  );
+}
+
+export const updateHistogram = throttle(2000, iUpdateHistogram);

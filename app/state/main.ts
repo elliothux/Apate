@@ -2,6 +2,7 @@ import { action, observable, runInAction } from "mobx";
 import { Maybe } from "types";
 import * as worker from "../worker";
 import { ViewType } from "../types/state";
+import { updateHistogram } from "../worker";
 
 export class MainStore {
   constructor() {
@@ -71,6 +72,25 @@ export class MainStore {
   @action
   public setView = (i: ViewType) => {
     this.view = i;
+  };
+
+  @observable
+  public showHistogram: boolean = true;
+
+  @action
+  public toggleHistogram = () => {
+    this.showHistogram = !this.showHistogram;
+  };
+
+  @observable
+  public expandHistogram: boolean = false;
+
+  @action
+  public toggleExpandHistogram = () => {
+    this.expandHistogram = !this.expandHistogram;
+    updateHistogram(
+      this.canvasContext!.getImageData(0, 0, this.width, this.height).data
+    );
   };
 }
 
