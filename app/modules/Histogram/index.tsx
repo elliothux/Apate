@@ -22,7 +22,7 @@ export class Histogram extends React.Component {
   render() {
     return (
       <div id="histogram">
-        <canvas ref={this.setRefAndCtx} width={521} height={208}>
+        <canvas ref={this.setRefAndCtx} width={256} height={100}>
           你的浏览器不支持canvas
         </canvas>
       </div>

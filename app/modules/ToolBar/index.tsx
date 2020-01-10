@@ -22,6 +22,8 @@ function IToolBar() {
         <Button icon={IconType.PLUS} />
         <Gap w={5} />
         <Button icon={IconType.MINUS} />
+        <Gap w={30} />
+        <Button icon={IconType.HISTOGRAM} />
       </ButtonGroup>
 
       <ButtonGroup>

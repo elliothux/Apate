@@ -20,9 +20,11 @@ export function generateHistogramData(
   const bs = new Array<number>(n).fill(0);
 
   for (let i = 0; i < imageData.length; i += 4) {
-    const [r, g, b] = [imageData[i], imageData[i + 1], imageData[i + 2]].map(
-      i => normalizeU8(i, n)
-    );
+    const [r, g, b] = [
+      imageData[i],
+      imageData[i + 1],
+      imageData[i + 2]
+    ].map(i => normalizeU8(i, n));
 
     if (rs[r]) {
       rs[r] += 1;
@@ -64,8 +66,26 @@ function normalizeU8(value: number, n: number): number {
 }
 
 export function drawRGBHistogram(
-  data: HistogramData,
-  ctx: OffscreenCanvasRenderingContext2D
+  { data, max }: HistogramData,
+  ctx: OffscreenCanvasRenderingContext2D,
+  graphWidth: number,
+  graphHeight: number
 ) {
-  // TODO
+  const colors = ["rgba(255,0,0,0.6)", "rgba(0,255,0,0.6)", "rgba(0,0,255,0.6)"];
+
+  data.forEach((histogramData, index) => {
+    ctx.fillStyle = colors[index];
+    ctx.beginPath();
+    ctx.moveTo(0, graphHeight);
+
+    histogramData.forEach((i, index) => {
+      const drawHeight = Math.round((i / max) * graphHeight);
+      const drawX = index + 1;
+      ctx.lineTo(drawX, graphHeight - drawHeight);
+    });
+
+    ctx.lineTo(graphWidth, graphHeight);
+    ctx.closePath();
+    ctx.fill();
+  });
 }

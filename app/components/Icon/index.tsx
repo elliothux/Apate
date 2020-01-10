@@ -8,6 +8,7 @@ import DOWN from "assets/icons/down.svg";
 import EXPORT from "assets/icons/export.svg";
 import MINUS from "assets/icons/minus.svg";
 import PLUS from "assets/icons/plus.svg";
+import HISTOGRAM from "assets/icons/histogram.svg";
 
 export enum IconType {
   ADJUSTMENT = "adjustment",
@@ -16,7 +17,8 @@ export enum IconType {
   DOWN = "down",
   EXPORT = "EXPORT",
   MINUS = "minus",
-  PLUS = "plus"
+  PLUS = "plus",
+  HISTOGRAM = "histogram"
 }
 
 export enum IconSize {
@@ -68,6 +70,11 @@ export function Icon({ type, size = IconSize.MEDIUM }: Props) {
     case IconType.PLUS: {
       src = PLUS;
       className = IconType.PLUS;
+      break;
+    }
+    case IconType.HISTOGRAM: {
+      src = HISTOGRAM;
+      className = IconType.HISTOGRAM;
       break;
     }
   }
