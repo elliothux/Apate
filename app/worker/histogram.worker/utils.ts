@@ -73,24 +73,33 @@ export function drawRGBHistogram(
   expand: boolean
 ) {
   const colors = [
-    "rgba(255,0,0,0.6)",
-    "rgba(0,255,0,0.6)",
-    "rgba(0,0,255,0.6)"
+    "rgba(255,0,0,0.45)",
+    "rgba(0,255,0,0.45)",
+    "rgba(0,0,255,0.45)"
   ];
+  const borderColors = ["#ff0000", "#00ff00", "#0000ff"];
 
-  data.forEach((histogramData, index) => {
-    ctx.fillStyle = colors[index];
+  data.forEach((histogramData, histogramIndex) => {
+    ctx.fillStyle = colors[histogramIndex];
+    ctx.strokeStyle = borderColors[histogramIndex];
     ctx.beginPath();
-    ctx.moveTo(0, expand ? graphHeight * (index + 1) : graphHeight);
+    ctx.moveTo(0, expand ? graphHeight * (histogramIndex + 1) : graphHeight);
 
     histogramData.forEach((i, index) => {
       const drawHeight = Math.round((i / max) * graphHeight);
       const drawX = index + 1;
-      ctx.lineTo(drawX, graphHeight * (expand ? index + 1 : 1) - drawHeight);
+      ctx.lineTo(
+        drawX,
+        graphHeight * (expand ? histogramIndex + 1 : 1) - drawHeight + 1
+      );
     });
 
-    ctx.lineTo(graphWidth, expand ? graphHeight * (index + 1) : graphHeight);
+    ctx.lineTo(
+      graphWidth,
+      expand ? graphHeight * (histogramIndex + 1) : graphHeight
+    );
     ctx.closePath();
     ctx.fill();
+    ctx.stroke();
   });
 }

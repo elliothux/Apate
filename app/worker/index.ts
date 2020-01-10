@@ -70,9 +70,7 @@ export function init(): Promise<void> {
 
 export function initImage(data: ImageData) {
   imageWorker.postMessage(createMessage(MessageType.INIT_IMAGE, data));
-  // TODO: fix
-  iUpdateHistogram(data.data);
-  setTimeout(() => iUpdateHistogram(data.data), 1000);
+  updateHistogram(data.data);
 }
 
 export function getCurrentImageData() {

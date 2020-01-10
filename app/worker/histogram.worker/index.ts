@@ -16,11 +16,12 @@ const handlersMap = {
     const h = expand ? height * 3 : height;
     if (h !== canvas.height) {
       ctx!.canvas.height = h;
+      ctx!.clearRect(0, 0, width, h);
     }
 
-    const bitmap = canvas.transferToImageBitmap();
     const histogramData = generateHistogramData(data, 255);
     drawRGBHistogram(histogramData, ctx!, width, height, expand);
+    const bitmap = canvas.transferToImageBitmap();
     self.postMessage(createMessage(MessageType.UPDATE_HISTOGRAM, bitmap), [
       bitmap
     ]);
