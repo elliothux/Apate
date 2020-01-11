@@ -53,6 +53,6 @@ pub fn normalize_u8(value: u8, n: usize) -> u8 {
     if n == 255 {
         value
     } else {
-        ((value as f32) * (n as f32) / 255_f32).round() as u8
+        ((value as f32) / 255_f32 * (n as f32)).round() as u8
     }
 }

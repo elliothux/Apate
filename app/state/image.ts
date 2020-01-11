@@ -7,7 +7,8 @@ const THROTTLE_TIMEOUT = 200;
 
 export class ImageStore {
   public initImageData = () => {
-    worker.initImage(this.getImageData());
+    const data = this.getImageData();
+    worker.initImage(data);
   };
 
   public getImageData = (): ImageData => {

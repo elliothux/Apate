@@ -1,10 +1,17 @@
 import { createMessage, MessageType, WorkerMessage } from "../share";
-import { drawRGBHistogram, generateHistogramData } from "./utils";
+import {
+  drawRGBHistogram,
+  generateHistogramData,
+  HistogramData
+} from "./utils";
 import { loadWasmLib } from "../share";
+import { Maybe } from "../../types";
 
 const [width, height] = [256, 100];
 const canvas = new OffscreenCanvas(width, height);
 const ctx = canvas.getContext("2d");
+
+let histogramData: Maybe<HistogramData> = null;
 
 const handlersMap = {
   [MessageType.INIT]: async () => {
@@ -25,8 +32,16 @@ const handlersMap = {
       ctx!.clearRect(0, 0, width, h);
     }
 
-    const histogramData = generateHistogramData(data, 255);
-    drawRGBHistogram(histogramData, ctx!, width, height, expand);
+    histogramData = generateHistogramData(data, 255, 100);
+    drawRGBHistogram(ctx!, expand, histogramData);
+    const bitmap = canvas.transferToImageBitmap();
+    self.postMessage(createMessage(MessageType.UPDATE_HISTOGRAM, bitmap), [
+      bitmap
+    ]);
+  },
+
+  [MessageType.TOGGLE_HISTOGRAM_EXPAND]: (expand: boolean) => {
+    drawRGBHistogram(ctx!, expand, histogramData!);
     const bitmap = canvas.transferToImageBitmap();
     self.postMessage(createMessage(MessageType.UPDATE_HISTOGRAM, bitmap), [
       bitmap

@@ -54,7 +54,7 @@ histogramWorker.addEventListener("message", ({ data: msg }) => {
   }
 });
 
-export function init(): Promise<void> {
+export function init(): Promise<any> {
   return Promise.all([
     new Promise(resolve => {
       const handler = (message: MessageEvent) => {
@@ -67,6 +67,18 @@ export function init(): Promise<void> {
 
       imageWorker.addEventListener("message", handler);
       imageWorker.postMessage(createMessage(MessageType.INIT));
+    }),
+    new Promise(resolve => {
+      const handler = (message: MessageEvent) => {
+        if (message.data.type !== MessageType.READY) {
+          return;
+        }
+        histogramWorker.removeEventListener("message", handler);
+        resolve();
+      };
+
+      histogramWorker.addEventListener("message", handler);
+      histogramWorker.postMessage(createMessage(MessageType.INIT));
     })
   ]);
 }

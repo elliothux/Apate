@@ -6,6 +6,7 @@ pub mod image;
 pub mod utils;
 pub mod lut;
 pub mod histogram;
+pub mod resampling;
 
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]

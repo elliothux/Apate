@@ -16,7 +16,8 @@ export enum MessageType {
   SET_IMAGE_SHADOW = "set_image_shadow",
   APPLY_FILTER = "apply_filter",
   UNAPPLY_FILTER = "unapply_filter",
-  UPDATE_HISTOGRAM = "update_histogram"
+  UPDATE_HISTOGRAM = "update_histogram",
+  TOGGLE_HISTOGRAM_EXPAND = "toggle_histogram_expand"
 }
 
 export interface WorkerMessage<T = any> {

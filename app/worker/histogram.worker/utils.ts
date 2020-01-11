@@ -1,69 +1,50 @@
+import { getWasmLib } from "../share";
+
 export interface HistogramData {
-  data: [number[], number[], number[]];
+  rs: Uint32Array;
+  gs: Uint32Array;
+  bs: Uint32Array;
   max: number;
+  width: number;
+  height: number;
 }
+
+const [samplingWidth, samplingHeight] = [300, 300];
+const samplingSize = 4 * samplingWidth * samplingHeight;
 
 export function generateHistogramData(
   imageData: Uint8ClampedArray,
-  n: number
+  width: number,
+  height: number
 ): HistogramData {
-  let max = 1;
-  const rs = new Array<number>(n).fill(0);
-  const gs = new Array<number>(n).fill(0);
-  const bs = new Array<number>(n).fill(0);
-
-  for (let i = 0; i < imageData.length; i += 4) {
-    const [r, g, b] = [
-      imageData[i],
-      imageData[i + 1],
-      imageData[i + 2]
-    ].map(i => normalizeU8(i, n));
-
-    if (rs[r]) {
-      rs[r] += 1;
-      if (rs[r] > max) {
-        max = rs[r];
-      }
-    } else {
-      rs[r] = 1;
-    }
-
-    if (gs[g]) {
-      gs[g] += 1;
-      if (gs[g] > max) {
-        max = gs[g];
-      }
-    } else {
-      gs[g] = 1;
-    }
-
-    if (bs[b]) {
-      bs[b] += 1;
-      if (bs[b] > max) {
-        max = bs[b];
-      }
-    } else {
-      bs[b] = 1;
-    }
+  let targetWidth = width;
+  let targetHeight = height;
+  if (imageData.length > samplingSize) {
+    const scale = samplingSize / imageData.length;
+    targetWidth = Math.round(width * scale);
+    targetHeight = Math.round(height * scale);
   }
 
-  return { data: [rs, gs, bs], max } as HistogramData;
-}
-
-function normalizeU8(value: number, n: number): number {
-  if (n === 255) {
-    return value;
-  }
-
-  return Math.round((value * n) / 255);
+  const lib = getWasmLib();
+  const result = lib.generate_histogram_data(imageData as any, width, height, targetWidth, targetHeight);
+  const indexes = [1, width + 1, width * 2 + 1, width * 3 + 1];
+  const rs = result.subarray(indexes[0], indexes[1]);
+  const gs = result.subarray(indexes[1], indexes[2]);
+  const bs = result.subarray(indexes[2], indexes[3]);
+  return {
+    rs,
+    gs,
+    bs,
+    max: result[0],
+    width,
+    height
+  } as HistogramData;
 }
 
 export function drawRGBHistogram(
-  { data, max }: HistogramData,
   ctx: OffscreenCanvasRenderingContext2D,
-  graphWidth: number,
-  graphHeight: number,
-  expand: boolean
+  expand: boolean,
+  { rs, gs, bs, max, width, height }: HistogramData
 ) {
   const colors = [
     "rgba(255,0,0,0.45)",
@@ -72,25 +53,22 @@ export function drawRGBHistogram(
   ];
   const borderColors = ["#ff0000", "#00ff00", "#0000ff"];
 
-  data.forEach((histogramData, histogramIndex) => {
+  [rs, gs, bs].forEach((histogramData, histogramIndex) => {
     ctx.fillStyle = colors[histogramIndex];
     ctx.strokeStyle = borderColors[histogramIndex];
     ctx.beginPath();
-    ctx.moveTo(0, expand ? graphHeight * (histogramIndex + 1) : graphHeight);
+    ctx.moveTo(0, expand ? height * (histogramIndex + 1) : height);
 
     histogramData.forEach((i, index) => {
-      const drawHeight = Math.round((i / max) * graphHeight);
+      const drawHeight = Math.round((i / max) * height);
       const drawX = index + 1;
       ctx.lineTo(
         drawX,
-        graphHeight * (expand ? histogramIndex + 1 : 1) - drawHeight + 1
+        height * (expand ? histogramIndex + 1 : 1) - drawHeight + 1
       );
     });
 
-    ctx.lineTo(
-      graphWidth,
-      expand ? graphHeight * (histogramIndex + 1) : graphHeight
-    );
+    ctx.lineTo(width, expand ? height * (histogramIndex + 1) : height);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
