@@ -71,12 +71,10 @@ export function drawRGBHistogram(
       const drawX = index + 1;
       const drawY = expand ? height * (histogramIndex + 1) - i : height - i;
       ctx.lineTo(drawX, drawY);
-      console.log("x, y: ", drawX, drawY);
     });
 
     const endX = width;
     const endY = expand ? height * (histogramIndex + 1) : height;
-    console.log(endX, endY);
     ctx.lineTo(endX, endY);
     ctx.closePath();
     ctx.fill();

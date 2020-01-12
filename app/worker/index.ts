@@ -154,3 +154,9 @@ function iUpdateHistogram(
 }
 
 export const updateHistogram = throttle(2000, iUpdateHistogram);
+
+export function toggleHistogramExpand(expand: boolean) {
+  histogramWorker.postMessage(
+    createMessage(MessageType.TOGGLE_HISTOGRAM_EXPAND, expand)
+  );
+}

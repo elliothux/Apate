@@ -30,26 +30,27 @@ const handlersMap = {
     height: number;
     expand: boolean;
   }) => {
-    const h = expand ? histogramH * 3 : histogramH;
-    if (h !== canvas.height) {
-      ctx!.canvas.height = h;
-      ctx!.clearRect(0, 0, width, h);
-    }
-
-    histogramData = generateHistogramData(data, width, height, histogramW, histogramH);
+    histogramData = generateHistogramData(
+      data,
+      width,
+      height,
+      histogramW,
+      histogramH
+    );
     drawRGBHistogram(ctx!, expand, histogramData);
-    const bitmap = canvas.transferToImageBitmap();
-    self.postMessage(createMessage(MessageType.UPDATE_HISTOGRAM, bitmap), [
-      bitmap
-    ]);
+    drawBitmap();
   },
 
   [MessageType.TOGGLE_HISTOGRAM_EXPAND]: (expand: boolean) => {
+    const h = expand ? histogramH * 3 : histogramH;
+    if (h !== canvas.height) {
+      ctx!.canvas.height = h;
+      ctx!.clearRect(0, 0, histogramW, h);
+      drawBitmap();
+    }
+
     drawRGBHistogram(ctx!, expand, histogramData!);
-    const bitmap = canvas.transferToImageBitmap();
-    self.postMessage(createMessage(MessageType.UPDATE_HISTOGRAM, bitmap), [
-      bitmap
-    ]);
+    drawBitmap();
   }
 };
 
@@ -66,3 +67,10 @@ self.addEventListener("message", async ({ data: msg }) => {
 
   return console.log(`Invalid message received at histogram.worker: ${type}`);
 });
+
+function drawBitmap() {
+  const bitmap = canvas.transferToImageBitmap();
+  self.postMessage(createMessage(MessageType.UPDATE_HISTOGRAM, bitmap), [
+    bitmap
+  ]);
+}

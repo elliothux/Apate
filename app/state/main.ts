@@ -2,7 +2,7 @@ import { action, observable, runInAction } from "mobx";
 import { Maybe } from "types";
 import * as worker from "../worker";
 import { ViewType } from "../types/state";
-import { updateHistogram } from "../worker";
+import { toggleHistogramExpand, updateHistogram } from "../worker";
 
 export class MainStore {
   constructor() {
@@ -88,11 +88,7 @@ export class MainStore {
   @action
   public toggleExpandHistogram = () => {
     this.expandHistogram = !this.expandHistogram;
-    updateHistogram(
-      this.canvasContext!.getImageData(0, 0, this.width, this.height).data,
-      this.width,
-      this.height
-    );
+    toggleHistogramExpand(this.expandHistogram);
   };
 }
 
