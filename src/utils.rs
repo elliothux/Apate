@@ -49,10 +49,14 @@ pub fn linear_interpolation(v1: f32, v2: f32, d: f32) -> f32 {
     v1 + (v2 - v1) * d
 }
 
-pub fn normalize_u8(value: u8, n: usize) -> u8 {
+pub fn normalize_u8(value: u8, n: u32) -> u8 {
     if n == 255 {
         value
     } else {
         ((value as f32) / 255_f32 * (n as f32)).round() as u8
     }
+}
+
+pub fn normalize(value: u32, max: u32, n: u32) -> u32 {
+    value * n / max
 }

@@ -4,7 +4,6 @@ export interface HistogramData {
   rs: Uint32Array;
   gs: Uint32Array;
   bs: Uint32Array;
-  max: number;
   width: number;
   height: number;
 }
@@ -14,20 +13,30 @@ const samplingSize = 4 * samplingWidth * samplingHeight;
 
 export function generateHistogramData(
   imageData: Uint8ClampedArray,
-  width: number,
-  height: number
+  imageWidth: number,
+  imageHeight: number,
+  histogramWidth: number,
+  histogramHeight: number
 ): HistogramData {
-  let targetWidth = width;
-  let targetHeight = height;
+  let targetWidth = histogramWidth;
+  let targetHeight = histogramHeight;
   if (imageData.length > samplingSize) {
     const scale = samplingSize / imageData.length;
-    targetWidth = Math.round(width * scale);
-    targetHeight = Math.round(height * scale);
+    targetWidth = Math.round(histogramWidth * scale);
+    targetHeight = Math.round(histogramHeight * scale);
   }
 
   const lib = getWasmLib();
-  const result = lib.generate_histogram_data(imageData as any, width, height, targetWidth, targetHeight);
-  const indexes = [1, width + 1, width * 2 + 1, width * 3 + 1];
+  const result = lib.generate_histogram_data(
+    imageData as any,
+    histogramWidth,
+    histogramHeight,
+    imageWidth,
+    imageHeight,
+    targetWidth,
+    targetHeight
+  );
+  const indexes = [0, histogramWidth, histogramWidth * 2, histogramWidth * 3];
   const rs = result.subarray(indexes[0], indexes[1]);
   const gs = result.subarray(indexes[1], indexes[2]);
   const bs = result.subarray(indexes[2], indexes[3]);
@@ -35,16 +44,15 @@ export function generateHistogramData(
     rs,
     gs,
     bs,
-    max: result[0],
-    width,
-    height
+    width: histogramWidth,
+    height: histogramHeight
   } as HistogramData;
 }
 
 export function drawRGBHistogram(
   ctx: OffscreenCanvasRenderingContext2D,
   expand: boolean,
-  { rs, gs, bs, max, width, height }: HistogramData
+  { rs, gs, bs, width, height }: HistogramData
 ) {
   const colors = [
     "rgba(255,0,0,0.45)",
@@ -60,15 +68,16 @@ export function drawRGBHistogram(
     ctx.moveTo(0, expand ? height * (histogramIndex + 1) : height);
 
     histogramData.forEach((i, index) => {
-      const drawHeight = Math.round((i / max) * height);
       const drawX = index + 1;
-      ctx.lineTo(
-        drawX,
-        height * (expand ? histogramIndex + 1 : 1) - drawHeight + 1
-      );
+      const drawY = expand ? height * (histogramIndex + 1) - i : height - i;
+      ctx.lineTo(drawX, drawY);
+      console.log("x, y: ", drawX, drawY);
     });
 
-    ctx.lineTo(width, expand ? height * (histogramIndex + 1) : height);
+    const endX = width;
+    const endY = expand ? height * (histogramIndex + 1) : height;
+    console.log(endX, endY);
+    ctx.lineTo(endX, endY);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();

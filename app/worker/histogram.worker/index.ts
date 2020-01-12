@@ -7,8 +7,8 @@ import {
 import { loadWasmLib } from "../share";
 import { Maybe } from "../../types";
 
-const [width, height] = [256, 100];
-const canvas = new OffscreenCanvas(width, height);
+const [histogramW, histogramH] = [256, 100];
+const canvas = new OffscreenCanvas(histogramW, histogramH);
 const ctx = canvas.getContext("2d");
 
 let histogramData: Maybe<HistogramData> = null;
@@ -21,18 +21,22 @@ const handlersMap = {
 
   [MessageType.UPDATE_HISTOGRAM]: ({
     data,
-    expand
+    expand,
+    width,
+    height
   }: {
     data: Uint8ClampedArray;
+    width: number;
+    height: number;
     expand: boolean;
   }) => {
-    const h = expand ? height * 3 : height;
+    const h = expand ? histogramH * 3 : histogramH;
     if (h !== canvas.height) {
       ctx!.canvas.height = h;
       ctx!.clearRect(0, 0, width, h);
     }
 
-    histogramData = generateHistogramData(data, 255, 100);
+    histogramData = generateHistogramData(data, width, height, histogramW, histogramH);
     drawRGBHistogram(ctx!, expand, histogramData);
     const bitmap = canvas.transferToImageBitmap();
     self.postMessage(createMessage(MessageType.UPDATE_HISTOGRAM, bitmap), [

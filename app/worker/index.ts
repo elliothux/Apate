@@ -23,7 +23,7 @@ imageWorker.addEventListener("message", ({ data: msg }) => {
   switch (type) {
     case MessageType.GET_CURRENT_IMAGE_DATA: {
       imageStore.rerenderImage(data);
-      updateHistogram(data);
+      updateHistogram(data, mainStore.width, mainStore.height);
       return;
     }
 
@@ -85,7 +85,7 @@ export function init(): Promise<any> {
 
 export function initImage(data: ImageData) {
   imageWorker.postMessage(createMessage(MessageType.INIT_IMAGE, data));
-  updateHistogram(data.data);
+  updateHistogram(data.data, data.width, data.height);
 }
 
 export function getCurrentImageData() {
@@ -138,10 +138,16 @@ export function unapplyFilter() {
   imageWorker.postMessage(createMessage(MessageType.UNAPPLY_FILTER));
 }
 
-function iUpdateHistogram(data: Uint8ClampedArray) {
+function iUpdateHistogram(
+  data: Uint8ClampedArray,
+  width: number,
+  height: number
+) {
   histogramWorker.postMessage(
     createMessage(MessageType.UPDATE_HISTOGRAM, {
       data,
+      width,
+      height,
       expand: mainStore.expandHistogram
     })
   );

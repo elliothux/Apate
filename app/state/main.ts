@@ -89,7 +89,9 @@ export class MainStore {
   public toggleExpandHistogram = () => {
     this.expandHistogram = !this.expandHistogram;
     updateHistogram(
-      this.canvasContext!.getImageData(0, 0, this.width, this.height).data
+      this.canvasContext!.getImageData(0, 0, this.width, this.height).data,
+      this.width,
+      this.height
     );
   };
 }
