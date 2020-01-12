@@ -128,6 +128,10 @@ export function setImageShadow(v: number) {
   imageWorker.postMessage(createMessage(MessageType.SET_IMAGE_SHADOW, v));
 }
 
+export function loadFilter(collection: string, name: string) {
+
+}
+
 export function applyFilter(collection: string, name: string) {
   imageWorker.postMessage(
     createMessage(MessageType.APPLY_FILTER, { collection, name })

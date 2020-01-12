@@ -15,6 +15,7 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-draggable": "^4.2.0",
+    "react-spinners": "^0.8.0",
     "react-uwp": "^1.2.31",
     "throttle-debounce": "^2.1.0"
   },
@@ -35,6 +36,7 @@
     "babel-eslint": "10.0.3",
     "babel-jest": "^24.9.0",
     "babel-loader": "8.0.6",
+    "babel-plugin-emotion": "^10.0.27",
     "babel-plugin-named-asset-import": "^0.3.5",
     "babel-preset-react-app": "^9.1.0",
     "camelcase": "^5.3.1",

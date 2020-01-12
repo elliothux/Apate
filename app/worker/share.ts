@@ -14,6 +14,7 @@ export enum MessageType {
   SET_IMAGE_CONTRAST = "set_image_contract",
   SET_IMAGE_HIGHLIGHT = "set_image_highlight",
   SET_IMAGE_SHADOW = "set_image_shadow",
+  LOAD_FILTER = "load_filter",
   APPLY_FILTER = "apply_filter",
   UNAPPLY_FILTER = "unapply_filter",
   UPDATE_HISTOGRAM = "update_histogram",

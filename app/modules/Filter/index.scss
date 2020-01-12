@@ -32,6 +32,10 @@
       position: relative;
       cursor: pointer;
 
+      & > div:first-child {
+        transform: scale(0.6) translate(47px, -7px);
+      }
+
       &.selected {
         p {
           background-color: #b3d4fc !important;
@@ -54,5 +58,11 @@
         letter-spacing: 1px;
       }
     }
+  }
+
+  #filter-snapshots {
+    position: absolute;
+    top: 75px;
+    left: 15px;
   }
 }

@@ -1,11 +1,19 @@
 import { action, observable } from "mobx";
-import { Maybe } from "types";
+import { FilterCollection, Maybe } from "types";
 import * as worker from "../worker";
 import { filters } from "../../filter";
 
 export class FilterStore {
   @observable
-  public filters: [string, string[]][] = Object.entries(filters);
+  public filters: FilterCollection[] = Object.entries(filters);
+
+  @observable
+  public loadedFilterMap: { [name: string]: true } = {};
+
+  @action
+  public setFilterLoaded = (name: string) => {
+    this.loadedFilterMap[name] = true;
+  };
 
   @observable
   public currentCollectionIndex: number = 0;

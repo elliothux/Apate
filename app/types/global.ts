@@ -21,3 +21,7 @@ export enum RequestStatus {
   SUCCESS = "success",
   FAILED = "failed"
 }
+
+export type FilterNames = string[];
+
+export type FilterCollection = [string, FilterNames];
