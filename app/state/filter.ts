@@ -28,15 +28,16 @@ export class FilterStore {
 
   @action
   public selectFilter = (filterIndex: number) => {
-    this.appliedFilter = [this.currentCollectionIndex, filterIndex];
     this.filterStrength = 100;
 
-    const [name, filters] = this.filters[this.currentCollectionIndex];
-    return this.applyFilter(name, filters[filterIndex]);
-  };
-
-  private applyFilter = async (collection: string, name: string) => {
-    return worker.applyFilter(collection, name);
+    if (filterIndex > -1) {
+      this.appliedFilter = [this.currentCollectionIndex, filterIndex];
+      const [collection, filters] = this.filters[this.currentCollectionIndex];
+      return worker.applyFilter(collection, filters[filterIndex]);
+    } else {
+      this.appliedFilter = null;
+      return worker.unapplyFilter();
+    }
   };
 }
 

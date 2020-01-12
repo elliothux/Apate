@@ -29,6 +29,12 @@ export class Filter extends React.Component {
 
     return (
       <div className="filter-collection">
+        <div
+          className={`filter-item${!appliedFilter ? " selected" : ""}`}
+          onClick={() => filterStore.selectFilter(-1)}
+        >
+          <p>None</p>
+        </div>
         {filters.map((name, index) => {
           const selected =
             appliedFilter &&
