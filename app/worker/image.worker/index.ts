@@ -20,6 +20,7 @@ const handlersMap = {
   [MessageType.INIT_IMAGE]: (data: ImageData) => {
     initSnapshotOriginalData(data);
     bitmapImage = createBitmapImage(data.width, data.height, data.data);
+    self.postMessage(createMessage(MessageType.INIT_IMAGE));
   },
 
   [MessageType.GET_CURRENT_IMAGE_DATA]: updateImageData,
@@ -69,19 +70,20 @@ const handlersMap = {
     updateImageData();
   },
 
-  [MessageType.LOAD_FILTER]: async ({
+  [MessageType.LOAD_FILTER]: ({
     collectionName,
-    name
+    filters
   }: {
     collectionName: string;
-    name: string;
-    index: number;
+    filters: string[];
   }) => {
-    const filter = await getFilter(collectionName, name);
-    const snapshot = await generateFilterSnapshot(filter);
-    self.postMessage(
-      createMessage(MessageType.LOAD_FILTER, { name, snapshot })
-    );
+    filters.forEach(async name => {
+      const filter = await getFilter(collectionName, name);
+      const snapshot = await generateFilterSnapshot(filter);
+      self.postMessage(
+        createMessage(MessageType.LOAD_FILTER, { name, snapshot })
+      );
+    });
   },
 
   [MessageType.APPLY_FILTER]: async ({

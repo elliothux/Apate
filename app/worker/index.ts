@@ -21,6 +21,10 @@ imageWorker.addEventListener("message", ({ data: msg }) => {
   const { type, data } = msg as WorkerMessage;
 
   switch (type) {
+    case MessageType.INIT_IMAGE: {
+      return filterStore.selectCollection(0);
+    }
+
     case MessageType.GET_CURRENT_IMAGE_DATA: {
       imageStore.rerenderImage(data);
       return updateHistogram(data, mainStore.width, mainStore.height);
@@ -72,6 +76,7 @@ export function init(): Promise<any> {
       imageWorker.addEventListener("message", handler);
       imageWorker.postMessage(createMessage(MessageType.INIT));
     }),
+
     new Promise(resolve => {
       const handler = (message: MessageEvent) => {
         if (message.data.type !== MessageType.READY) {
@@ -132,9 +137,12 @@ export function setImageShadow(v: number) {
   imageWorker.postMessage(createMessage(MessageType.SET_IMAGE_SHADOW, v));
 }
 
-export function loadFilter(collectionName: string, name: string) {
+export function loadFilterCollection(
+  collectionName: string,
+  filters: string[]
+) {
   imageWorker.postMessage(
-    createMessage(MessageType.LOAD_FILTER, { collectionName, name })
+    createMessage(MessageType.LOAD_FILTER, { collectionName, filters })
   );
 }
 

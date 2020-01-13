@@ -2,7 +2,7 @@ import { action, observable, runInAction } from "mobx";
 import { Maybe } from "types";
 import * as worker from "../worker";
 import { ViewType } from "../types/state";
-import { toggleHistogramExpand, updateHistogram } from "../worker";
+import { toggleHistogramExpand } from "../worker";
 
 export class MainStore {
   constructor() {

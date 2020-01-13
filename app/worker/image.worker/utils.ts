@@ -9,7 +9,7 @@ export function createBitmapImage(
   return lib.Image.from(width, height, data as any);
 }
 
-export function getSnapshotOriginalData(
+export function cropImageData(
   imageData: ImageData,
   width: number,
   height: number
@@ -61,14 +61,13 @@ export function getColumns(
   start: number,
   end: number
 ): Uint8ClampedArray {
-  const length = (end - start) * 4 * height;
-  const result: number[] = new Array(length);
+  let result: number[] = [];
 
   for (let i = 0; i < width; i++) {
     const startIndex = i * width * 4 + start * 4;
     const endIndex = i * width * 4 + end * 4;
     const row = data.slice(startIndex, endIndex);
-    result.concat(Array.from(row));
+    result = result.concat(Array.from(row));
   }
 
   return Uint8ClampedArray.from(result);

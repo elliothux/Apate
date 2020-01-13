@@ -1,5 +1,5 @@
 import { Maybe } from "../../types";
-import { createBitmapImage, getSnapshotOriginalData } from "./utils";
+import { createBitmapImage, cropImageData } from "./utils";
 import { Filter } from "./filter";
 
 const [snapshotWidth, snapshotHeight] = [128, 100];
@@ -7,7 +7,7 @@ const [snapshotWidth, snapshotHeight] = [128, 100];
 let snapshotOriginalImageData: Maybe<Uint8ClampedArray> = null;
 
 export function initSnapshotOriginalData(imageData: ImageData) {
-  snapshotOriginalImageData = getSnapshotOriginalData(
+  snapshotOriginalImageData = cropImageData(
     imageData,
     snapshotWidth,
     snapshotHeight

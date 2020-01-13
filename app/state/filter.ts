@@ -2,9 +2,11 @@ import { action, observable } from "mobx";
 import { FilterCollection, Maybe } from "types";
 import * as worker from "../worker";
 import { filters } from "../../filter";
-import { loadFilter } from "../worker";
+import { loadFilterCollection } from "../worker";
 
 export const filterSnapshotMap = new Map<string, string>();
+
+export const filterLoadingStatus = new Map<string, boolean>();
 
 export class FilterStore {
   @observable
@@ -27,12 +29,10 @@ export class FilterStore {
     this.currentCollectionIndex = index;
 
     const [collectionName, filters] = this.filterCollections[index];
-    filters.forEach(name => {
-      if (this.loadedFilterMap[name]) {
-        return;
-      }
-      loadFilter(collectionName, name);
-    });
+    if (!filterLoadingStatus.get(collectionName)) {
+      loadFilterCollection(collectionName, [...filters]);
+      filterLoadingStatus.set(collectionName, true);
+    }
   };
 
   @observable

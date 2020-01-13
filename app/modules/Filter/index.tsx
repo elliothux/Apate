@@ -2,7 +2,12 @@ import "./index.scss";
 import * as React from "react";
 import { observer } from "mobx-react";
 import FadeLoader from "react-spinners/FadeLoader";
-import { filterSnapshotMap, filterStore } from "../../state";
+import {
+  filterSnapshotMap,
+  filterStore,
+  imageStore,
+  mainStore
+} from "../../state";
 import { Maybe } from "../../types";
 import { noop } from "../../utils";
 
@@ -36,6 +41,7 @@ export class Filter extends React.Component {
           className={`filter-item${!appliedFilter ? " selected" : ""}`}
           onClick={() => filterStore.selectFilter(-1)}
         >
+          <img alt="None" src={mainStore.imageSrc!} />
           <p>None</p>
         </div>
         {filters.map((name, index) =>
