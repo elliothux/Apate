@@ -46,6 +46,12 @@
         margin-left: 10px;
       }
 
+      & > img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
       & > p {
         position: absolute;
         bottom: 0;
@@ -58,11 +64,5 @@
         letter-spacing: 1px;
       }
     }
-  }
-
-  #filter-snapshots {
-    position: absolute;
-    top: 75px;
-    left: 15px;
   }
 }

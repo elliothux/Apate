@@ -2,16 +2,20 @@ import { action, observable } from "mobx";
 import { FilterCollection, Maybe } from "types";
 import * as worker from "../worker";
 import { filters } from "../../filter";
+import { loadFilter } from "../worker";
+
+export const filterSnapshotMap = new Map<string, string>();
 
 export class FilterStore {
   @observable
-  public filters: FilterCollection[] = Object.entries(filters);
+  public filterCollections: FilterCollection[] = Object.entries(filters);
 
   @observable
   public loadedFilterMap: { [name: string]: true } = {};
 
   @action
-  public setFilterLoaded = (name: string) => {
+  public setFilterLoaded = (name: string, snapshot: Blob) => {
+    filterSnapshotMap.set(name, URL.createObjectURL(snapshot));
     this.loadedFilterMap[name] = true;
   };
 
@@ -21,6 +25,14 @@ export class FilterStore {
   @action
   public selectCollection = (index: number) => {
     this.currentCollectionIndex = index;
+
+    const [collectionName, filters] = this.filterCollections[index];
+    filters.forEach(name => {
+      if (this.loadedFilterMap[name]) {
+        return;
+      }
+      loadFilter(collectionName, name);
+    });
   };
 
   @observable
@@ -40,7 +52,9 @@ export class FilterStore {
 
     if (filterIndex > -1) {
       this.appliedFilter = [this.currentCollectionIndex, filterIndex];
-      const [collection, filters] = this.filters[this.currentCollectionIndex];
+      const [collection, filters] = this.filterCollections[
+        this.currentCollectionIndex
+      ];
       return worker.applyFilter(collection, filters[filterIndex]);
     } else {
       this.appliedFilter = null;

@@ -2,8 +2,7 @@ import "./index.scss";
 import * as React from "react";
 import { observer } from "mobx-react";
 import FadeLoader from "react-spinners/FadeLoader";
-import { filterStore } from "../../state";
-import { FilterSnapshots } from "./FilterSnapshot";
+import { filterSnapshotMap, filterStore } from "../../state";
 import { Maybe } from "../../types";
 import { noop } from "../../utils";
 
@@ -72,19 +71,22 @@ export class Filter extends React.Component {
       >
         {loading ? (
           <FadeLoader color="white" width={2} height={14} radius={2} />
-        ) : null}
+        ) : (
+          <img alt={name} src={filterSnapshotMap.get(name)} />
+        )}
         <p>{name}</p>
       </div>
     );
   };
 
   render() {
-    const { filters, currentCollectionIndex } = filterStore;
+    const { filterCollections, currentCollectionIndex } = filterStore;
     return (
       <div id="filter">
-        <FilterSnapshots filterCollection={filters[currentCollectionIndex]} />
-        {this.renderCollectionSelect(filters, currentCollectionIndex)}
-        {this.renderFilterCollection(filters[currentCollectionIndex][1])}
+        {this.renderCollectionSelect(filterCollections, currentCollectionIndex)}
+        {this.renderFilterCollection(
+          filterCollections[currentCollectionIndex][1]
+        )}
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import { throttle } from "throttle-debounce";
 import { createMessage, MessageType, WorkerMessage } from "./share";
-import { imageStore, mainStore } from "../state";
+import { filterStore, imageStore, mainStore } from "../state";
 import { globalEvent, GlobalEventType } from "../utils";
 
 const imageWorker = new Worker("./image.worker", {
@@ -23,8 +23,12 @@ imageWorker.addEventListener("message", ({ data: msg }) => {
   switch (type) {
     case MessageType.GET_CURRENT_IMAGE_DATA: {
       imageStore.rerenderImage(data);
-      updateHistogram(data, mainStore.width, mainStore.height);
-      return;
+      return updateHistogram(data, mainStore.width, mainStore.height);
+    }
+
+    case MessageType.LOAD_FILTER: {
+      const { name, snapshot } = data;
+      return filterStore.setFilterLoaded(name, snapshot);
     }
 
     case MessageType.READY:
@@ -128,8 +132,10 @@ export function setImageShadow(v: number) {
   imageWorker.postMessage(createMessage(MessageType.SET_IMAGE_SHADOW, v));
 }
 
-export function loadFilter(collection: string, name: string) {
-
+export function loadFilter(collectionName: string, name: string) {
+  imageWorker.postMessage(
+    createMessage(MessageType.LOAD_FILTER, { collectionName, name })
+  );
 }
 
 export function applyFilter(collection: string, name: string) {
@@ -142,22 +148,19 @@ export function unapplyFilter() {
   imageWorker.postMessage(createMessage(MessageType.UNAPPLY_FILTER));
 }
 
-function iUpdateHistogram(
-  data: Uint8ClampedArray,
-  width: number,
-  height: number
-) {
-  histogramWorker.postMessage(
-    createMessage(MessageType.UPDATE_HISTOGRAM, {
-      data,
-      width,
-      height,
-      expand: mainStore.expandHistogram
-    })
-  );
-}
-
-export const updateHistogram = throttle(2000, iUpdateHistogram);
+export const updateHistogram = throttle(
+  2000,
+  (data: Uint8ClampedArray, width: number, height: number) => {
+    histogramWorker.postMessage(
+      createMessage(MessageType.UPDATE_HISTOGRAM, {
+        data,
+        width,
+        height,
+        expand: mainStore.expandHistogram
+      })
+    );
+  }
+);
 
 export function toggleHistogramExpand(expand: boolean) {
   histogramWorker.postMessage(

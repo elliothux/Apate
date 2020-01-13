@@ -1,18 +1,20 @@
 import { getWasmLib } from "../share";
+import { ThreeDirectionLookUpTable } from "../../../pkg";
 
-type Filter = ReturnType<typeof parseFilter>;
+export type Filter = ReturnType<typeof parseFilter>;
 
 const filterMap: Map<string, Filter> = new Map<string, Filter>();
 
 async function requestFilter(
   collectionName: string,
   name: string
-): Promise<string> {
+): Promise<ThreeDirectionLookUpTable> {
   const response = await fetch(`/filter/${collectionName}/${name}.cube`);
-  return response.text();
+  const str = await response.text();
+  return parseFilter(str);
 }
 
-function parseFilter(str: string) {
+function parseFilter(str: string): ThreeDirectionLookUpTable {
   const lib = getWasmLib();
   return lib.ThreeDirectionLookUpTable.from_string(str);
 }
@@ -26,15 +28,7 @@ export async function getFilter(
     return filter;
   }
 
-  const str = await requestFilter(collectionName, name);
-  const parsedFilter = parseFilter(str);
+  const parsedFilter = await requestFilter(collectionName, name);
   filterMap.set(name, parsedFilter);
   return parsedFilter;
 }
-
-const snapshotCanvas = new OffscreenCanvas(270, 112);
-
-const snapshotCtx = snapshotCanvas.getContext("2d");
-
-const filterSnapshotMap: Map<string, ImageData> = new Map<string, ImageData>();
-
