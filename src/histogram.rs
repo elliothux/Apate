@@ -1,6 +1,6 @@
 use wasm_bindgen::prelude::*;
 use crate::utils::{normalize_u8, normalize};
-use crate::resampling::{ResamplingData, resampling_image_data};
+use crate::resampling::{ResamplingData};
 
 #[wasm_bindgen()]
 pub fn generate_histogram_data(
@@ -12,7 +12,7 @@ pub fn generate_histogram_data(
     target_width: u32,
     target_height: u32
 ) -> Box<[u32]> {
-    let resampling = resampling_image_data(image_data, image_height, image_height, target_width, target_height);
+    let resampling = ResamplingData::from(image_data, image_height, image_height, target_width, target_height);
     generate_histogram_data_with_resampling(&resampling, histogram_width, histogram_height)
 }
 

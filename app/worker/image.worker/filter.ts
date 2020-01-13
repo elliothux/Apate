@@ -2,7 +2,7 @@ import { getWasmLib } from "../share";
 
 type Filter = ReturnType<typeof parseFilter>;
 
-const filterMap: { [name: string]: Filter } = {};
+const filterMap: Map<string, Filter> = new Map<string, Filter>();
 
 async function requestFilter(
   collectionName: string,
@@ -21,10 +21,20 @@ export async function getFilter(
   collectionName: string,
   name: string
 ): Promise<Filter> {
-  if (!filterMap[name]) {
-    const str = await requestFilter(collectionName, name);
-    filterMap[name] = parseFilter(str);
+  const filter = filterMap.get(name);
+  if (filter) {
+    return filter;
   }
 
-  return filterMap[name];
+  const str = await requestFilter(collectionName, name);
+  const parsedFilter = parseFilter(str);
+  filterMap.set(name, parsedFilter);
+  return parsedFilter;
 }
+
+const snapshotCanvas = new OffscreenCanvas(270, 112);
+
+const snapshotCtx = snapshotCanvas.getContext("2d");
+
+const filterSnapshotMap: Map<string, ImageData> = new Map<string, ImageData>();
+

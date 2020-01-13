@@ -5,10 +5,14 @@ import {
   WorkerMessage,
   loadWasmLib
 } from "../share";
-import { createBitmapImage } from "./utils";
+import { createBitmapImage, getSnapshotOriginalData } from "./utils";
 import { getFilter } from "./filter";
 
 let bitmapImage: Maybe<ReturnType<typeof createBitmapImage>> = null;
+
+const [snapshotItemWidth, snapshotItemHeight] = [128, 100];
+
+let snapshotOriginalImageData: Maybe<Uint8ClampedArray> = null;
 
 const handlersMap = {
   [MessageType.INIT]: async () => {
@@ -17,6 +21,12 @@ const handlersMap = {
   },
 
   [MessageType.INIT_IMAGE]: (data: ImageData) => {
+    snapshotOriginalImageData = getSnapshotOriginalData(
+      data,
+      snapshotItemWidth,
+      snapshotItemHeight
+    );
+    debugger;
     bitmapImage = createBitmapImage(data.width, data.height, data.data);
   },
 
@@ -65,6 +75,16 @@ const handlersMap = {
   [MessageType.SET_IMAGE_SHADOW]: (v: number) => {
     bitmapImage!.set_shadow(v);
     updateImageData();
+  },
+
+  [MessageType.LOAD_FILTER]: async ({
+    collection,
+    name
+  }: {
+    collection: string;
+    name: string;
+  }) => {
+    await getFilter(collection, name);
   },
 
   [MessageType.APPLY_FILTER]: async ({

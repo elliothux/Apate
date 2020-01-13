@@ -7,12 +7,20 @@ pub struct ResamplingData {
     pub height: usize,
 }
 
-pub fn resampling_image_data(image_data: &[u8], width: u32, height: u32, target_width: u32, target_height: u32) -> ResamplingData {
-    ResamplingData {
-        data: nearest_neighbor(image_data, width, height, target_width, target_height),
-        width: target_width as usize,
-        height: target_height as usize,
+impl ResamplingData {
+    pub fn from(image_data: &[u8], width: u32, height: u32, target_width: u32, target_height: u32) -> ResamplingData {
+        ResamplingData {
+            data: nearest_neighbor(image_data, width, height, target_width, target_height),
+            width: target_width as usize,
+            height: target_height as usize,
+        }
     }
+}
+
+#[wasm_bindgen()]
+pub fn resampling_image_data(image_data: &[u8], width: u32, height: u32, target_width: u32, target_height: u32) -> Box<[u8]> {
+    let result = nearest_neighbor(image_data, width, height, target_width, target_height);
+    result.into_boxed_slice()
 }
 
 fn nearest_neighbor(data: &[u8], width: u32, height: u32, target_width: u32, target_height: u32) -> Vec<u8> {
@@ -29,6 +37,7 @@ fn nearest_neighbor(data: &[u8], width: u32, height: u32, target_width: u32, tar
             result.push(data[index]);
             result.push(data[index + 1]);
             result.push(data[index + 2]);
+            result.push(data[index + 3]);
         }
     }
 
