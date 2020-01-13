@@ -30,8 +30,8 @@ export class FilterStore {
 
     const [collectionName, filters] = this.filterCollections[index];
     if (!filterLoadingStatus.get(collectionName)) {
-      loadFilterCollection(collectionName, [...filters]);
       filterLoadingStatus.set(collectionName, true);
+      return loadFilterCollection(collectionName, [...filters]);
     }
   };
 

@@ -2,12 +2,7 @@ import "./index.scss";
 import * as React from "react";
 import { observer } from "mobx-react";
 import FadeLoader from "react-spinners/FadeLoader";
-import {
-  filterSnapshotMap,
-  filterStore,
-  imageStore,
-  mainStore
-} from "../../state";
+import { filterSnapshotMap, filterStore, mainStore } from "../../state";
 import { Maybe } from "../../types";
 import { noop } from "../../utils";
 

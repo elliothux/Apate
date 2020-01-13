@@ -6,7 +6,7 @@ import {
   loadWasmLib
 } from "../share";
 import { createBitmapImage } from "./utils";
-import { getFilter } from "./filter";
+import { Filter, getFilter, getFilterFromString } from "./filter";
 import { initSnapshotOriginalData, generateFilterSnapshot } from "./snapshot";
 
 let bitmapImage: Maybe<ReturnType<typeof createBitmapImage>> = null;
@@ -72,16 +72,27 @@ const handlersMap = {
 
   [MessageType.LOAD_FILTER]: ({
     collectionName,
-    filters
+    filters,
+    filterStrings
   }: {
     collectionName: string;
     filters: string[];
+    filterStrings: Maybe<string>[];
   }) => {
-    filters.forEach(async name => {
-      const filter = await getFilter(collectionName, name);
+    filters.forEach(async (name, index) => {
+      let filter: Filter;
+      let filterStr = filterStrings[index];
+
+      if (filterStr) {
+        filter = await getFilterFromString(name, filterStr);
+        filterStr = null;
+      } else {
+        [filter, filterStr] = await getFilter(collectionName, name);
+      }
+
       const snapshot = await generateFilterSnapshot(filter);
       self.postMessage(
-        createMessage(MessageType.LOAD_FILTER, { name, snapshot })
+        createMessage(MessageType.LOAD_FILTER, { name, snapshot, filterStr })
       );
     });
   },
@@ -93,7 +104,7 @@ const handlersMap = {
     collection: string;
     name: string;
   }) => {
-    const filter = await getFilter(collection, name);
+    const [filter] = await getFilter(collection, name);
     bitmapImage!.apply_lut(filter);
     updateImageData();
   },

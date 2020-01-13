@@ -4,6 +4,7 @@
       <w>apate</w>
       <w>bitmaprenderer</w>
       <w>lerp</w>
+      <w>localforage</w>
       <w>resampling</w>
       <w>unexpand</w>
       <w>wasm</w>

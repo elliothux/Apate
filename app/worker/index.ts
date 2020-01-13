@@ -1,7 +1,12 @@
 import { throttle } from "throttle-debounce";
 import { createMessage, MessageType, WorkerMessage } from "./share";
 import { filterStore, imageStore, mainStore } from "../state";
-import { globalEvent, GlobalEventType } from "../utils";
+import {
+  getFilterString,
+  globalEvent,
+  GlobalEventType,
+  saveFilter
+} from "../utils";
 
 const imageWorker = new Worker("./image.worker", {
   name: "image",
@@ -31,7 +36,10 @@ imageWorker.addEventListener("message", ({ data: msg }) => {
     }
 
     case MessageType.LOAD_FILTER: {
-      const { name, snapshot } = data;
+      const { name, snapshot, filterStr } = data;
+      if (filterStr) {
+        saveFilter(name, filterStr);
+      }
       return filterStore.setFilterLoaded(name, snapshot);
     }
 
@@ -137,12 +145,16 @@ export function setImageShadow(v: number) {
   imageWorker.postMessage(createMessage(MessageType.SET_IMAGE_SHADOW, v));
 }
 
-export function loadFilterCollection(
+export async function loadFilterCollection(
   collectionName: string,
   filters: string[]
 ) {
   imageWorker.postMessage(
-    createMessage(MessageType.LOAD_FILTER, { collectionName, filters })
+    createMessage(MessageType.LOAD_FILTER, {
+      collectionName,
+      filters,
+      filterStrings: await Promise.all(filters.map(i => getFilterString(i)))
+    })
   );
 }
 

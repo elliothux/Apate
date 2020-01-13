@@ -1,5 +1,6 @@
 import { getWasmLib } from "../share";
 import { ThreeDirectionLookUpTable } from "../../../pkg";
+import { Maybe } from "../../types";
 
 export type Filter = ReturnType<typeof parseFilter>;
 
@@ -8,10 +9,9 @@ const filterMap: Map<string, Filter> = new Map<string, Filter>();
 async function requestFilter(
   collectionName: string,
   name: string
-): Promise<ThreeDirectionLookUpTable> {
+): Promise<string> {
   const response = await fetch(`/filter/${collectionName}/${name}.cube`);
-  const str = await response.text();
-  return parseFilter(str);
+  return response.text();
 }
 
 function parseFilter(str: string): ThreeDirectionLookUpTable {
@@ -22,13 +22,23 @@ function parseFilter(str: string): ThreeDirectionLookUpTable {
 export async function getFilter(
   collectionName: string,
   name: string
-): Promise<Filter> {
+): Promise<[Filter, Maybe<string>]> {
   const filter = filterMap.get(name);
   if (filter) {
-    return filter;
+    return [filter, null];
   }
 
-  const parsedFilter = await requestFilter(collectionName, name);
+  const str = await requestFilter(collectionName, name);
+  const parsedFilter = parseFilter(str);
+  filterMap.set(name, parsedFilter);
+  return [parsedFilter, str];
+}
+
+export async function getFilterFromString(
+  name: string,
+  str: string
+): Promise<Filter> {
+  const parsedFilter = parseFilter(str);
   filterMap.set(name, parsedFilter);
   return parsedFilter;
 }

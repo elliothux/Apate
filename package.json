@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@types/rc-slider": "^8.6.5",
+    "localforage": "^1.7.3",
     "mobx": "^5.15.1",
     "mobx-react": "^6.1.4",
     "rc-slider": "^8.7.1",
