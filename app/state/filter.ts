@@ -27,7 +27,10 @@ export class FilterStore {
   @action
   public selectCollection = (index: number) => {
     this.currentCollectionIndex = index;
+    return this.loadFilterCollection(index);
+  };
 
+  public loadFilterCollection = (index: number) => {
     const [collectionName, filters] = this.filterCollections[index];
     if (!filterLoadingStatus.get(collectionName)) {
       filterLoadingStatus.set(collectionName, true);

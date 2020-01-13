@@ -2,7 +2,9 @@ import { Maybe } from "../../types";
 import { createBitmapImage, cropImageData } from "./utils";
 import { Filter } from "./filter";
 
-const [snapshotWidth, snapshotHeight] = [128, 100];
+const [snapshotWidth, snapshotHeight] = [128, 100].map(i =>
+  Math.round(i * 0.7)
+);
 
 let snapshotOriginalImageData: Maybe<Uint8ClampedArray> = null;
 

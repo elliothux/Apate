@@ -32,10 +32,6 @@ export const filters = {
     "C8",
     "C9"
   ],
-  "D": [
-    "D1",
-    "D2"
-  ],
   "E": [
     "E1",
     "E2",

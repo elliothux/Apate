@@ -61,13 +61,15 @@ export function getColumns(
   start: number,
   end: number
 ): Uint8ClampedArray {
-  let result: number[] = [];
+  const length = width * 4 * height;
+  let result: number[] = [length];
+  let index = 0;
 
   for (let i = 0; i < width; i++) {
     const startIndex = i * width * 4 + start * 4;
     const endIndex = i * width * 4 + end * 4;
     const row = data.slice(startIndex, endIndex);
-    result = result.concat(Array.from(row));
+    row.forEach(i => (result[index++] = i));
   }
 
   return Uint8ClampedArray.from(result);

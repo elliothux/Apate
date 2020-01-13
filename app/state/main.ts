@@ -67,7 +67,7 @@ export class MainStore {
   };
 
   @observable
-  public view: ViewType = ViewType.FILTER;
+  public view: ViewType = ViewType.ADJUSTMENT;
 
   @action
   public setView = (i: ViewType) => {
