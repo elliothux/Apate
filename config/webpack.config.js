@@ -90,7 +90,9 @@ module.exports = {
     new WorkerPlugin(),
     new WasmPackPlugin({
       crateDirectory: path.resolve(__dirname, "../"),
-      extraArgs: "--out-name index"
+      extraArgs: "--out-name index",
+      // forceMode: 'development',
+      forceMode: 'production'
     }),
     new HtmlWebpackPlugin(
       Object.assign(
