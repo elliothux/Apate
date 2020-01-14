@@ -1,3 +1,6 @@
+use crate::image::ImageData;
+use crate::color::RGB;
+
 pub fn add_u8(a: u8, b: u8) -> u8 {
     let result = a as u16 + b as u16;
     if result > 255 {
@@ -59,4 +62,17 @@ pub fn normalize_u8(value: u8, n: u32) -> u8 {
 
 pub fn normalize(value: u32, max: u32, n: u32) -> u32 {
     value * n / max
+}
+
+pub fn reshape_image_data_to_u8_slice(data: &ImageData) -> Box<[u8]> {
+    let mut result = Vec::<u8>::new();
+    for row in data {
+        for RGB { r, g, b } in row {
+            result.push(r.clone());
+            result.push(g.clone());
+            result.push(b.clone());
+            result.push(255_u8);
+        }
+    }
+    result.into_boxed_slice()
 }

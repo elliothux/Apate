@@ -17,8 +17,8 @@ pub struct EditData {
     pub filter_strength: u8,
 }
 
-type ImageDataRow = Vec<RGB>;
-type ImageData = Vec<ImageDataRow>;
+pub type ImageDataRow = Vec<RGB>;
+pub type ImageData = Vec<ImageDataRow>;
 
 #[wasm_bindgen()]
 pub struct Image {
