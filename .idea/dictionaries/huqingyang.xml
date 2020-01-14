@@ -2,9 +2,11 @@
   <dictionary name="huqingyang">
     <words>
       <w>apate</w>
+      <w>bindgen</w>
       <w>bitmaprenderer</w>
       <w>lerp</w>
       <w>localforage</w>
+      <w>mobx</w>
       <w>resampling</w>
       <w>unexpand</w>
       <w>wasm</w>
