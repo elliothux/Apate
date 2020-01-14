@@ -21,15 +21,6 @@ export class FilterStore {
     this.loadedFilterMap[name] = true;
   };
 
-  @observable
-  public currentCollectionIndex: number = 0;
-
-  @action
-  public selectCollection = (index: number) => {
-    this.currentCollectionIndex = index;
-    return this.loadFilterCollection(index);
-  };
-
   public loadFilterCollection = (index: number) => {
     const [collectionName, filters] = this.filterCollections[index];
     if (!filterLoadingStatus.get(collectionName)) {
@@ -50,14 +41,12 @@ export class FilterStore {
   };
 
   @action
-  public selectFilter = (filterIndex: number) => {
+  public selectFilter = (collectionIndex: number, filterIndex: number) => {
     this.filterStrength = 100;
 
     if (filterIndex > -1) {
-      this.appliedFilter = [this.currentCollectionIndex, filterIndex];
-      const [collection, filters] = this.filterCollections[
-        this.currentCollectionIndex
-      ];
+      this.appliedFilter = [collectionIndex, filterIndex];
+      const [collection, filters] = this.filterCollections[collectionIndex];
       return worker.applyFilter(collection, filters[filterIndex]);
     } else {
       this.appliedFilter = null;

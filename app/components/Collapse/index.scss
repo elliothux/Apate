@@ -1,0 +1,15 @@
+.rc-collapse {
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 0;
+  color: white !important;
+
+  & > .rc-collapse-item {
+    border-top: none;
+  }
+
+  .rc-collapse-content {
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0);
+  }
+}

@@ -1,65 +1,55 @@
 import "./index.scss";
 import * as React from "react";
 import { observer } from "mobx-react";
-import FadeLoader from "react-spinners/FadeLoader";
 import { filterSnapshotMap, filterStore, mainStore } from "../../state";
-import { Maybe } from "../../types";
+import { FilterCollection, Maybe } from "../../types";
 import { noop } from "../../utils";
+import { Collapse, CollapsePanel } from "../../components/Collapse";
+import FadeLoader from "react-spinners/FadeLoader";
 
 @observer
 export class Filter extends React.Component {
-  private renderCollectionSelect = (
-    filters: [string, string[]][],
-    currentIndex: number
-  ) => {
-    return (
-      <select
-        className="filter-collection-select"
-        value={currentIndex}
-        onChange={i => filterStore.selectCollection(parseInt(i.target.value))}
-      >
-        {filters.map(([collectionName], index) => (
-          <option key={collectionName} value={index}>
-            {collectionName}
-          </option>
-        ))}
-      </select>
+  private renderFilterCollections = (filterCollections: FilterCollection[]) => {
+    return filterCollections.map(
+      ([collectionName, filters], collectionIndex) => (
+        <CollapsePanel header={collectionName} key={collectionName} forceRender>
+          {this.renderFilterCollection(filters, collectionIndex)}
+        </CollapsePanel>
+      )
     );
   };
 
-  private renderFilterCollection = (filters: string[]) => {
-    const { appliedFilter, currentCollectionIndex } = filterStore;
+  private renderFilterCollection = (
+    filters: string[],
+    collectionIndex: number
+  ) => {
+    const { appliedFilter } = filterStore;
 
     return (
       <div className="filter-collection">
         <div
           className={`filter-item${!appliedFilter ? " selected" : ""}`}
-          onClick={() => filterStore.selectFilter(-1)}
+          onClick={() => filterStore.selectFilter(collectionIndex, -1)}
         >
           <img alt="None" src={mainStore.imageSrc!} />
           <p>None</p>
         </div>
         {filters.map((name, index) =>
-          this.renderFilterItem(
-            name,
-            index,
-            appliedFilter,
-            currentCollectionIndex
-          )
+          this.renderFilterItem(collectionIndex, name, index, appliedFilter)
         )}
       </div>
     );
   };
 
   private renderFilterItem = (
+    collectionIndex: number,
     name: string,
     index: number,
-    appliedFilter: Maybe<[number, number]>,
-    currentCollectionIndex: number
+    appliedFilter: Maybe<[number, number]>
   ) => {
     const selected =
       appliedFilter &&
-      appliedFilter[0] === currentCollectionIndex &&
+      appliedFilter[0] === collectionIndex &&
       appliedFilter[1] === index;
 
     const loading = !filterStore.loadedFilterMap[name];
@@ -68,7 +58,11 @@ export class Filter extends React.Component {
       <div
         key={name}
         className={`filter-item${selected ? " selected" : ""}`}
-        onClick={loading ? noop : () => filterStore.selectFilter(index)}
+        onClick={
+          loading
+            ? noop
+            : () => filterStore.selectFilter(collectionIndex, index)
+        }
       >
         {loading ? (
           <FadeLoader color="white" width={2} height={14} radius={2} />
@@ -81,13 +75,12 @@ export class Filter extends React.Component {
   };
 
   render() {
-    const { filterCollections, currentCollectionIndex } = filterStore;
+    const { filterCollections } = filterStore;
     return (
       <div id="filter">
-        {this.renderCollectionSelect(filterCollections, currentCollectionIndex)}
-        {this.renderFilterCollection(
-          filterCollections[currentCollectionIndex][1]
-        )}
+        <Collapse accordion defaultActiveKey={["A"]}>
+          {this.renderFilterCollections(filterCollections)}
+        </Collapse>
       </div>
     );
   }
