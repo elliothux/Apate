@@ -1,6 +1,6 @@
 {
   "author": "You <you@example.com>",
-  "name": "rust-webpack-template",
+  "name": "apate",
   "version": "0.1.0",
   "scripts": {
     "start": "rimraf dist pkg && NODE_ENV=development webpack-dev-server --open -d --config ./config/webpack.config.js",

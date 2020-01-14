@@ -51,3 +51,7 @@ This project is based on those technologies:
     - [ ] Import lut
     - [ ] Export lut
     - [ ] Save imported lut locally
+
+- [ ] Performance optimization
+    - [ ] Multi threads
+    - [ ] Shared memory
