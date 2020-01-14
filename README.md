@@ -6,12 +6,12 @@ This is an **experimental** project and is still in development. BUGs may exist.
 
 ## Technologies
 This project is based on those technologies:
-* Rust
-* WebAssembly
-* wasm-bindgen
-* TypeScript
-* React
-* Mobx
+* [Rust](https://www.rust-lang.org/)
+* [WebAssembly](https://webassembly.org/)
+* [wasm-bindgen](https://github.com/rustwasm/wasm-bindgen)
+* [TypeScript](https://www.typescriptlang.org/)
+* [React](https://reactjs.org/)
+* [Mobx](https://mobx.js.org/README.html)
 
 ## Features
 - [ ] Basic features
