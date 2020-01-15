@@ -33,36 +33,36 @@ export class Adjustment extends React.Component {
       <div id="adjustment">
         <Collapse defaultActiveKey={["0", "1"]}>
           <CollapsePanel header="色彩" key="0">
-            <div className="adjustment-range-item">
-              <span>色温</span>
-              <RangeInput
-                min={-100}
-                max={100}
-                step={1}
-                value={temperature}
-                onChange={setTemperature}
-              />
-            </div>
-            <div className="adjustment-range-item">
-              <span>色调</span>
-              <RangeInput
-                min={-100}
-                max={100}
-                step={1}
-                value={tint}
-                onChange={setTint}
-              />
-            </div>
-            <div className="adjustment-range-item">
-              <span>饱和度</span>
-              <RangeInput
-                min={-100}
-                max={100}
-                step={1}
-                value={saturation}
-                onChange={setSaturation}
-              />
-            </div>
+            <RangeInput
+              className="adjustment-range-item"
+              label="色温"
+              min={-100}
+              max={100}
+              step={1}
+              value={temperature}
+              onChange={setTemperature}
+              backgroundStyle={{
+                backgroundImage: 'linear-gradient(90deg, #0063FA 0%, #4C4C4C 50%, #FF7E00 100%)'
+              }}
+            />
+            <RangeInput
+              className="adjustment-range-item"
+              label="色调"
+              min={-100}
+              max={100}
+              step={1}
+              value={tint}
+              onChange={setTint}
+            />
+            <RangeInput
+              className="adjustment-range-item"
+              label="饱和度"
+              min={-100}
+              max={100}
+              step={1}
+              value={saturation}
+              onChange={setSaturation}
+            />
             {/*<div className="adjustment-range-item">*/}
             {/*  <span>自然饱和度</span>*/}
             {/*  <RangeInput*/}
@@ -76,56 +76,51 @@ export class Adjustment extends React.Component {
           </CollapsePanel>
 
           <CollapsePanel header="光效" key="1">
-            <div className="adjustment-range-item">
-              <span>亮度</span>
-              <RangeInput
-                min={-100}
-                max={100}
-                step={1}
-                value={brightness}
-                onChange={setBrightness}
-              />
-            </div>
-            <div className="adjustment-range-item">
-              <span>曝光</span>
-              <RangeInput
-                min={-100}
-                max={100}
-                step={1}
-                value={exposure}
-                onChange={setExposure}
-              />
-            </div>
-            <div className="adjustment-range-item">
-              <span>对比度</span>
-              <RangeInput
-                min={-100}
-                max={100}
-                step={1}
-                value={contrast}
-                onChange={setContrast}
-              />
-            </div>
-            <div className="adjustment-range-item">
-              <span>高光</span>
-              <RangeInput
-                min={-100}
-                max={100}
-                step={1}
-                value={highlight}
-                onChange={setHighlight}
-              />
-            </div>
-            <div className="adjustment-range-item">
-              <span>阴影</span>
-              <RangeInput
-                min={-100}
-                max={100}
-                step={1}
-                value={shadow}
-                onChange={setShadow}
-              />
-            </div>
+            <RangeInput
+              className="adjustment-range-item"
+              label="亮度"
+              min={-100}
+              max={100}
+              step={1}
+              value={brightness}
+              onChange={setBrightness}
+            />
+            <RangeInput
+              className="adjustment-range-item"
+              label="曝光"
+              min={-100}
+              max={100}
+              step={1}
+              value={exposure}
+              onChange={setExposure}
+            />
+            <RangeInput
+              className="adjustment-range-item"
+              label="对比度"
+              min={-100}
+              max={100}
+              step={1}
+              value={contrast}
+              onChange={setContrast}
+            />
+            <RangeInput
+              className="adjustment-range-item"
+              label="高光"
+              min={-100}
+              max={100}
+              step={1}
+              value={highlight}
+              onChange={setHighlight}
+            />
+            <RangeInput
+              className="adjustment-range-item"
+              label="阴影"
+              min={-100}
+              max={100}
+              step={1}
+              value={shadow}
+              onChange={setShadow}
+            />
           </CollapsePanel>
         </Collapse>
       </div>

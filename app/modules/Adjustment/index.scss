@@ -13,19 +13,26 @@
   font-size: 12px;
   overflow-y: scroll;
 
+  .rc-collapse-content-box {
+    text-align: center;
+  }
+
   .adjustment-range-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 50px;
+    margin: 0 auto 18px auto;
+    width: 240px;
 
-    .rc-slider {
-      width: 160px;
-    }
-
-    & > span {
-      width: 50px;
-      margin-right: 10px;
-    }
+    //  display: flex;
+    //  align-items: center;
+    //  justify-content: center;
+    //  height: 50px;
+    //
+    //  .rc-slider {
+    //    width: 160px;
+    //  }
+    //
+    //  & > span {
+    //    width: 50px;
+    //    margin-right: 10px;
+    //  }
   }
 }
