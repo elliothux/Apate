@@ -28,7 +28,7 @@ imageWorker.addEventListener("message", ({ data: msg }) => {
   switch (type) {
     case MessageType.INIT_IMAGE: {
       return filterStore.filterCollections.forEach((_, index) => {
-        setTimeout(() => filterStore.loadFilterCollection(index), index * 2000);
+        setTimeout(() => filterStore.loadFilterCollection(index), index * 1000);
       });
     }
 

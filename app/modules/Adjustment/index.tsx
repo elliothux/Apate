@@ -42,7 +42,8 @@ export class Adjustment extends React.Component {
               value={temperature}
               onChange={setTemperature}
               backgroundStyle={{
-                backgroundImage: 'linear-gradient(90deg, #0063FA 0%, #4C4C4C 50%, #FF7E00 100%)'
+                backgroundImage:
+                  "linear-gradient(90deg, #0063FA 0%, #4C4C4C 50%, #FF7E00 100%)"
               }}
             />
             <RangeInput
@@ -53,6 +54,10 @@ export class Adjustment extends React.Component {
               step={1}
               value={tint}
               onChange={setTint}
+              backgroundStyle={{
+                backgroundImage:
+                  "linear-gradient(-90deg, #0F0 0%, #4C4C4C 50%, #F0F 100%)"
+              }}
             />
             <RangeInput
               className="adjustment-range-item"
@@ -62,6 +67,10 @@ export class Adjustment extends React.Component {
               step={1}
               value={saturation}
               onChange={setSaturation}
+              backgroundStyle={{
+                backgroundImage:
+                  "linear-gradient(90deg, #343434 0%, #594E52 30%, #7F5782 46%, #544A90 59%, #4FAD30 71%, #E2D009 84%, #FF1F00 100%)"
+              }}
             />
             {/*<div className="adjustment-range-item">*/}
             {/*  <span>自然饱和度</span>*/}
@@ -84,6 +93,9 @@ export class Adjustment extends React.Component {
               step={1}
               value={brightness}
               onChange={setBrightness}
+              backgroundStyle={{
+                backgroundImage: "linear-gradient(90deg, #111 0%, #EEE 100%)"
+              }}
             />
             <RangeInput
               className="adjustment-range-item"
@@ -93,6 +105,9 @@ export class Adjustment extends React.Component {
               step={1}
               value={exposure}
               onChange={setExposure}
+              backgroundStyle={{
+                backgroundImage: "linear-gradient(90deg, #111 0%, #EEE 100%)"
+              }}
             />
             <RangeInput
               className="adjustment-range-item"
@@ -102,6 +117,9 @@ export class Adjustment extends React.Component {
               step={1}
               value={contrast}
               onChange={setContrast}
+              backgroundStyle={{
+                backgroundImage: "linear-gradient(90deg, #BBB 0%, #000 100%)"
+              }}
             />
             <RangeInput
               className="adjustment-range-item"
@@ -111,6 +129,9 @@ export class Adjustment extends React.Component {
               step={1}
               value={highlight}
               onChange={setHighlight}
+              backgroundStyle={{
+                backgroundImage: "linear-gradient(90deg, #555 0%, #FFF 100%)"
+              }}
             />
             <RangeInput
               className="adjustment-range-item"
@@ -120,6 +141,9 @@ export class Adjustment extends React.Component {
               step={1}
               value={shadow}
               onChange={setShadow}
+              backgroundStyle={{
+                backgroundImage: "linear-gradient(90deg, #111 0%, #CCC 100%)"
+              }}
             />
           </CollapsePanel>
         </Collapse>
