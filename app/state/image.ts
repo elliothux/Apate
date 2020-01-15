@@ -2,6 +2,7 @@ import { action, observable, computed, runInAction } from "mobx";
 import { throttle } from "throttle-debounce";
 import { mainStore } from "./main";
 import * as worker from "../worker";
+import { Maybe } from "../types";
 
 const THROTTLE_TIMEOUT = 200;
 
@@ -245,6 +246,22 @@ export class ImageStore {
     this.rotateIndex = 0;
     this.flipX = false;
     this.flipY = false;
+  };
+
+  /**
+   * @desc 裁剪
+   */
+  @observable
+  public cropRatio: Maybe<[number, number]> = null;
+
+  @action
+  public setCropRatio = (w: number, h: number) => {
+    this.cropRatio = [w, h];
+  };
+
+  @action
+  public clearCropRatio = () => {
+    this.cropRatio = null;
   };
 }
 

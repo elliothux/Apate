@@ -7,6 +7,7 @@ import { globalEvent, GlobalEventType } from "../../utils";
 import { mainStore } from "../../state";
 import { Button } from "components/Button";
 import { IconSize, IconType } from "../../components/Icon";
+import { ViewType } from "../../types/state";
 
 const { innerWidth, innerHeight } = window;
 
@@ -42,7 +43,13 @@ export class Histogram extends React.Component {
 
   render() {
     const { draggableBounds, draggableDefaultPositions } = this;
-    const { showHistogram, expandHistogram, toggleExpandHistogram } = mainStore;
+    const {
+      showHistogram,
+      expandHistogram,
+      view,
+      toggleExpandHistogram
+    } = mainStore;
+    const show = showHistogram && view !== ViewType.CROP;
 
     return (
       <Draggable
@@ -55,10 +62,7 @@ export class Histogram extends React.Component {
             : draggableDefaultPositions
         }
       >
-        <div
-          id="histogram"
-          style={{ display: showHistogram ? "block" : "none" }}
-        >
+        <div id="histogram" style={{ display: show ? "block" : "none" }}>
           <Button
             onClick={toggleExpandHistogram}
             icon={expandHistogram ? IconType.UNEXPAND : IconType.EXPAND}
