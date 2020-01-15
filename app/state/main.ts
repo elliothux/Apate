@@ -67,7 +67,7 @@ export class MainStore {
   };
 
   @observable
-  public view: ViewType = ViewType.ADJUSTMENT;
+  public view: ViewType = ViewType.CROP;
 
   @action
   public setView = (i: ViewType) => {

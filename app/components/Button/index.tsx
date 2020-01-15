@@ -6,6 +6,7 @@ import { Icon, IconSize, IconType } from "../Icon";
 interface Props extends WithOptionalReactChildren {
   icon?: IconType;
   iconSize?: IconSize;
+  iconRotate?: number;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   activated?: boolean;
 }
@@ -14,13 +15,14 @@ export function Button({
   children,
   icon,
   iconSize,
+  iconRotate,
   onClick,
   activated
 }: Props) {
   return (
     <div className={`button${activated ? " activated" : ""}`} onClick={onClick}>
       {children}
-      {icon ? <Icon type={icon} size={iconSize} /> : null}
+      {icon ? <Icon type={icon} size={iconSize} rotate={iconRotate} /> : null}
     </div>
   );
 }

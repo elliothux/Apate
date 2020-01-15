@@ -1,4 +1,4 @@
-import { action, observable } from "mobx";
+import { action, observable, computed, runInAction } from "mobx";
 import { throttle } from "throttle-debounce";
 import { mainStore } from "./main";
 import * as worker from "../worker";
@@ -204,6 +204,48 @@ export class ImageStore {
   private setImageVibrance = throttle(THROTTLE_TIMEOUT, (v: number) => {
     worker.setImageVibrance(100 + v);
   });
+
+  /**
+   * @desc 旋转
+   */
+  @observable
+  private rotateIndex: number = 0;
+
+  @computed
+  public get rotate(): number {
+    return this.rotateIndex * 90;
+  }
+
+  @action
+  public toggleRotate = () => {
+    this.rotateIndex += 1;
+  };
+
+  /**
+   * @desc 翻转
+   */
+  @observable
+  public flipX: boolean = false;
+
+  @action
+  public toggleFlipX = () => {
+    this.flipX = !this.flipX;
+  };
+
+  @observable
+  public flipY: boolean = false;
+
+  @action
+  public toggleFlipY = () => {
+    this.flipY = !this.flipY;
+  };
+
+  @action
+  public resetCrop = () => {
+    this.rotateIndex = 0;
+    this.flipX = false;
+    this.flipY = false;
+  };
 }
 
 export const imageStore = new ImageStore();

@@ -1,5 +1,5 @@
-
 export enum ViewType {
-    ADJUSTMENT = 'adjustment',
-    FILTER = 'filter'
+  ADJUSTMENT = "adjustment",
+  FILTER = "filter",
+  CROP = "CROP"
 }

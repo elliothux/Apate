@@ -31,7 +31,13 @@ function IToolBar() {
       </ButtonGroup>
 
       <ButtonGroup>
-        <Button icon={IconType.CROP}>裁剪</Button>
+        <Button
+          icon={IconType.CROP}
+          activated={view === ViewType.CROP}
+          onClick={() => setView(ViewType.CROP)}
+        >
+          裁剪
+        </Button>
         <Gap />
         <Button
           icon={IconType.ADJUSTMENT}

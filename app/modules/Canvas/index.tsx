@@ -71,6 +71,7 @@ export class Canvas extends React.Component {
 
   public render() {
     const { width, height } = mainStore;
+    const { rotate, flipX, flipY } = imageStore;
     const { left, top } = this.state;
     return (
       <div id="main-canvas-container" ref={this.setContainerRef}>
@@ -79,7 +80,14 @@ export class Canvas extends React.Component {
           ref={this.setRefAndCtx}
           width={width}
           height={height}
-          style={{ backgroundColor: "white", top, left }}
+          style={{
+            backgroundColor: "white",
+            top,
+            left,
+            transform: `rotate(${rotate}deg) scaleX(${
+              flipX ? "-1" : "1"
+            }) scaleY(${flipY ? "-1" : "1"})`
+          }}
         >
           你的浏览器不支持canvas
         </canvas>

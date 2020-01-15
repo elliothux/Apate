@@ -1,14 +1,15 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import { Canvas } from "./modules/Canvas";
-import { ToolBar } from "./modules/ToolBar";
-import { Adjustment } from "./modules/Adjustment";
-import { Filter } from "./modules/Filter";
-import { Histogram } from "./modules/Histogram";
 import { WithEmptyImage } from "./modules/WithEmptyImage";
 import { mainStore } from "./state";
 import { Maybe } from "./types";
 import { ViewType } from "./types/state";
+import { ToolBar } from "./modules/ToolBar";
+import { Adjustment } from "./modules/Adjustment";
+import { Filter } from "./modules/Filter";
+import { Histogram } from "./modules/Histogram";
+import { Crop } from "./modules/Crop";
 
 function IApp() {
   const { ready, view } = mainStore;
@@ -27,6 +28,9 @@ function IApp() {
       panel = <Filter />;
       break;
     }
+    case ViewType.CROP:
+      panel = <Crop />;
+      break;
   }
 
   return (

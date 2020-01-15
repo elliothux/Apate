@@ -11,6 +11,10 @@ import PLUS from "assets/icons/plus.svg";
 import HISTOGRAM from "assets/icons/histogram.svg";
 import EXPAND from "assets/icons/expand.svg";
 import UNEXPAND from "assets/icons/unexpand.svg";
+import ROTATE from "assets/icons/rotate.svg";
+import FLIP from "assets/icons/flip.svg";
+import ASPECT from "assets/icons/aspect.svg";
+import RESET from "assets/icons/reset.svg";
 
 export enum IconType {
   ADJUSTMENT = "adjustment",
@@ -22,7 +26,11 @@ export enum IconType {
   PLUS = "plus",
   HISTOGRAM = "histogram",
   EXPAND = "expand",
-  UNEXPAND = "unexpand"
+  UNEXPAND = "unexpand",
+  ROTATE = "rotate",
+  FLIP = "flip",
+  ASPECT = "aspect",
+  RESET = "reset"
 }
 
 export enum IconSize {
@@ -35,9 +43,10 @@ interface Props {
   type: IconType;
   size?: IconSize;
   onClick?: Function;
+  rotate?: number;
 }
 
-export function Icon({ type, size = IconSize.MEDIUM, onClick }: Props) {
+export function Icon({ type, size = IconSize.MEDIUM, rotate }: Props) {
   let src: string;
   let className: string;
 
@@ -92,6 +101,26 @@ export function Icon({ type, size = IconSize.MEDIUM, onClick }: Props) {
       className = IconType.UNEXPAND;
       break;
     }
+    case IconType.ROTATE: {
+      src = ROTATE;
+      className = IconType.ROTATE;
+      break;
+    }
+    case IconType.FLIP: {
+      src = FLIP;
+      className = IconType.FLIP;
+      break;
+    }
+    case IconType.ASPECT: {
+      src = ASPECT;
+      className = IconType.ASPECT;
+      break;
+    }
+    case IconType.RESET: {
+      src = RESET;
+      className = IconType.RESET;
+      break;
+    }
   }
 
   return (
@@ -99,6 +128,7 @@ export function Icon({ type, size = IconSize.MEDIUM, onClick }: Props) {
       src={src}
       className={`icon icon-${className} icon-size-${size}`}
       alt="icon"
+      style={{ transform: `rotate(${rotate || 0}deg)` }}
     />
   );
 }
