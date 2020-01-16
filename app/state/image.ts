@@ -236,6 +236,10 @@ export class ImageStore {
 
   @action
   public toggleFlipX = () => {
+    if (this.rotateIndex % 2 !== 0) {
+      this.flipY = !this.flipY;
+      return;
+    }
     this.flipX = !this.flipX;
   };
 
@@ -244,6 +248,10 @@ export class ImageStore {
 
   @action
   public toggleFlipY = () => {
+    if (this.rotateIndex % 2 !== 0) {
+      this.flipX = !this.flipX;
+      return;
+    }
     this.flipY = !this.flipY;
   };
 
