@@ -65,6 +65,7 @@ export class CropStore {
       return;
     }
     this.cropRatio = [w, h];
+    this.initCrop();
   };
 
   @action
@@ -110,7 +111,7 @@ export class CropStore {
   };
 
   @action
-  public initCrop = () => {
+  private initCrop = () => {
     const { width, height } = getMainCanvas()!.getBoundingClientRect();
     const halfW = width / 2;
     const halfH = height / 2;
@@ -131,6 +132,9 @@ export class CropStore {
       this.resizeCrop(halfW, halfH, halfW / 2, halfH / 2);
     }
   };
+
+  @action
+  confirmCrop = () => {};
 }
 
 export const cropStore = new CropStore();

@@ -3,6 +3,12 @@
   height: 40px;
   cursor: grab;
 
+  &:hover {
+    .slider-value {
+      transform: scale(1.5);
+    }
+  }
+
   .slider-label,
   .slider-value {
     position: absolute;
@@ -17,6 +23,8 @@
 
   .slider-value {
     right: 8px;
+    transform-origin: right;
+    transition: all ease 300ms;
   }
 
   .slider-background {
