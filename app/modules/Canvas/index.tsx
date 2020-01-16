@@ -20,11 +20,6 @@ export class Canvas extends React.Component {
     height: 0
   };
 
-  public state = {
-    top: 0,
-    left: 0
-  };
-
   public async componentDidMount() {
     window.addEventListener("resize", this.setMaxSize);
 
@@ -47,17 +42,15 @@ export class Canvas extends React.Component {
   private drawImage = async () => {
     const image = await loadImage(mainStore.imageSrc!);
     const { naturalWidth, naturalHeight } = image;
-    const { width, height, left, top } = getCanvasSizeAndPosition(
+    const { width, height } = getCanvasSizeAndPosition(
       this.maxSize.width,
       this.maxSize.height,
       naturalWidth,
       naturalHeight
     );
     mainStore.setCanvasSize(width, height);
-    this.setState({ top, left }, () => {
-      this.ctx!.drawImage(image, 0, 0, width, height);
-      imageStore.initImageData();
-    });
+    this.ctx!.drawImage(image, 0, 0, width, height);
+    imageStore.initImageData();
   };
 
   private setContainerRef = (i: HTMLDivElement) => (this.containerRef = i);
@@ -70,25 +63,41 @@ export class Canvas extends React.Component {
     }
   };
 
-  public render() {
+  private get style() {
     const { width, height } = mainStore;
     const { rotate, flipX, flipY } = imageStore;
-    const { left, top } = this.state;
+
+    let scaleX = flipX ? -1 : 1;
+    let scaleY = flipY ? -1 : 1;
+
+    if (rotate % 180 !== 0) {
+      const [h, w] = [width, height];
+      const { width: maxW } = getCanvasSizeAndPosition(
+        this.maxSize.width,
+        this.maxSize.height,
+        w,
+        h
+      );
+      const scale = w / maxW;
+      scaleX /= scale;
+      scaleY /= scale;
+    }
+
+    return {
+      width,
+      height,
+      transform: `rotate(${rotate}deg) scaleX(${scaleX}) scaleY(${scaleY})`
+    };
+  }
+
+  public render() {
+    const { width, height } = mainStore;
+
     return (
       <div id="main-canvas-container" ref={this.setContainerRef}>
-        <WithCrop
-          style={{
-            backgroundColor: "white",
-            top,
-            left,
-            width,
-            height,
-            transform: `rotate(${rotate}deg) scaleX(${
-              flipX ? "-1" : "1"
-            }) scaleY(${flipY ? "-1" : "1"})`
-          }}
-        >
+        <WithCrop>
           <canvas
+            style={this.style}
             id="main-canvas"
             ref={this.setRefAndCtx}
             width={width}

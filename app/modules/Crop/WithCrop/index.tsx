@@ -1,5 +1,6 @@
+import "./index.scss";
 import * as React from "react";
-import { WithReactChildren } from "../../types";
+import { WithReactChildren } from "types";
 import { Cropper } from "./Cropper";
 
 interface Props extends WithReactChildren {

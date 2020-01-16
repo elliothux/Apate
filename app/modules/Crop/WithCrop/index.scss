@@ -1,0 +1,42 @@
+#with-crop {
+  position: relative;
+  transition: all ease 400ms;
+  transform-origin: center;
+
+  .crop-handler {
+    box-shadow: rgba(0, 0, 0, 0.6) 0 0 0 2048px;
+    border: 1px solid white;
+    position: relative;
+    z-index: 2;
+
+    .crop-handler-corner {
+      display: block;
+      position: absolute;
+      border-width: 0;
+      border-style: solid;
+      width: 20px;
+      height: 20px;
+      pointer-events: none;
+
+      &.top {
+        top: -3px;
+        border-top: 2px solid white;
+      }
+
+      &.left {
+        left: -3px;
+        border-left: 2px solid white;
+      }
+
+      &.right {
+        right: -3px;
+        border-right: 2px solid white;
+      }
+
+      &.bottom {
+        bottom: -3px;
+        border-bottom: 2px solid white;
+      }
+    }
+  }
+}

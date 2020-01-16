@@ -2,7 +2,8 @@ import "./index.scss";
 import * as React from "react";
 import { observer } from "mobx-react";
 import { Button, ButtonGroup } from "../../components/Button";
-import { IconType } from "../../components/Icon";
+import { IconSize, IconType } from "../../components/Icon";
+import { Collapse, CollapsePanel } from "../../components/Collapse";
 import { imageStore } from "../../state";
 import { Maybe } from "../../types";
 
@@ -24,7 +25,7 @@ export class Crop extends React.Component {
     const { cropRatio } = imageStore;
     return (
       <>
-        <p>裁剪比例</p>
+        <p className="crop-title">裁剪比例</p>
         <div className="crop-aspects">
           <div
             className={`crop-aspect ${cropRatio ? "" : "activated"}`}
@@ -139,21 +140,60 @@ export class Crop extends React.Component {
   render() {
     return (
       <div id="crop">
-        {this.renderCropAspect()}
-        <ButtonGroup>
-          <Button icon={IconType.ROTATE} onClick={imageStore.toggleRotate} />
-          <Button
-            icon={IconType.FLIP}
-            onClick={imageStore.toggleFlipX}
-            iconRotate={90}
-          />
-          <Button icon={IconType.FLIP} onClick={imageStore.toggleFlipY} />
-          <Button icon={IconType.RESET} onClick={imageStore.resetCrop} />
-        </ButtonGroup>
-        <ButtonGroup>
-          <Button>确认</Button>
-          <Button>取消</Button>
-        </ButtonGroup>
+        <Collapse activeKey={[imageStore.cropMode ? "crop" : "buttons"]}>
+          <CollapsePanel
+            header={""}
+            key="buttons"
+            showArrow={false}
+            className="buttons"
+            forceRender
+          >
+            <Button
+              icon={IconType.ASPECT}
+              iconSize={IconSize.LARGE}
+              onClick={imageStore.toggleCropMode}
+            >
+              <span>裁切</span>
+            </Button>
+            <Button
+              icon={IconType.ROTATE}
+              iconSize={IconSize.LARGE}
+              onClick={imageStore.toggleRotate}
+            >
+              <span>旋转</span>
+            </Button>
+            <Button
+              icon={IconType.FLIP}
+              iconSize={IconSize.LARGE}
+              onClick={imageStore.toggleFlipY}
+            >
+              <span>上下翻转</span>
+            </Button>
+            <Button
+              icon={IconType.FLIP}
+              iconSize={IconSize.LARGE}
+              onClick={imageStore.toggleFlipX}
+              iconRotate={90}
+            >
+              <span>左右翻转</span>
+            </Button>
+            <Button
+              icon={IconType.RESET}
+              iconSize={IconSize.LARGE}
+              onClick={imageStore.resetCrop}
+            >
+              <span>重置</span>
+            </Button>
+          </CollapsePanel>
+
+          <CollapsePanel header={""} key="crop" showArrow={false} forceRender>
+            {this.renderCropAspect()}
+            <ButtonGroup>
+              <Button>确认</Button>
+              <Button onClick={imageStore.toggleCropMode}>取消</Button>
+            </ButtonGroup>
+          </CollapsePanel>
+        </Collapse>
       </div>
     );
   }

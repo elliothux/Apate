@@ -2,8 +2,7 @@ import { action, computed, observable, reaction } from "mobx";
 import { throttle } from "throttle-debounce";
 import { mainStore } from "./main";
 import * as worker from "../worker";
-import { Maybe } from "../types";
-import { ViewType } from "../types/state";
+import { Maybe, ViewType } from "../types";
 
 const THROTTLE_TIMEOUT = 200;
 
@@ -308,6 +307,14 @@ export class ImageStore {
   public moveCrop = (x: number, y: number) => {
     this.cropX = x;
     this.cropY = y;
+  };
+
+  @observable
+  public cropMode: boolean = false;
+
+  @action
+  public toggleCropMode = () => {
+    this.cropMode = !this.cropMode;
   };
 
   @action

@@ -5,7 +5,7 @@ import ICollapse, { Panel } from "rc-collapse";
 import { WithReactChildren } from "../../types";
 
 interface CollapseProps extends WithReactChildren {
-  activeKeys?: string[];
+  activeKey?: string[];
   className?: string;
   defaultActiveKey?: string[];
   destroyInactivePanel?: boolean;

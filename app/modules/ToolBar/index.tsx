@@ -5,7 +5,7 @@ import { IconType } from "components/Icon";
 import { Gap } from "components/Gap";
 import { mainStore } from "state";
 import { observer } from "mobx-react";
-import { ViewType } from "../../types/state";
+import { ViewType } from "../../types";
 
 function IToolBar() {
   const { view, setView, showHistogram, toggleHistogram } = mainStore;

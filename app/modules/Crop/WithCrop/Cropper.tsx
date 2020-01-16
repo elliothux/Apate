@@ -1,11 +1,11 @@
 import * as React from "react";
-import { DraggableData, Position, ResizableDelta, Rnd } from "react-rnd";
+import { useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
-import { imageStore, mainStore } from "../../state";
-import { ViewType } from "../../types/state";
-import { useCallback, useEffect, useMemo } from "react";
 import { DraggableEvent } from "react-draggable";
 import { ResizeDirection } from "re-resizable";
+import { DraggableData, Position, ResizableDelta, Rnd } from "react-rnd";
+import { imageStore, mainStore } from "state";
+import { ViewType } from "types";
 
 function CropperContent() {
   return (
@@ -50,14 +50,14 @@ function ICropper() {
     []
   );
 
-  if (mainStore.view !== ViewType.CROP) {
+  if (!imageStore.cropMode) {
     return null;
   }
 
   return (
     <Rnd
       className="crop-handler"
-      bounds="parent"
+      bounds="#main-canvas"
       lockAspectRatio={ratio}
       minWidth={60}
       minHeight={60}

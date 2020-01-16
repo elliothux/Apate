@@ -2,12 +2,11 @@ import "./index.scss";
 import * as React from "react";
 import { observer } from "mobx-react";
 import Draggable from "react-draggable";
-import { Maybe } from "../../types";
+import { Maybe, ViewType } from "../../types";
 import { globalEvent, GlobalEventType } from "../../utils";
 import { mainStore } from "../../state";
 import { Button } from "components/Button";
 import { IconSize, IconType } from "../../components/Icon";
-import { ViewType } from "../../types/state";
 
 const { innerWidth, innerHeight } = window;
 
