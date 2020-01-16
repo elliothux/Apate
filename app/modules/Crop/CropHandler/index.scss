@@ -1,7 +1,6 @@
-#with-crop {
-  position: relative;
-  transition: all ease 400ms;
-  transform-origin: center;
+.crop-handler-container {
+  position: fixed;
+  overflow: hidden;
 
   .crop-handler {
     box-shadow: rgba(0, 0, 0, 0.6) 0 0 0 2048px;

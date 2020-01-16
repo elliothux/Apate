@@ -5,7 +5,6 @@ import { loadImage } from "utils";
 import { observer } from "mobx-react";
 import { imageStore, mainStore } from "../../state";
 import { getCanvasSizeAndPosition } from "./utils";
-import { WithCrop } from "../Crop";
 
 @observer
 export class Canvas extends React.Component {
@@ -95,17 +94,15 @@ export class Canvas extends React.Component {
 
     return (
       <div id="main-canvas-container" ref={this.setContainerRef}>
-        <WithCrop>
-          <canvas
-            style={this.style}
-            id="main-canvas"
-            ref={this.setRefAndCtx}
-            width={width}
-            height={height}
-          >
-            你的浏览器不支持canvas
-          </canvas>
-        </WithCrop>
+        <canvas
+          style={this.style}
+          id="main-canvas"
+          ref={this.setRefAndCtx}
+          width={width}
+          height={height}
+        >
+          你的浏览器不支持canvas
+        </canvas>
       </div>
     );
   }

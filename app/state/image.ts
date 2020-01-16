@@ -1,4 +1,4 @@
-import { action, computed, observable, reaction } from "mobx";
+import { action, computed, observable } from "mobx";
 import { throttle } from "throttle-debounce";
 import { mainStore } from "./main";
 import * as worker from "../worker";
@@ -11,16 +11,7 @@ export class ImageStore {
     this.initReaction();
   }
 
-  private initReaction = () => {
-    reaction(
-      () => mainStore.view,
-      view => {
-        if (view === ViewType.CROP) {
-          this.initCrop();
-        }
-      }
-    );
-  };
+  private initReaction = () => {};
 
   public initImageData = () => {
     const data = this.getImageData();
@@ -275,7 +266,6 @@ export class ImageStore {
       return;
     }
     this.cropRatio = [w, h];
-    this.initCrop();
   };
 
   @action
@@ -315,17 +305,22 @@ export class ImageStore {
   @action
   public toggleCropMode = () => {
     this.cropMode = !this.cropMode;
+    if (this.cropMode) {
+      this.initCrop();
+    }
   };
 
   @action
-  private initCrop = () => {
-    const { cropRatio } = this;
-    const { width, height } = mainStore;
+  public initCrop = () => {
+    const { width, height } = document
+      .querySelector("#main-canvas")!
+      .getBoundingClientRect();
+
     const halfW = width / 2;
     const halfH = height / 2;
 
-    if (cropRatio) {
-      const [cropW, cropH] = cropRatio;
+    if (this.cropRatio) {
+      const [cropW, cropH] = this.cropRatio;
 
       const w = halfW;
       const h = (w * cropH) / cropW;
