@@ -3,7 +3,7 @@ import * as React from "react";
 import { Maybe } from "types";
 import { loadImage } from "utils";
 import { observer } from "mobx-react";
-import { imageStore, mainStore } from "../../state";
+import {cropStore, imageStore, mainStore} from "../../state";
 import { getCanvasSizeAndPosition } from "./utils";
 
 @observer
@@ -64,7 +64,7 @@ export class Canvas extends React.Component {
 
   private get style() {
     const { width, height } = mainStore;
-    const { rotate, flipX, flipY } = imageStore;
+    const { rotate, flipX, flipY } = cropStore;
 
     let scaleX = flipX ? -1 : 1;
     let scaleY = flipY ? -1 : 1;

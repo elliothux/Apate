@@ -1,7 +1,7 @@
 import "./index.scss";
 import * as React from "react";
 import { Maybe } from "../../../types";
-import { imageStore } from "../../../state";
+import { cropStore } from "../../../state";
 import { observer } from "mobx-react";
 
 function classWithCompareRatio(
@@ -17,7 +17,7 @@ function classWithCompareRatio(
 }
 
 function ICropAspect() {
-  const { cropRatio, setCropRatio } = imageStore;
+  const { cropRatio, setCropRatio } = cropStore;
 
   return (
     <>
@@ -25,7 +25,7 @@ function ICropAspect() {
       <div className="crop-aspects">
         <div
           className={`crop-aspect ${cropRatio ? "" : "activated"}`}
-          onClick={imageStore.clearCropRatio}
+          onClick={cropStore.clearCropRatio}
         >
           <p>FREE</p>
         </div>

@@ -4,16 +4,16 @@ import { observer } from "mobx-react";
 import { Button, ButtonGroup } from "../../components/Button";
 import { IconSize, IconType } from "../../components/Icon";
 import { Collapse, CollapsePanel } from "../../components/Collapse";
-import { imageStore } from "../../state";
+import { cropStore } from "../../state";
 import { CropHandler } from "./CropHandler";
 import { CropAspect } from "./CropAspect";
 
 function ICrop() {
   return (
     <>
-      {imageStore.cropMode ? <CropHandler /> : null}
+      {cropStore.cropMode ? <CropHandler /> : null}
       <div id="crop">
-        <Collapse activeKey={[imageStore.cropMode ? "crop" : "buttons"]}>
+        <Collapse activeKey={[cropStore.cropMode ? "crop" : "buttons"]}>
           <CollapsePanel
             header={""}
             key="buttons"
@@ -24,28 +24,28 @@ function ICrop() {
             <Button
               icon={IconType.ASPECT}
               iconSize={IconSize.LARGE}
-              onClick={imageStore.toggleCropMode}
+              onClick={cropStore.toggleCropMode}
             >
               <span>裁切</span>
             </Button>
             <Button
               icon={IconType.ROTATE}
               iconSize={IconSize.LARGE}
-              onClick={imageStore.toggleRotate}
+              onClick={cropStore.toggleRotate}
             >
               <span>旋转</span>
             </Button>
             <Button
               icon={IconType.FLIP}
               iconSize={IconSize.LARGE}
-              onClick={imageStore.toggleFlipY}
+              onClick={cropStore.toggleFlipY}
             >
               <span>上下翻转</span>
             </Button>
             <Button
               icon={IconType.FLIP}
               iconSize={IconSize.LARGE}
-              onClick={imageStore.toggleFlipX}
+              onClick={cropStore.toggleFlipX}
               iconRotate={90}
             >
               <span>左右翻转</span>
@@ -53,7 +53,7 @@ function ICrop() {
             <Button
               icon={IconType.RESET}
               iconSize={IconSize.LARGE}
-              onClick={imageStore.resetCrop}
+              onClick={cropStore.resetCrop}
             >
               <span>重置</span>
             </Button>
@@ -63,7 +63,7 @@ function ICrop() {
             <CropAspect />
             <ButtonGroup>
               <Button>确认</Button>
-              <Button onClick={imageStore.toggleCropMode}>取消</Button>
+              <Button onClick={cropStore.toggleCropMode}>取消</Button>
             </ButtonGroup>
           </CollapsePanel>
         </Collapse>

@@ -5,7 +5,8 @@ import { observer } from "mobx-react";
 import { DraggableEvent } from "react-draggable";
 import { ResizeDirection } from "re-resizable";
 import { DraggableData, Position, ResizableDelta, Rnd } from "react-rnd";
-import { imageStore } from "state";
+import { cropStore } from "state";
+import { getMainCanvas } from "../../../utils";
 
 function ICropHandler() {
   const {
@@ -16,7 +17,7 @@ function ICropHandler() {
     cropY: y,
     resizeCrop,
     moveCrop
-  } = imageStore;
+  } = cropStore;
 
   const ratio = useMemo<number | undefined>(
     () => (cropRatio ? cropRatio[0] / cropRatio[1] : undefined),
@@ -24,9 +25,12 @@ function ICropHandler() {
   );
 
   const cropStyle = useMemo(() => {
-    const { top, left, width, height } = document
-      .querySelector("#main-canvas")!
-      .getBoundingClientRect();
+    const {
+      top,
+      left,
+      width,
+      height
+    } = getMainCanvas()!.getBoundingClientRect();
     return { top, left, width, height };
   }, []);
 
