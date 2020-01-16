@@ -1,12 +1,28 @@
-import { action, observable, computed, runInAction } from "mobx";
+import { action, computed, observable, reaction } from "mobx";
 import { throttle } from "throttle-debounce";
 import { mainStore } from "./main";
 import * as worker from "../worker";
 import { Maybe } from "../types";
+import { ViewType } from "../types/state";
 
 const THROTTLE_TIMEOUT = 200;
 
 export class ImageStore {
+  constructor() {
+    this.initReaction();
+  }
+
+  private initReaction = () => {
+    reaction(
+      () => mainStore.view,
+      view => {
+        if (view === ViewType.CROP) {
+          this.initCrop();
+        }
+      }
+    );
+  };
+
   public initImageData = () => {
     const data = this.getImageData();
     worker.initImage(data);
@@ -256,12 +272,66 @@ export class ImageStore {
 
   @action
   public setCropRatio = (w: number, h: number) => {
+    if (this.cropRatio && this.cropRatio[0] === w && this.cropRatio[1] === h) {
+      return;
+    }
     this.cropRatio = [w, h];
+    this.initCrop();
   };
 
   @action
   public clearCropRatio = () => {
     this.cropRatio = null;
+  };
+
+  @observable
+  public cropWidth: number = 0;
+
+  @observable
+  public cropHeight: number = 0;
+
+  @action
+  public resizeCrop = (w: number, h: number, x: number, y: number) => {
+    this.cropWidth = w;
+    this.cropHeight = h;
+    this.cropX = x;
+    this.cropY = y;
+  };
+
+  @observable
+  public cropX: number = 0;
+
+  @observable
+  public cropY: number = 0;
+
+  @action
+  public moveCrop = (x: number, y: number) => {
+    this.cropX = x;
+    this.cropY = y;
+  };
+
+  @action
+  private initCrop = () => {
+    const { cropRatio } = this;
+    const { width, height } = mainStore;
+    const halfW = width / 2;
+    const halfH = height / 2;
+
+    if (cropRatio) {
+      const [cropW, cropH] = cropRatio;
+
+      const w = halfW;
+      const h = (w * cropH) / cropW;
+      if (h < height) {
+        this.resizeCrop(w, h, w / 2, (height - h) / 2);
+      } else {
+        const h = halfH;
+        const w = (h * cropW) / cropH;
+        this.resizeCrop(w, h, (width - w) / 2, h / 2);
+      }
+    } else {
+      this.resizeCrop(halfW, halfH, halfW / 2, halfH / 2);
+    }
   };
 }
 

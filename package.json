@@ -18,7 +18,6 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-draggable": "^4.2.0",
-    "react-image-crop": "^8.5.0",
     "react-rnd": "^10.1.4",
     "react-spinners": "^0.8.0",
     "throttle-debounce": "^2.1.0"
@@ -33,7 +32,6 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
-    "@types/react-image-crop": "^8.1.2",
     "@types/throttle-debounce": "^2.1.0",
     "@typescript-eslint/eslint-plugin": "^2.8.0",
     "@typescript-eslint/parser": "^2.8.0",

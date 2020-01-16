@@ -9,3 +9,7 @@ export function preventSyntheticEvent<T = HTMLElement, E = Event>(
   e.stopPropagation();
   return false;
 }
+
+export function isNumber(i: any): boolean {
+  return typeof i === "number";
+}
