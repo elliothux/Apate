@@ -70,12 +70,12 @@ export function drawRGBHistogram(
     histogramData.forEach((i, index) => {
       const drawX = index + 1;
       const drawY = expand ? height * (histogramIndex + 1) - i : height - i;
-      ctx.lineTo(drawX, drawY);
+      ctx.lineTo(drawX, drawY + 1);
     });
 
     const endX = width;
     const endY = expand ? height * (histogramIndex + 1) : height;
-    ctx.lineTo(endX, endY);
+    ctx.lineTo(endX, endY + 1);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();

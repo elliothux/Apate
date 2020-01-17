@@ -1,5 +1,6 @@
 use crate::image::ImageData;
 use crate::color::RGB;
+use num::Num;
 
 pub fn add_u8(a: u8, b: u8) -> u8 {
     let result = a as u16 + b as u16;
@@ -29,7 +30,7 @@ pub fn clamp_u8(i: f32) -> u8 {
     }
 }
 
-pub fn clamp(value: f32, min: f32, max: f32) -> f32 {
+pub fn clamp<N: Num + PartialOrd + Copy>(value: N, min: N, max: N) -> N {
     if value > max {
         return max;
     }

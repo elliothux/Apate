@@ -1,5 +1,5 @@
 use wasm_bindgen::prelude::*;
-use crate::utils::{normalize_u8, normalize};
+use crate::utils::{normalize_u8, normalize, clamp};
 use crate::resampling::{ResamplingData};
 
 #[wasm_bindgen()]
@@ -51,7 +51,8 @@ fn generate_histogram_data_with_resampling(
     for index in 1..result.len() {
         let value = result[index];
         if value != 0 {
-            result[index] = normalize(value, max, histogram_height);
+            let v = normalize(value, max, histogram_height);
+            result[index] = clamp(v * 2_u32, 10, histogram_height);
         }
     }
 
