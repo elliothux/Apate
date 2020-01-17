@@ -1,9 +1,9 @@
 import "./index.scss";
 import * as React from "react";
 import { Maybe } from "types";
-import { loadImage } from "utils";
+import { globalEvent, GlobalEventType, loadImage } from "utils";
 import { observer } from "mobx-react";
-import {cropStore, imageStore, mainStore} from "../../state";
+import { cropStore, imageStore, mainStore } from "../../state";
 import { getCanvasSizeAndPosition } from "./utils";
 
 @observer
@@ -24,6 +24,8 @@ export class Canvas extends React.Component {
 
     this.setMaxSize();
     this.drawImage();
+
+    globalEvent.on(GlobalEventType.UPDATE_IMAGE, this.drawImage);
   }
 
   public componentWillUnmount(): void {

@@ -21,12 +21,25 @@ export class FilterStore {
     this.loadedFilterMap[name] = true;
   };
 
+  public clearFilterSnapshots = () => {
+    filterSnapshotMap.clear();
+    filterLoadingStatus.clear();
+    this.loadedFilterMap = {};
+    this.loadAll();
+  };
+
   public loadFilterCollection = (index: number) => {
     const [collectionName, filters] = this.filterCollections[index];
     if (!filterLoadingStatus.get(collectionName)) {
       filterLoadingStatus.set(collectionName, true);
       return loadFilterCollection(collectionName, [...filters]);
     }
+  };
+
+  public loadAll = () => {
+    this.filterCollections.forEach((_, index) => {
+      setTimeout(() => this.loadFilterCollection(index), index * 1000);
+    });
   };
 
   @observable

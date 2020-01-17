@@ -2,6 +2,8 @@ import { action, observable, runInAction } from "mobx";
 import { Maybe, ViewType } from "types";
 import * as worker from "../worker";
 import { toggleHistogramExpand } from "../worker";
+import { globalEvent, GlobalEventType } from "../utils";
+import { filterStore } from "./filter";
 
 export class MainStore {
   constructor() {
@@ -39,6 +41,8 @@ export class MainStore {
       reader.addEventListener("load", () => {
         document.body.removeChild(input);
         this.setImageSrc(reader.result!.toString());
+        globalEvent.emit(GlobalEventType.UPDATE_IMAGE);
+        filterStore.clearFilterSnapshots();
       });
       reader.readAsDataURL(input.files![0]);
     });
