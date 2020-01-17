@@ -3,12 +3,6 @@ import { Maybe } from "../types";
 import { getMainCanvas } from "../utils";
 import { mainStore } from "./main";
 import { imageStore } from "./image";
-import {
-  cropCenterImageDataWithResampling,
-  getColumns,
-  getRows
-} from "../worker/image.worker/utils";
-import { getWasmLib } from "../worker/share";
 
 export class CropStore {
   /**

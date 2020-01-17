@@ -3,6 +3,13 @@ use crate::color::{RGB};
 use crate::lut::{ThreeDirectionLookUpTable, get_lut_value};
 use crate::utils::{adjacent, linear_interpolation, clamp_u8};
 
+pub struct CropData {
+    pub x: usize,
+    pub y: usize,
+    pub width: usize,
+    pub height: usize,
+}
+
 pub struct EditData {
     pub saturation: u8,
     pub vibrance: u8,
@@ -15,6 +22,7 @@ pub struct EditData {
     pub shadow: u8,
     pub filter: Option<ThreeDirectionLookUpTable>,
     pub filter_strength: u8,
+    pub crop: Option<CropData>
 }
 
 pub type ImageDataRow = Vec<RGB>;
@@ -24,11 +32,14 @@ pub type ImageData = Vec<ImageDataRow>;
 pub struct Image {
     pub width: u32,
     pub height: u32,
+    pub original_width: u32,
+    pub original_height: u32,
 
     edit_data: EditData,
 
-    data: ImageData,
     original_data: ImageData,
+    cropped_original_data: ImageData,
+    data: ImageData,
 }
 
 #[wasm_bindgen()]
@@ -54,8 +65,11 @@ impl Image {
         Image {
             width,
             height,
+            original_width: width,
+            original_height: height,
             data: image_data.clone(),
-            original_data: image_data,
+            original_data: image_data.clone(),
+            cropped_original_data: image_data,
             edit_data: EditData {
                 saturation: 100u8,
                 vibrance: 100u8,
@@ -66,8 +80,11 @@ impl Image {
                 contrast: 100_u8,
                 highlight: 100_u8,
                 shadow: 100_u8,
+
                 filter: None,
-                filter_strength: 100
+                filter_strength: 100,
+
+                crop: None
             },
         }
     }
@@ -116,7 +133,7 @@ impl Image {
 
         for y in 0..self.height {
             for x in 0..self.width {
-                let RGB { r, g, b} = self.get_original_color_data(x as usize, y as usize);
+                let RGB { r, g, b} = &self.cropped_original_data[y as usize][x as usize];
                 let xo = (r.clone() as f32) * multiple;
                 let yo = (g.clone() as f32) * multiple;
                 let zo = (b.clone() as f32) * multiple;
@@ -193,12 +210,39 @@ impl Image {
         &self.data[y][x]
     }
 
-    fn get_original_color_data(&self, x: usize, y: usize) -> &RGB {
-        &self.original_data[y][x]
-    }
-
     fn set_data(&mut self, x: usize, y: usize, data: RGB) {
         self.data[y][x] = data;
+    }
+
+    pub fn set_crop(&mut self, x: usize, y: usize, width: usize, height: usize) {
+        let crop = CropData {
+            x, y, width, height
+        };
+        self.calc_crop(&crop);
+        self.edit_data.crop = Some(crop);
+        self.width = width as u32;
+        self.height = height as u32;
+
+        if let Some(filter) = self.edit_data.filter.clone() {
+            self.calc_lut(&filter);
+        } else {
+            self.data = self.cropped_original_data.clone();
+        }
+    }
+
+    fn calc_crop(&mut self, crop: &CropData) {
+        let mut data: ImageData = Vec::<ImageDataRow>::new();
+
+        for y in crop.y..(crop.y + crop.height) {
+            let mut row = Vec::<RGB>::new();
+            for x in crop.x..(crop.x + crop.width) {
+                let color = &self.original_data[y][x];
+                row.push(color.clone());
+            }
+            data.push(row);
+        }
+
+        self.cropped_original_data = data;
     }
 }
 

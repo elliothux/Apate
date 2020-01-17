@@ -130,6 +130,10 @@ impl RGB {
     pub fn to_tuple(&self) -> (u8, u8, u8) {
         (self.r, self.g, self.b)
     }
+
+    pub fn from(r: u8, g: u8, b: u8) -> RGB {
+        RGB { r, g, b }
+    }
 }
 
 fn calc_saturation(i: u8, saturation: u8, grey: u8) -> u8 {
