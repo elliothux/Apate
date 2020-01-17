@@ -13,6 +13,13 @@ This project is based on those technologies:
 * [React](https://reactjs.org/)
 * [Mobx](https://mobx.js.org/README.html)
 
+## Preview
+
+![](https://pic.downk.cc/item/5e21c12f2fb38b8c3c414550.png)
+![](https://pic.downk.cc/item/5e21c12f2fb38b8c3c414552.png)
+![](https://pic.downk.cc/item/5e21c12f2fb38b8c3c414554.png)
+![](https://pic.downk.cc/item/5e21c12f2fb38b8c3c414556.png)
+
 ## Features
 - [ ] Basic features
     - [ ] Import images
