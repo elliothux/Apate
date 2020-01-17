@@ -9,7 +9,7 @@ export function createBitmapImage(
   return lib.Image.from(width, height, data as any);
 }
 
-export function cropImageData(
+export function cropCenterImageDataWithResampling(
   imageData: ImageData,
   width: number,
   height: number

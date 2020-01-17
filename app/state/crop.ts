@@ -1,6 +1,14 @@
 import { action, computed, observable } from "mobx";
 import { Maybe } from "../types";
 import { getMainCanvas } from "../utils";
+import { mainStore } from "./main";
+import { imageStore } from "./image";
+import {
+  cropCenterImageDataWithResampling,
+  getColumns,
+  getRows
+} from "../worker/image.worker/utils";
+import { getWasmLib } from "../worker/share";
 
 export class CropStore {
   /**
@@ -106,6 +114,7 @@ export class CropStore {
   public toggleCropMode = () => {
     this.cropMode = !this.cropMode;
     if (this.cropMode) {
+      this.clearCropRatio();
       this.initCrop();
     }
   };
@@ -134,7 +143,78 @@ export class CropStore {
   };
 
   @action
-  confirmCrop = () => {};
+  confirmCrop = () => {
+    this.cropMode = false;
+
+    const { width, height } = mainStore;
+    const {
+      cropWidth,
+      cropHeight,
+      cropX,
+      cropY,
+      flipX,
+      flipY,
+      rotateIndex
+    } = this;
+
+    let [x, y, w, h] = [cropX, cropY, cropWidth, cropHeight];
+
+    switch (rotateIndex % 4) {
+      case 1: {
+        x = cropY;
+        y = width - cropX - cropWidth;
+        w = cropHeight;
+        h = cropWidth;
+        break;
+      }
+      case 2: {
+        x = width - cropX - cropWidth;
+        y = height - cropY - cropHeight;
+        w = cropWidth;
+        h = cropHeight;
+        break;
+      }
+      case 3: {
+        x = width - cropY - cropHeight;
+        y = cropX;
+        w = cropHeight;
+        h = cropWidth;
+      }
+    }
+
+    if (flipX) {
+      x = width - w - x;
+    }
+
+    if (flipY) {
+      y = height - h - y;
+    }
+
+    [w, h, x, y] = [w, h, x, y].map((i: number) => Math.round(i));
+    const data = cropImageData(imageStore.getImageData(), w, h, x, y);
+    mainStore.canvasContext!.putImageData(data, 0, 0);
+  };
+}
+
+function cropImageData(
+  { width, data: imageData }: ImageData,
+  w: number,
+  h: number,
+  x: number,
+  y: number
+): ImageData {
+  const length = w * 4 * h;
+  let result: Uint8ClampedArray = new Uint8ClampedArray(length);
+  let index = 0;
+
+  for (let currentY = y; currentY < y + h; currentY++) {
+    const startIndex = (currentY * width + x) * 4;
+    const endIndex = startIndex + w * 4;
+    const row = imageData.slice(startIndex, endIndex);
+    row.forEach(i => (result[index++] = i));
+  }
+
+  return new ImageData(result, w, h);
 }
 
 export const cropStore = new CropStore();

@@ -1,5 +1,5 @@
 import { Maybe } from "../../types";
-import { createBitmapImage, cropImageData } from "./utils";
+import { createBitmapImage, cropCenterImageDataWithResampling } from "./utils";
 import { Filter } from "./filter";
 
 const [snapshotWidth, snapshotHeight] = [128, 100].map(i =>
@@ -9,7 +9,7 @@ const [snapshotWidth, snapshotHeight] = [128, 100].map(i =>
 let snapshotOriginalImageData: Maybe<Uint8ClampedArray> = null;
 
 export function initSnapshotOriginalData(imageData: ImageData) {
-  snapshotOriginalImageData = cropImageData(
+  snapshotOriginalImageData = cropCenterImageDataWithResampling(
     imageData,
     snapshotWidth,
     snapshotHeight

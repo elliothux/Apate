@@ -62,7 +62,7 @@ function ICrop() {
           <CollapsePanel header={""} key="crop" showArrow={false} forceRender>
             <CropAspect />
             <ButtonGroup>
-              <Button>确认</Button>
+              <Button onClick={cropStore.confirmCrop}>确认</Button>
               <Button onClick={cropStore.toggleCropMode}>取消</Button>
             </ButtonGroup>
           </CollapsePanel>
