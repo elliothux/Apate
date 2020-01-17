@@ -56,7 +56,7 @@ function IToolBar() {
         </Button>
       </ButtonGroup>
 
-      <Button icon={IconType.EXPORT} />
+      <Button icon={IconType.EXPORT} onClick={mainStore.exportImage} />
     </div>
   );
 }

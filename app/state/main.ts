@@ -93,6 +93,23 @@ export class MainStore {
     this.expandHistogram = !this.expandHistogram;
     toggleHistogramExpand(this.expandHistogram);
   };
+
+  public exportImage = () => {
+    const link = document.createElement("a");
+    link.setAttribute("download", "MintyPaper.png");
+    link.setAttribute(
+      "href",
+      this.canvasContext!.canvas.toDataURL("image/jpeg", 1).replace(
+        "image/jpeg",
+        "image/octet-stream"
+      )
+    );
+    link.click();
+    document.body.appendChild(link);
+    setTimeout(() => {
+      document.body.removeChild(link);
+    }, 1000);
+  };
 }
 
 export const mainStore = new MainStore();
