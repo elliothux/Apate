@@ -5,7 +5,7 @@ A browser-based realtime image process application.
 This is an **experimental** project and is still in development. BUGs may exist. APIs and features may change.
 
 ## Technologies
-This project is based on those technologies:
+This project is based on those open-source projects:
 * [Rust](https://www.rust-lang.org/)
 * [WebAssembly](https://webassembly.org/)
 * [wasm-bindgen](https://github.com/rustwasm/wasm-bindgen)
@@ -16,8 +16,11 @@ This project is based on those technologies:
 ## Preview
 
 ![](https://pic.downk.cc/item/5e21c12f2fb38b8c3c414550.png)
+
 ![](https://pic.downk.cc/item/5e21c12f2fb38b8c3c414552.png)
+
 ![](https://pic.downk.cc/item/5e21c12f2fb38b8c3c414554.png)
+
 ![](https://pic.downk.cc/item/5e21c12f2fb38b8c3c414556.png)
 
 ## Features
