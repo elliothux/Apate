@@ -5,8 +5,7 @@
   top: $header-height;
   left: 0;
   height: calc(100% - #{$header-height});
-  width: calc(100% - #{$adjustment-width} - 1px);
-  overflow: hidden;
+  overflow: scroll;
   display: flex;
   align-items: center;
 

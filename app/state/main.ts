@@ -2,7 +2,7 @@ import { action, observable, runInAction } from "mobx";
 import { Maybe, ViewType } from "types";
 import * as worker from "../worker";
 import { toggleHistogramExpand } from "../worker";
-import { globalEvent, GlobalEventType } from "../utils";
+import { downloadFile, globalEvent, GlobalEventType } from "../utils";
 import { filterStore } from "./filter";
 
 export class MainStore {
@@ -70,7 +70,7 @@ export class MainStore {
   };
 
   @observable
-  public view: ViewType = ViewType.CROP;
+  public view: ViewType = ViewType.ADJUSTMENT;
 
   @action
   public setView = (i: ViewType) => {
@@ -95,20 +95,16 @@ export class MainStore {
   };
 
   public exportImage = () => {
-    const link = document.createElement("a");
-    link.setAttribute("download", "MintyPaper.png");
-    link.setAttribute(
-      "href",
-      this.canvasContext!.canvas.toDataURL("image/jpeg", 1).replace(
-        "image/jpeg",
-        "image/octet-stream"
-      )
+    this.canvasContext!.canvas.toBlob(
+      file => {
+        if (!file) {
+          return;
+        }
+        downloadFile(file, "image/jpeg", `export-${Date.now()}.jpg`);
+      },
+      "image/jpeg",
+      1
     );
-    link.click();
-    document.body.appendChild(link);
-    setTimeout(() => {
-      document.body.removeChild(link);
-    }, 1000);
   };
 }
 

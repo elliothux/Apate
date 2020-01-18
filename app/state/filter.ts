@@ -21,6 +21,7 @@ export class FilterStore {
     this.loadedFilterMap[name] = true;
   };
 
+  @action
   public clearFilterSnapshots = () => {
     filterSnapshotMap.clear();
     filterLoadingStatus.clear();

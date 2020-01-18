@@ -6,6 +6,8 @@ import { observer } from "mobx-react";
 import { cropStore, imageStore, mainStore } from "../../state";
 import { getCanvasSizeAndPosition } from "./utils";
 
+const containerWidth = window.innerWidth - 300 - 1;
+
 @observer
 export class Canvas extends React.Component {
   private containerRef: Maybe<HTMLDivElement> = null;
@@ -95,7 +97,11 @@ export class Canvas extends React.Component {
     const { width, height } = mainStore;
 
     return (
-      <div id="main-canvas-container" ref={this.setContainerRef}>
+      <div
+        id="main-canvas-container"
+        ref={this.setContainerRef}
+        style={{ width: containerWidth }}
+      >
         <canvas
           style={this.style}
           id="main-canvas"

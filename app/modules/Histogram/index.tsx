@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import Draggable from "react-draggable";
 import { Maybe, ViewType } from "../../types";
 import { globalEvent, GlobalEventType } from "../../utils";
-import { mainStore } from "../../state";
+import { cropStore, mainStore } from "../../state";
 import { Button } from "components/Button";
 import { IconSize, IconType } from "../../components/Icon";
 
@@ -42,13 +42,8 @@ export class Histogram extends React.Component {
 
   render() {
     const { draggableBounds, draggableDefaultPositions } = this;
-    const {
-      showHistogram,
-      expandHistogram,
-      view,
-      toggleExpandHistogram
-    } = mainStore;
-    const show = showHistogram && view !== ViewType.CROP;
+    const { showHistogram, expandHistogram, toggleExpandHistogram } = mainStore;
+    const show = showHistogram && !cropStore.cropMode;
 
     return (
       <Draggable
